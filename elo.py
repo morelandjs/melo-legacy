@@ -1,78 +1,35 @@
 #!/usr/bin/env python2
 
 import sqlite3
-from collections import defaultdict, namedtuple
+from collections import defaultdict
 from pathlib import Path
 
-import matplotlib.pyplot as plt
 import nfldb
-import numpy as np
 
 
-WEEKS = 17.
+nweeks = 17.
 AVG_ELO = 1500.
 
-Rtg = namedtuple('Rtg', 'elo, elo_')
+
 
 class Rating:
     def __init__(self, database='elo.db'):
 
         self.nfldb = nfldb.connect()
-        self.elodb = self.build(database)
-        #self.hfa = self.home_field_advantage()
+        self.hfa = self.home_field_advantage()
 
-    def build(self, name):
-        dirname = Path('sqlite')
-        if not dirname.exists():
-            dirname.mkdir()
-        dest = dirname / name
+    def home_field_advantage(self):
+        q = nfldb.Query(self.nfldb)
+        q.game(season_type='Regular')
 
-        return sqlite3.connect(str(dest))
+        spreads = [g.home_score - g.away_score for g in q.as_games()]
+        hfa = sum(spreads)/float(len(spreads))
 
+        return hfa
 
     def starting_elo(self, margin):
-        return Rtg(elo=1500, elo_=1500)
-
-    def query_elo(self, team, year, week, margin):
-        """
-        Retrieve elo ratings for a given team
-        for (year, week) with given margin
-
-        """
-
-        c = self.elodb.cursor()
-
-        query = c.execute(
-        '''SELECT elo, elo_ FROM rating
-        WHERE team = ? AND year < ? AND week < ? AND margin = ?
-        ORDER BY year, week DESC''',
-        (team, year, week, margin)
-        ).fetchone()
-
-        if query:
-            return Rtg(*query)
-        else:
-            rtg = self.starting_elo(margin)
-            c.execute(
-                    '''INSERT INTO rating
-                    VALUES (?, ?, ?, ?, ?, ?)''',
-                    (team, year, week, margin, rtg.elo, rtg.elo_)
-                    )
-            return rtg
-
-    def set_elo(self, team, year, week, margin, elo, elo_):
-        """
-        Set elo ratings for a given team
-        for (year, week) with given margin
-
-        """
-        c = self.elodb.cursor()
-
-        c.execute(
-                '''INSERT INTO rating
-                VALUES (?, ?, ?, ?, ?, ?)''',
-                (team, year, week, margin, elo, elo_)
-                )
+        # (fair elo, handicapped elo)
+        return {'fair': 1500, 'hcap': 1500}
 
     def calc_elo(self, k_factor=40.):
         """
@@ -85,16 +42,41 @@ class Rating:
         q = nfldb.Query(self.nfldb)
         q.game(season_type='Regular')
 
-        # elo ratings database
-        c = self.elodb.cursor()
-        c.execute(
-        '''CREATE TABLE IF NOT EXISTS rating
-        (team text, year int, week int,
-        margin int, elo float, elo_ float)'''
-        )
+        # create the elo record dictionary
+        nested_dict = lambda: defaultdict(nested_dict)
+        elodb = nested_dict()
 
         def time(game):
             return game.season_year, game.week
+
+        def elo_change(rtg1, rtg2, home_wins=True):
+            prob = self.win_prob(rtg1, rtg2)
+            if home_wins:
+                return k_factor * (1. - prob)
+            return - k_factor * prob
+
+        def query_elo(team, year, week, margin):
+            """
+            Retrieve elo ratings for a given team
+            for (year, week) with given margin
+
+            """
+            while True:
+                if week > 1:
+                    week -= 1
+                else:
+                    year -= 1
+                    week = nweeks
+
+                if not elodb[team][year]:
+                    starting_elo = self.starting_elo(margin)
+                    print(starting_elo)
+                    elodb[team][year][week][margin] = starting_elo
+                    print(elodb[team][year][week][margin])
+                    return starting_elo
+                elif elodb[team][year][week][margin]:
+                    print(elodb[team][year][week][margin])
+                    return elodb[team][year][week][margin]
 
         # loop over historical games in chronological order
         for game in sorted(q.as_games(), key=lambda g: time(g)):
@@ -104,54 +86,75 @@ class Rating:
             week = game.week
             home = game.home_team
             away = game.away_team
+            #print(year, week, home, '@' + away)
+
+            # point differential
+            points = game.home_score - game.away_score - self.hfa
 
             # loop over all possible spread margins
-            for spread in range(0, 40):
+            for handicap in range(0, 1):
 
-                # retrieve elo ratings
-                home_rtg = self.query_elo(home, year, week, spread)
-                away_rtg = self.query_elo(away, year, week, spread)
-                print(year, week, spread, home_rtg)
+                # query current elo ratings from most recent game
+                home_rtg = query_elo(home, year, week, handicap)
+                away_rtg = query_elo(away, year, week, handicap)
 
-                # first handicap the home team
-                score = game.home_score - game.away_score - spread
+                #print(home_rtg)
+                #print(away_rtg)
+                #print
 
-                def elo_change(rtg1, rtg2, win):
-                    prob = self.win_prob(rtg1, rtg2)
-                    if win:
-                        return k_factor * (1. - prob)
-                    return - k_factor * prob
-
-
-                # handicapped home team covers spread
-                if score > 0:
-                    print('score > 0')
-                    pts1 = elo_change(home_rtg.elo, away_rtg.elo_, True) 
-                    pts2 = elo_change(home_rtg.elo_, away_rtg.elo, True) 
-
-                    self.set_elo(
-                            home, year, week, spread,
-                            home_rtg.elo + pts1, home_rtg.elo_ + pts2
+                # handicap the home team
+                if points - handicap >= 0:
+                    # home team wins
+                    bounty = elo_change(
+                            home_rtg['hcap'],
+                            away_rtg['fair'],
+                            home_wins=True
                             )
-
-                    self.set_elo(
-                            away, year, week, spread,
-                            away_rtg.elo - pts2, away_rtg.elo_ - pts1
-                            )
+                    home_rtg['hcap'] += bounty
+                    away_rtg['fair'] -= bounty
                 else:
-                    print('score < 0')
-                    pts1 = elo_change(home_rtg.elo, away_rtg.elo_, False) 
-                    pts2 = elo_change(home_rtg.elo_, away_rtg.elo, False) 
-
-                    self.set_elo(
-                            home, year, week, spread,
-                            home_rtg.elo + pts1, home_rtg.elo_ + pts2
+                    # away team wins
+                    bounty = elo_change(
+                            home_rtg['hcap'],
+                            away_rtg['fair'],
+                            home_wins=False
                             )
+                    home_rtg['hcap'] += bounty
+                    away_rtg['fair'] -= bounty
 
-                    self.set_elo(
-                            away, year, week, spread,
-                            away_rtg.elo - pts2, away_rtg.elo_ - pts1
+                # handicap the away team
+                if points + handicap >= 0:
+                    # home team wins
+                    bounty = elo_change(
+                            home_rtg['fair'],
+                            away_rtg['hcap'],
+                            home_wins=True
                             )
+                    home_rtg['fair'] += bounty
+                    away_rtg['hcap'] -= bounty
+                else:
+                    # away team wins
+                    bounty = elo_change(
+                            home_rtg['fair'],
+                            away_rtg['hcap'],
+                            home_wins=False
+                            )
+                    home_rtg['fair'] += bounty
+                    away_rtg['hcap'] -= bounty
+
+                # update elo ratings
+                for team, team_rtg in [(home, home_rtg), (away, away_rtg)]:
+                    elodb[team][year][week][handicap] = rating
+
+    def predict_spread(self, team, opp, year, week):
+
+        for margin in range(0, 40):
+            team_rtg = query_elo(team, year, week, margin)
+            opp_rtg = query_elo(opp, year, week, margin)
+            prob = self.win_prob(team_rtg['hcap'], opp_rtg['fair'])
+            print(margin, prob)
+
+
 
 #    def current_elo(self, team, game):
 #        q = nfldb.Query(self.nfldb)
@@ -292,3 +295,5 @@ class Rating:
 
 rating = Rating(database='elo.db')
 rating.calc_elo()
+
+rating.predict_spread('NE', 'CLE', 2016, 17)
