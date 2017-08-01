@@ -13,11 +13,9 @@ import nfldb
 nweeks = 17
 AVG_ELO = 1500.
 
-nested_dict = lambda: defaultdict(nested_dict)
-
 class Rating:
     def __init__(self, database='elo.db'):
-
+        nested_dict = lambda: defaultdict(nested_dict)
         self.nfldb = nfldb.connect()
         self.hfa = self.home_field_advantage()
         self.elodb = nested_dict()
@@ -32,9 +30,20 @@ class Rating:
         return hfa
 
     def starting_elo(self, margin):
+        """
+        Initialize the starting elo for each team. For the present
+        database, team histories start in 2009. One exception is the LA
+        rams.
+
+        """
         return {'fair': 1500, 'hcap': 1500}
 
     def rewind(self, year, week, n=2):
+        """
+        Simple function to go back "one game in time".
+        For example rewind(2016, 1) = (2015, 17).
+
+        """
         for _ in range(n):
             if week > 1:
                 week -= 1
@@ -44,10 +53,15 @@ class Rating:
             yield year, week
 
     def query_elo(self, team, margin, year, week):
+        """
+        Queries the most recent ELO rating for a team, i.e.
+        elo(year, week) for (year, week) < (query year, query week)
+
+        """
         for yr, wk in self.rewind(year, week):
             elo = self.elodb[team][margin][yr][wk]
             if elo:
-                return elo
+                return elo.copy()
 
         elo = self.starting_elo(margin)
         self.elodb[team][margin][year-1][nweeks] = elo
@@ -84,7 +98,6 @@ class Rating:
             week = game.week
             home = game.home_team
             away = game.away_team
-            #print year, week
 
             # point differential
             points = game.home_score - game.away_score
@@ -95,7 +108,6 @@ class Rating:
                 # query current elo ratings from most recent game
                 home_rtg = self.query_elo(home, handicap, year, week)
                 away_rtg = self.query_elo(away, handicap, year, week)
-                #print home, home_rtg, away, away_rtg
 
                 # handicap the home team
                 if points - handicap >= 0:
@@ -141,7 +153,38 @@ class Rating:
                 for team, team_rtg in [(home, home_rtg), (away, away_rtg)]:
                     self.elodb[team][handicap][year][week] = team_rtg
 
+    def elo_history(self, team, margin):
+        """
+        Plot the ELO rating history for a given team with a 
+        specified margin of victory handicap.
+
+        """
+        def time(game):
+            return game.season_year + game.week/float(nweeks)
+
+        def elo(game):
+            rtg = self.query_elo(team, margin, game.season_year, game.week)
+            return rtg['hcap']
+
+        q = nfldb.Query(self.nfldb)
+        q.game(team=team, season_type='Regular')
+        q.as_games()
+
+        history = [(time(game), elo(game))
+                for game in sorted(q.as_games(), key=lambda g: time(g))]
+
+        plt.plot(*zip(*history), label=team)
+        plt.xlabel('Time (year, week)')
+        plt.ylabel('ELO rating'.format(margin))
+        plt.title('Handicap={} pts'.format(margin))
+        plt.legend()
+
     def predict_spread(self, team, opp, year, week):
+        """
+        Predict the spread for a matchup, given current knowledge of each
+        team's ELO ratings.
+
+        """
         def winprob(margin):
             team_rtg = self.query_elo(team, margin, year, week)
             opp_rtg = self.query_elo(opp, margin, year, week)
@@ -160,10 +203,6 @@ class Rating:
 
 rating = Rating(database='elo.db')
 rating.calc_elo()
-rating.predict_spread('ATL', 'CLE', 2016, 17)
-rating.predict_spread('NE', 'GB', 2016, 17)
-rating.predict_spread('CIN', 'CLE', 2016, 17)
-rating.predict_spread('CIN', 'CLE', 2016, 17)
-rating.predict_spread('CLE', 'PHI', 2016, 17)
-plt.legend()
+rating.elo_history('CLE', 0)
+#rating.predict_spread('NE', 'CLE', 2016, 17)
 plt.show()
