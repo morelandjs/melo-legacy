@@ -3,6 +3,8 @@
 import copy
 import sqlite3
 from collections import defaultdict
+from functools import partial
+from itertools import chain
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -12,23 +14,31 @@ import nfldb
 
 
 nweeks = 17
+nested_dict = lambda: defaultdict(nested_dict)
 
 class Rating:
-    def __init__(self, database='elo.db'):
-        nested_dict = lambda: defaultdict(nested_dict)
+    def __init__(self, kfactor=40, kdecay=60, database='elo.db'):
+        # k factor parameters
+        self.kfactor = kfactor
+        self.kdecay = kdecay
+
+        # score and elo containers
         self.nfldb = nfldb.connect()
-        self.spreads = self.spread_freq()
-        self.hfa = self.home_field_advantage()
-        self.elodb = nested_dict()
+        self.spread_prob = self.spread_probability()
+        self.elodb = self.calc_elo()
 
-    def home_field_advantage(self):
-        q = nfldb.Query(self.nfldb)
-        q.game(season_type='Regular')
+    def hfa(self, elodb, handicap, year, week):
+        """
+        ELO bonus for home field advantage
 
-        spreads = [g.home_score - g.away_score for g in q.as_games()]
-        hfa = sum(spreads)/float(len(spreads))
+        """
+        home_rtg = self.query_elo(elodb, 'home', handicap, year, week)
+        away_rtg = self.query_elo(elodb, 'away', handicap, year, week)
 
-        return hfa
+        hcap_diff = home_rtg['hcap'] - away_rtg['hcap']
+        fair_diff = home_rtg['fair'] - away_rtg['fair']
+
+        return 0.5*(hcap_diff + fair_diff)
 
     def starting_elo(self, margin):
         """
@@ -38,37 +48,48 @@ class Rating:
 
         """
         elo_init = 1500.
-        prob = 0.5*self.spreads[margin]
+        prob = max(0.5*self.spread_prob[margin], 1e-6)
         arg = max(1/prob - 1, 1e-6)
-        elo_diff = 400*np.log10(arg)/2
+        elo_diff = 200*np.log10(arg)
 
         return {'fair': elo_init + elo_diff, 'hcap': elo_init - elo_diff}
 
-    def spread_freq(self, plot=False):
+    def spreads(self):
         """
-        Determine the frequency of each margin of victory. This function
-        is used to initialize margin-dependent ELO ratings.
+        All point spreads (points winner - points loser) since 2009.
+
+        """
+        q = nfldb.Query(self.nfldb)
+        q.game(season_type='Regular')
+        spreads = [abs(g.home_score - g.away_score) for g in q.as_games()]
+
+        return spreads
+
+    def spread_probability(self):
+        """
+        Probabilities of observing each point spread.
+
+        """
+        bins = np.arange(-0.5, 41.5)
+        hist, edges = np.histogram(self.spreads(), bins=bins, normed=True)
+        spread = 0.5*(edges[:-1] + edges[1:])
+        prob = np.cumsum(hist[::-1], dtype=float)[::-1]
+
+        return dict(zip(spread, prob))
+
+    def ngames(self, year, week):
+        """
+        Number of games scheduled in a given (year, week)
 
         """
         # nfldb database
         q = nfldb.Query(self.nfldb)
-        q.game(season_type='Regular')
-        spreads = [abs(g.home_score - g.away_score)
-                for g in q.as_games()]
+        q.game(season_type='Regular', season_year=year, week=week)
 
-        # plot the thing
-        if plot:
-            plt.hist(spreads, bins=np.arange(0, 42))
-            plt.xlabel('Spread [pts]')
-            plt.ylabel('Counts [games]')
-            plt.title('Frequency of NFL spreads')
-            plt.savefig('spread_frequency.pdf')
+        # integer number of games
+        N = len(q.as_games())
 
-        hist, edges = np.histogram(spreads, bins=np.arange(42))
-        prob = np.cumsum(hist.astype(float)[::-1])[::-1]
-        prob /= prob[0]
-
-        return dict(zip(edges[:-1], prob))
+        return float(N)
 
     def rewind(self, year, week, n=2):
         """
@@ -84,111 +105,126 @@ class Rating:
                 week = nweeks
             yield year, week
 
-    def query_elo(self, team, margin, year, week):
+    def query_elo(self, elodb, team, margin, year, week):
         """
         Queries the most recent ELO rating for a team, i.e.
         elo(year, week) for (year, week) < (query year, query week)
 
+        If the team name is one of ("home", "away"), then return the
+        rating from the current year, week if it exists.
+
         """
-        for yr, wk in self.rewind(year, week):
-            elo = self.elodb[team][margin][yr][wk]
+        def previous(year, week):
+            if team in ('home', 'away'):
+                yield year, week
+            for yr, wk in self.rewind(year, week):
+                yield yr, wk
+
+        for yr, wk in previous(year, week):
+            elo = elodb[team][margin][yr][wk]
             if elo:
                 return elo.copy()
 
         elo = self.starting_elo(margin)
-        self.elodb[team][margin][year-1][nweeks] = elo
+        elodb[team][margin][year-1][nweeks] = elo
+
         return elo
 
-    def calc_elo(self, k_factor=40., k_decay=30):
+
+    def elo_change(self, rating_diff, points, handicap):
+        """
+        Change in home team ELO rating after a single game
+
+        """
+        prob = self.win_prob(rating_diff)
+        K = self.kfactor * np.exp(-handicap/self.kdecay)
+
+        # home team wins
+        if points - handicap > 0:
+            return K * (1. - prob)
+        # home and away team tie
+        elif points - handicap == 0:
+            return K * (0.5 - prob)
+        # away team wins
+        elif points - handicap < 0:
+            return -K * prob
+
+    def calc_elo(self):
         """
         This function calculates ELO ratings for every team
-        for every value of the spread. The ratings are stored
-        in an sqlite database for subsequent reference.
+        for every value of the spread.
 
         """
         # nfldb database
         q = nfldb.Query(self.nfldb)
         q.game(season_type='Regular')
 
+        # store elo ratings
+        elodb = nested_dict()
+        elo = self.query_elo
+
         # small sorting function
         def time(game):
             return game.season_year, game.week
 
-        # elo point change
-        def elo_change(rating1, rating2, margin, home_wins=True):
-            prob = self.win_prob(rating1, rating2)
-            K = k_factor * np.exp(-margin/k_decay)
-            if home_wins:
-                return K * (1. - prob)
-            return - K * prob
-
-
         # loop over historical games in chronological order
         for game in sorted(q.as_games(), key=lambda g: time(g)):
 
-            # game attributes
+            # game time
             year = game.season_year
             week = game.week
-            home = game.home_team
-            away = game.away_team
 
             # point differential
-            points = game.home_score - game.away_score - self.hfa
+            points = game.home_score - game.away_score
 
-            # loop over all possible spread margins
-            for handicap in range(0, 40):
+            # game team names
+            team_names = [
+                    ('home', 'away', self.ngames(year, week)),
+                    (game.home_team, game.away_team, 1.),
+                    ]
+            
+            # first update home/away ratings, then team ratings
+            for home, away, scale in team_names:
 
-                # query current elo ratings from most recent game
-                home_rtg = self.query_elo(home, handicap, year, week)
-                away_rtg = self.query_elo(away, handicap, year, week)
+                # loop over all possible spread margins
+                for handicap in range(41):
 
-                # handicap the home team
-                if points - handicap >= 0:
-                    # home team wins
-                    bounty = elo_change(
-                            home_rtg['hcap'],
-                            away_rtg['fair'],
-                            handicap,
-                            home_wins=True
-                            )
-                    home_rtg['hcap'] += bounty
-                    away_rtg['fair'] -= bounty
-                else:
-                    # away team wins
-                    bounty = elo_change(
-                            home_rtg['hcap'],
-                            away_rtg['fair'],
-                            handicap,
-                            home_wins=False
-                            )
-                    home_rtg['hcap'] += bounty
-                    away_rtg['fair'] -= bounty
+                    # query current elo ratings from most recent game
+                    home_rtg = elo(elodb, home, handicap, year, week)
+                    away_rtg = elo(elodb, away, handicap, year, week)
 
-                # handicap the away team
-                if points + handicap >= 0:
-                    # home team wins
-                    bounty = elo_change(
-                            home_rtg['fair'],
-                            away_rtg['hcap'],
-                            handicap,
-                            home_wins=True
-                            )
-                    home_rtg['fair'] += bounty
-                    away_rtg['hcap'] -= bounty
-                else:
-                    # away team wins
-                    bounty = elo_change(
-                            home_rtg['fair'],
-                            away_rtg['hcap'],
-                            handicap,
-                            home_wins=False
-                            )
-                    home_rtg['fair'] += bounty
-                    away_rtg['hcap'] -= bounty
+                    # disable hfa for home vs away elo calc
+                    hfa = (self.hfa(elodb, handicap, year, week)
+                            if scale == 1 else 0.)
 
-                # update elo ratings
-                for team, team_rtg in [(home, home_rtg), (away, away_rtg)]:
-                    self.elodb[team][handicap][year][week] = team_rtg
+                    # elo change when home(away) team is handicapped
+                    bounty_home_hcap, bounty_away_hcap = [
+                            self.elo_change(
+                                home_rtg[a] - away_rtg[b] + hfa,
+                                points,
+                                hcap
+                                ) / scale
+                            for (a, b, hcap) in [
+                                ('hcap', 'fair', handicap),
+                                ('fair', 'hcap', -handicap),
+                                ]
+                            ]
+
+                    # scale update by ngames if necessary
+                    home_rtg['hcap'] += bounty_home_hcap
+                    away_rtg['fair'] -= bounty_home_hcap
+                    home_rtg['fair'] += bounty_away_hcap
+                    away_rtg['hcap'] -= bounty_away_hcap
+
+                    # home and away team elo data
+                    team_rtgs = [(home, home_rtg), (away, away_rtg)]
+
+                    # update elo ratings
+                    for team, team_rtg in team_rtgs:
+                        elodb[team][handicap][year][week] = team_rtg
+
+        # return final elo ratings
+        return elodb
 
     def elo_history(self, team, margin):
         """
@@ -196,70 +232,113 @@ class Rating:
         specified margin of victory handicap.
 
         """
-        def time(game):
+        # convert (year, week) into a single date number
+        def date(game):
             return game.season_year + game.week/float(nweeks)
 
-        def elo(game):
-            rtg = self.query_elo(team, margin, game.season_year, game.week)
-            return rtg['hcap']
-
+        # query database for game dates
         q = nfldb.Query(self.nfldb)
-        q.game(team=team, season_type='Regular')
-        q.as_games()
+        q.game(season_type='Regular')
+        if team not in ('home', 'away'):
+            q.game(team=team)
 
-        history = [(time(game), elo(game))
-                for game in sorted(q.as_games(), key=lambda g: time(g))]
+        # unpack historical elo ratings
+        rtg_history = [
+                (date(game),
+                self.query_elo(
+                    self.elodb,
+                    team,
+                    margin,
+                    game.season_year,
+                    game.week
+                    ))
+                for game in sorted(q.as_games(), key=lambda g: date(g))
+                ]
 
-        plt.plot(*zip(*history), label=team)
+        # plot "fair" elo rating history
+        rtg_fair = [(date, rtg['fair']) for date, rtg in rtg_history]
+        #plt.step(*zip(*rtg_fair), label=team)
+
+        # plot "handicapped" elo rating history
+        rtg_hcap = [(date, rtg['hcap']) for date, rtg in rtg_history]
+        plt.step(*zip(*rtg_hcap), label=team)
+
+        # figure properties
         plt.xlabel('Time (year, week)')
         plt.ylabel('ELO rating'.format(margin))
         plt.title('Handicap={} pts'.format(margin))
-        plt.legend()
+        #plt.legend()
 
-    def predict_spread(self, team, opp, year, week):
+    def cdf(self, home, away, year, week):
+        """
+        Cumulative (integrated) probability that,
+        score home - score away > x.
+
+        """
+        for handicap in range(-40, 41):
+            hcap = abs(handicap)
+            home_rtg = self.query_elo(self.elodb, home, hcap, year, week)
+            away_rtg = self.query_elo(self.elodb, away, hcap, year, week)
+            hfa = self.hfa(self.elodb, hcap, year, week)
+
+            if handicap < 0:
+                rtg_diff = home_rtg['fair'] - away_rtg['hcap'] + hfa
+            else:
+                rtg_diff = home_rtg['hcap'] - away_rtg['fair'] + hfa
+
+            yield handicap, self.win_prob(rtg_diff)
+
+    def predict_spread(self, home, away, year, week):
         """
         Predict the spread for a matchup, given current knowledge of each
         team's ELO ratings.
 
         """
-        def team_win(margin):
-            team_rtg = self.query_elo(team, margin, year, week)
-            opp_rtg = self.query_elo(opp, margin, year, week)
-            return self.win_prob(team_rtg['hcap'], opp_rtg['fair'])
+        # cumulative spread distribution
+        cdf = list(self.cdf(home, away, year, week))
 
-        def opp_win(margin):
-            team_rtg = self.query_elo(team, margin, year, week)
-            opp_rtg = self.query_elo(opp, margin, year, week)
-            return self.win_prob(opp_rtg['hcap'], team_rtg['fair'])
+        # plot median prediction (compare to vegas spread)
+        median, _ = min(cdf, key=lambda k: abs(k[1] - 0.5))
 
-        label = ' '.join([team, '@'+opp])
+        return median
 
-        team_prob = [(margin, team_win(margin)) for margin in range(40)]
-        opp_prob = [(-margin, 1 - opp_win(margin)) for margin in range(40)]
+    def plot_spread(self, home, away, year, week, vegas=None):
+        # median model prediction
+        median = self.predict_spread(home, away, year, week)
 
-        margin, cdf = zip(*sorted(team_prob + opp_prob))
-        pdf = -np.diff(cdf)
-        print(team, opp, np.average(margin[1:], weights=pdf))
-        #plt.step(margin[1:], pdf)
-        #print(np.average(margin, weights=cdf))
+        # determine winner
+        if median > 0:
+            winner = home
+        elif median == 0:
+            winner = 'TIE'
+        else:
+            winner = away
 
-        #plt.step(*zip(*team_prob), label=label)
-        #plt.step(*zip(*opp_prob), label=label)
-        #plt.xlim(-40, 40)
-        #plt.ylim(0, 1.05)
+        # plot cumulative spread distribution
+        label = ''.join([away, '@'+home])
+        plt.step(*zip(*cdf), where='post')
 
-    def win_prob(self, team_rating, opp_rating):
-        elo_diff = team_rating - opp_rating
-        logistic_prob = 1/(10**(-elo_diff/400) + 1)
+        plt.axvline(
+                median, linewidth=.5, color=offblack,
+                label='model: {} ({})'.format(-abs(median), winner)
+                )
 
-        return logistic_prob
+        # plot Vegas spread if provided
+        vegas_winner = home if vegas < 0 else away
+        if vegas: plt.axvline(
+                -vegas, linewidth=.5, color=plt.cm.Reds(.6),
+                label='vegas: {} ({})'.format(-abs(vegas), vegas_winner)
+                )
 
+        # axes properties
+        plt.xlim(-20, 20)
+        plt.ylim(0, 1)
+        plt.xlabel('{} - {} [points]'.format(home, away))
+        plt.ylabel('Prob({} - {} > x)'.format(home, away))
+        plt.title(label)
+        plt.legend(handlelength=1)
 
-rating = Rating(database='elo.db')
-rating.calc_elo()
-#rating.elo_history('NE', 30)
-rating.predict_spread('MN', 'DET', 2016, 12)
-rating.predict_spread('DET', 'MN', 2016, 12)
-rating.predict_spread('GB', 'PHI', 2016, 12)
-rating.predict_spread('NYG', 'CLE', 2016, 12)
-plt.show()
+        plt.savefig('{}.png'.format(label), dpi=200)
+
+    def win_prob(self, rtg_diff):
+        return 1./(10**(-rtg_diff/400.) + 1.)
