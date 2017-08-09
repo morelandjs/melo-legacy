@@ -226,49 +226,6 @@ class Rating:
         # return final elo ratings
         return elodb
 
-    def elo_history(self, team, margin):
-        """
-        Plot the ELO rating history for a given team with a 
-        specified margin of victory handicap.
-
-        """
-        # convert (year, week) into a single date number
-        def date(game):
-            return game.season_year + game.week/float(nweeks)
-
-        # query database for game dates
-        q = nfldb.Query(self.nfldb)
-        q.game(season_type='Regular')
-        if team not in ('home', 'away'):
-            q.game(team=team)
-
-        # unpack historical elo ratings
-        rtg_history = [
-                (date(game),
-                self.query_elo(
-                    self.elodb,
-                    team,
-                    margin,
-                    game.season_year,
-                    game.week
-                    ))
-                for game in sorted(q.as_games(), key=lambda g: date(g))
-                ]
-
-        # plot "fair" elo rating history
-        rtg_fair = [(date, rtg['fair']) for date, rtg in rtg_history]
-        #plt.step(*zip(*rtg_fair), label=team)
-
-        # plot "handicapped" elo rating history
-        rtg_hcap = [(date, rtg['hcap']) for date, rtg in rtg_history]
-        plt.step(*zip(*rtg_hcap), label=team)
-
-        # figure properties
-        plt.xlabel('Time (year, week)')
-        plt.ylabel('ELO rating'.format(margin))
-        plt.title('Handicap={} pts'.format(margin))
-        #plt.legend()
-
     def cdf(self, home, away, year, week):
         """
         Cumulative (integrated) probability that,
@@ -301,44 +258,6 @@ class Rating:
         median, _ = min(cdf, key=lambda k: abs(k[1] - 0.5))
 
         return median
-
-    def plot_spread(self, home, away, year, week, vegas=None):
-        # median model prediction
-        median = self.predict_spread(home, away, year, week)
-
-        # determine winner
-        if median > 0:
-            winner = home
-        elif median == 0:
-            winner = 'TIE'
-        else:
-            winner = away
-
-        # plot cumulative spread distribution
-        label = ''.join([away, '@'+home])
-        plt.step(*zip(*cdf), where='post')
-
-        plt.axvline(
-                median, linewidth=.5, color=offblack,
-                label='model: {} ({})'.format(-abs(median), winner)
-                )
-
-        # plot Vegas spread if provided
-        vegas_winner = home if vegas < 0 else away
-        if vegas: plt.axvline(
-                -vegas, linewidth=.5, color=plt.cm.Reds(.6),
-                label='vegas: {} ({})'.format(-abs(vegas), vegas_winner)
-                )
-
-        # axes properties
-        plt.xlim(-20, 20)
-        plt.ylim(0, 1)
-        plt.xlabel('{} - {} [points]'.format(home, away))
-        plt.ylabel('Prob({} - {} > x)'.format(home, away))
-        plt.title(label)
-        plt.legend(handlelength=1)
-
-        plt.savefig('{}.png'.format(label), dpi=200)
 
     def win_prob(self, rtg_diff):
         return 1./(10**(-rtg_diff/400.) + 1.)
