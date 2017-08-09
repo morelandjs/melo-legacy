@@ -153,6 +153,7 @@ def weekly_spreads(year=2016, week=17):
             ax.spines[loc].set_color(None)
 
         ax.grid(which='major', linewidth=1, clip_on=False)
+        ax.patch.set_facecolor('0.94')
 
         ax.annotate('{}@{}'.format(away, home), xy=(0.02,0.02),
                 ha='left', va='bottom', xycoords='axes fraction',
@@ -162,6 +163,8 @@ def weekly_spreads(year=2016, week=17):
         ax.axvline(median, color=plt.cm.Oranges(.6), zorder=1,
                 lw=1, alpha=0.8)
 
+
+    fig.patch.set_facecolor('white')
     fig.text(0.5, 0.0, r'home $-$ away [points]',
             ha='center', va='bottom')
     fig.text(0.01, 0.5, r'Prob(home $-$ away > x)',
@@ -218,7 +221,7 @@ def main():
 
     if args.plots:
         for i in args.plots:
-            if i.endswith('.pdf'):
+            if i.endswith('.png'):
                 i = i[:-4]
             if i in plot_functions:
                 plot_functions[i]()
