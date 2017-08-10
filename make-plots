@@ -109,7 +109,7 @@ def spread_frequency():
     finish()
 
 @plot
-def weekly_spreads(year=2016, week=7):
+def weekly_spreads(year=2016, week=16):
     """
     Calculate the 50-50 betting point-spread for each team.
 
@@ -128,13 +128,11 @@ def weekly_spreads(year=2016, week=7):
         away = game.away_team
 
         spread, prob = rating.cdf(home, away, year, week)
-        prob = np.diff(prob)
-        prob /= prob.sum()
-        ax.step(0.5*(spread[:-1] + spread[1:]), prob)
+        ax.step(spread, prob)
 
         if ax.is_first_col():
             ax.set_yticks([0, 0.2, 0.4, 0.6, 0.8, 1])
-            ax.set_ylim(0, .1)
+            ax.set_ylim(0, 1)
 
         if ax.is_last_row():
             xticks = [-20, -10, 0, 10, 20]
