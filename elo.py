@@ -6,6 +6,7 @@ from collections import defaultdict
 from functools import partial
 from itertools import chain
 from pathlib import Path
+from scipy.ndimage.filters import gaussian_filter1d
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -17,7 +18,7 @@ nweeks = 17
 nested_dict = lambda: defaultdict(nested_dict)
 
 class Rating:
-    def __init__(self, kfactor=40, kdecay=60, database='elo.db'):
+    def __init__(self, kfactor=20, kdecay=20, database='elo.db'):
         # k factor parameters
         self.kfactor = kfactor
         self.kdecay = kdecay
@@ -232,7 +233,10 @@ class Rating:
         score home - score away > x.
 
         """
-        for handicap in range(-40, 41):
+        spreads = np.arange(-40, 41)
+        cumulative_win_prob = []
+
+        for handicap in spreads:
             hcap = abs(handicap)
             home_rtg = self.query_elo(self.elodb, home, hcap, year, week)
             away_rtg = self.query_elo(self.elodb, away, hcap, year, week)
@@ -243,7 +247,12 @@ class Rating:
             else:
                 rtg_diff = home_rtg['hcap'] - away_rtg['fair'] + hfa
 
-            yield handicap, self.win_prob(rtg_diff)
+            cumulative_win_prob.append(self.win_prob(rtg_diff))
+
+        return spreads, gaussian_filter1d(
+                cumulative_win_prob, 2, mode='constant'
+                )
+
 
     def predict_spread(self, home, away, year, week):
         """
@@ -252,12 +261,16 @@ class Rating:
 
         """
         # cumulative spread distribution
-        cdf = list(self.cdf(home, away, year, week))
+        cdf = self.cdf(home, away, year, week)
 
         # plot median prediction (compare to vegas spread)
-        median, _ = min(cdf, key=lambda k: abs(k[1] - 0.5))
+        median, prob = min(zip(*cdf), key=lambda k: abs(k[1] - 0.5))
 
-        return median
+        return median, prob
 
     def win_prob(self, rtg_diff):
+        """
+        Proability that a team will win as a function of ELO difference
+
+        """
         return 1./(10**(-rtg_diff/400.) + 1.)

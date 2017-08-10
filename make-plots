@@ -109,7 +109,7 @@ def spread_frequency():
     finish()
 
 @plot
-def weekly_spreads(year=2016, week=17):
+def weekly_spreads(year=2016, week=7):
     """
     Calculate the 50-50 betting point-spread for each team.
 
@@ -127,13 +127,14 @@ def weekly_spreads(year=2016, week=17):
         home = game.home_team
         away = game.away_team
 
-        cdf = rating.cdf(home, away, year, week)
-        spread, prob = zip(*cdf)
-        ax.step(spread, prob)
+        spread, prob = rating.cdf(home, away, year, week)
+        prob = np.diff(prob)
+        prob /= prob.sum()
+        ax.step(0.5*(spread[:-1] + spread[1:]), prob)
 
         if ax.is_first_col():
             ax.set_yticks([0, 0.2, 0.4, 0.6, 0.8, 1])
-            ax.set_ylim(0, 1)
+            ax.set_ylim(0, .1)
 
         if ax.is_last_row():
             xticks = [-20, -10, 0, 10, 20]
@@ -153,22 +154,27 @@ def weekly_spreads(year=2016, week=17):
             ax.spines[loc].set_color(None)
 
         ax.grid(which='major', linewidth=1, clip_on=False)
-        ax.patch.set_facecolor('0.94')
 
-        ax.annotate('{}@{}'.format(away, home), xy=(0.02,0.02),
+        ax.annotate('{}@{}'.format(away, home), xy=(0.98,0.98),
+                ha='right', va='top', xycoords='axes fraction',
+                zorder=2, color=offblack)
+
+        median, prob = rating.predict_spread(home, away, year, week)
+        ax.axvline(median, 0, prob, 
+                color=plt.cm.Oranges(.6), zorder=1, lw=1, alpha=0.8)
+
+        winner = home if median > 0 else away
+        ax.annotate('{} {}'.format(winner, -abs(median)), xy=(0.02,0.02),
                 ha='left', va='bottom', xycoords='axes fraction',
-                zorder=2)
-
-        median = rating.predict_spread(home, away, year, week)
-        ax.axvline(median, color=plt.cm.Oranges(.6), zorder=1,
-                lw=1, alpha=0.8)
-
+                zorder=2, color=offblack)
 
     fig.patch.set_facecolor('white')
     fig.text(0.5, 0.0, r'home $-$ away [points]',
             ha='center', va='bottom')
     fig.text(0.01, 0.5, r'Prob(home $-$ away > x)',
             ha='center', va='center', rotation=90)
+    fig.text(0.5, 0.99, r'Week {}, {}'.format(week, year),
+            ha='center', va='center', fontsize=texnormal)
     fig.tight_layout(w_pad=0.4, h_pad=0.4, pad=2) 
 
 def elo_history(self, team, margin):
@@ -202,7 +208,6 @@ def elo_history(self, team, margin):
 
     # plot "fair" elo rating history
     rtg_fair = [(date, rtg['fair']) for date, rtg in rtg_history]
-    #plt.step(*zip(*rtg_fair), label=team)
 
     # plot "handicapped" elo rating history
     rtg_hcap = [(date, rtg['hcap']) for date, rtg in rtg_history]
