@@ -66,7 +66,7 @@ def plot(f):
     def wrapper(*args, **kwargs):
         print(f.__name__)
         f(*args, **kwargs)
-        plt.savefig('fig/{}.png'.format(f.__name__), dpi=192)
+        plt.savefig('fig/{}.pdf'.format(f.__name__))
         plt.close()
 
     plot_functions[f.__name__] = wrapper
@@ -175,7 +175,48 @@ def weekly_spreads(year=2016, week=16):
             ha='center', va='center', fontsize=texnormal)
     fig.tight_layout(w_pad=0.4, h_pad=0.4, pad=2) 
 
-def elo_history(self, team, margin):
+@plot
+def toy_model(nsample=10**4):
+    # run elo ratings simulation
+    rating = elo.Rating(kfactor=2, kdecay=1e4, database='elo.db')
+    home, away = [
+            np.random.negative_binomial(n, 0.5, size=nsample)
+            for n in (10, 6)
+            ]
+
+    # home team true win rate
+    wins = [h > a for h, a in zip(home, away)]
+    win_rate = sum(wins)/float(len(wins))
+
+    # initialize elo ratings
+    arg = max(1/win_rate - 1, 1e-6)
+    elo_diff = -200*np.log10(arg)
+    home_elo = 1500. + elo_diff
+    away_elo = 1500. - elo_diff
+
+    win_prob = []
+
+    # simulate a ficticious season
+    for home_score, away_score in zip(home, away):
+        points = home_score - away_score
+        elo_diff = home_elo - away_elo
+        bounty = rating.elo_change(elo_diff, points, 0)
+        home_elo += bounty
+        away_elo -= bounty
+        win_prob.append(
+                rating.win_prob(home_elo - away_elo)
+                )
+
+    # plot model
+    plt.step(range(nsample), win_prob)
+    plt.axhline(win_rate, color=plt.cm.Oranges(.6), lw=2)
+    plt.xlabel('Iteration [Games]')
+    plt.ylabel('Win %')
+    plt.ylim(0, 1)
+        
+
+
+def elo_history(team, margin):
     """
     Plot the ELO rating history for a given team with a 
     specified margin of victory handicap.
@@ -183,7 +224,7 @@ def elo_history(self, team, margin):
     """
     # convert (year, week) into a single date number
     def date(game):
-        return game.season_year + game.week/float(nweeks)
+        return game.season_year + game.week/float(17.)
 
     # query database for game dates
     q = nfldb.Query(nfldb.connect())

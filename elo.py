@@ -18,7 +18,7 @@ nweeks = 17
 nested_dict = lambda: defaultdict(nested_dict)
 
 class Rating:
-    def __init__(self, kfactor=20, kdecay=20, database='elo.db'):
+    def __init__(self, kfactor=40, kdecay=40, database='elo.db'):
         # k factor parameters
         self.kfactor = kfactor
         self.kdecay = kdecay
@@ -143,11 +143,7 @@ class Rating:
         # home team wins
         if points - handicap > 0:
             return K * (1. - prob)
-        # home and away team tie
-        elif points - handicap == 0:
-            return K * (0.5 - prob)
-        # away team wins
-        elif points - handicap < 0:
+        else:
             return -K * prob
 
     def calc_elo(self):
@@ -250,7 +246,7 @@ class Rating:
             cumulative_win_prob.append(self.win_prob(rtg_diff))
 
         return spreads, gaussian_filter1d(
-                cumulative_win_prob, 2, mode='constant'
+                cumulative_win_prob, 3, mode='constant'
                 )
 
 
@@ -268,9 +264,50 @@ class Rating:
 
         return median, prob
 
+        
+    def predict_score(self, home, away, year, week):
+        # cumulative spread distribution
+        pts, cprob = self.cdf(home, away, year, week)
+        spread = 0.5*(pts[:-1] + pts[1:])
+        prob = -np.diff(cprob)
+        
+        score = np.average(spread, weights=prob)
+
+        return score
+
     def win_prob(self, rtg_diff):
         """
         Proability that a team will win as a function of ELO difference
 
         """
         return 1./(10**(-rtg_diff/400.) + 1.)
+
+    def model_accuracy(self):
+        # nfldb database
+        q = nfldb.Query(self.nfldb)
+        q.game(season_type='Regular')
+
+        residuals = []
+
+        for n, game in enumerate(q.as_games()):
+            year = game.season_year
+            week = game.week
+            home = game.home_team
+            away = game.away_team
+
+            # allow for one season burn-in
+            if year > 2009:
+                predicted, _ = self.predict_spread(home, away, year, week)
+                observed = game.home_score - game.away_score
+                print(predicted, observed)
+                residuals.append(np.square(observed - predicted))
+
+        return np.sqrt(np.mean(residuals))
+
+def main():
+    rating = Rating(kfactor=60, kdecay=80)
+    rms_error = rating.model_accuracy()
+    print(rms_error)
+
+if __name__ == "__main__":
+    main()
