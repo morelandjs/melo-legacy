@@ -18,7 +18,7 @@ nweeks = 17
 nested_dict = lambda: defaultdict(nested_dict)
 
 class Rating:
-    def __init__(self, kfactor=40, kdecay=1e6, database='elo.db'):
+    def __init__(self, kfactor=60, kdecay=1e6, database='elo.db'):
         # k factor parameters
         self.kfactor = kfactor
         self.kdecay = kdecay
@@ -246,7 +246,7 @@ class Rating:
             cumulative_win_prob.append(self.win_prob(rtg_diff))
 
         return spreads, gaussian_filter1d(
-                cumulative_win_prob, 3, mode='constant'
+                cumulative_win_prob, 2, mode='constant'
                 )
 
 
@@ -267,17 +267,12 @@ class Rating:
         
     def predict_score(self, home, away, year, week):
         # cumulative spread distribution
-        pts, cprob = self.cdf(home, away, year, week)
-        spread = 0.5*(pts[:-1] + pts[1:])
-        prob = -np.diff(cprob)
-        
-        score = np.average(spread, weights=prob)
-
-        return score
+        _, cprob = self.cdf(home, away, year, week)
+        return sum(cprob) - 40.
 
     def win_prob(self, rtg_diff):
         """
-        Proability that a team will win as a function of ELO difference
+        Probability that a team will win as a function of ELO difference
 
         """
         return 1./(10**(-rtg_diff/400.) + 1.)
@@ -296,15 +291,15 @@ class Rating:
             away = game.away_team
 
             # allow for one season burn-in
-            if year > 2009:
-                predicted, _ = self.predict_spread(home, away, year, week)
+            if year > 2014:
+                predicted = self.predict_score(home, away, year, week)
                 observed = game.home_score - game.away_score
-                residuals.append(np.square(observed - predicted))
+                residuals.append(observed - predicted)
 
-        return np.sqrt(np.mean(residuals))
+        return np.std(residuals)
 
 def main():
-    rating = Rating(kfactor=40, kdecay=1e6)
+    rating = Rating(kfactor=60, kdecay=1e5)
     rms_error = rating.model_accuracy()
     print(rms_error)
 
