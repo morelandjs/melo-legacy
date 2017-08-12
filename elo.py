@@ -18,7 +18,7 @@ nweeks = 17
 nested_dict = lambda: defaultdict(nested_dict)
 
 class Rating:
-    def __init__(self, kfactor=40, kdecay=40, database='elo.db'):
+    def __init__(self, kfactor=40, kdecay=1e6, database='elo.db'):
         # k factor parameters
         self.kfactor = kfactor
         self.kdecay = kdecay
@@ -299,13 +299,12 @@ class Rating:
             if year > 2009:
                 predicted, _ = self.predict_spread(home, away, year, week)
                 observed = game.home_score - game.away_score
-                print(predicted, observed)
                 residuals.append(np.square(observed - predicted))
 
         return np.sqrt(np.mean(residuals))
 
 def main():
-    rating = Rating(kfactor=60, kdecay=80)
+    rating = Rating(kfactor=40, kdecay=1e6)
     rms_error = rating.model_accuracy()
     print(rms_error)
 
