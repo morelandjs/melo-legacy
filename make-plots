@@ -91,6 +91,17 @@ def finish(despine=True, remove_ticks=False, pad=0.1,
 
     fig.tight_layout(pad=pad, h_pad=h_pad, w_pad=w_pad, rect=rect)
 
+def nbd(mean, std, size=1000):
+    """
+    Express negative binomial distribution as a function of its mean
+    and standard deviation.
+
+    """
+    n = -mean**2/float(mean - std**2)
+    p = mean/float(std**2)
+
+    return np.array(np.random.negative_binomial(n, p, size=size))
+
 @plot
 def spread_frequency():
     """
@@ -177,43 +188,62 @@ def weekly_spreads(year=2016, week=16):
 
 @plot
 def toy_model(nsample=10**4):
-    # run elo ratings simulation
-    rating = elo.Rating(kfactor=2, kdecay=1e4, database='elo.db')
-    home, away = [
-            np.random.negative_binomial(n, 0.5, size=nsample)
-            for n in (10, 6)
-            ]
+    rating = elo.Rating(kfactor=1, database='elo.db')
+    home, away = [nbd(mean, 7, size=nsample) for mean in (14, 7)]
 
-    # home team true win rate
-    wins = [h > a for h, a in zip(home, away)]
-    win_rate = sum(wins)/float(len(wins))
+    # loop over different handicap margins
+    for hcap in [0, 7, 14, 21]:
 
-    # initialize elo ratings
-    arg = max(1/win_rate - 1, 1e-6)
-    elo_diff = -200*np.log10(arg)
-    home_elo = 1500. + elo_diff
-    away_elo = 1500. - elo_diff
+        # home team true win rate
+        spreads = home - away - hcap
+        win_rate = np.heaviside(spreads, 0).mean()
 
-    win_prob = []
+        # initialize elo ratings
+        arg = max(1/win_rate - 1, 1e-6)
+        elo_diff = -200*np.log10(arg)
+        home_elo = 1500. + elo_diff
+        away_elo = 1500. - elo_diff
 
-    # simulate a ficticious season
-    for home_score, away_score in zip(home, away):
-        points = home_score - away_score
-        elo_diff = home_elo - away_elo
-        bounty = rating.elo_change(elo_diff, points, 0)
-        home_elo += bounty
-        away_elo -= bounty
-        win_prob.append(
-                rating.win_prob(home_elo - away_elo)
-                )
+        win_prob = []
 
-    # plot model
-    plt.step(range(nsample), win_prob)
-    plt.axhline(win_rate, color=plt.cm.Oranges(.6), lw=2)
-    plt.xlabel('Iteration [Games]')
-    plt.ylabel('Win %')
+        # simulate a ficticious season
+        for home_score, away_score in zip(home, away):
+            points = home_score - away_score
+            elo_diff = home_elo - away_elo
+            bounty = rating.elo_change(elo_diff, points, hcap)
+            home_elo += bounty
+            away_elo -= bounty
+            pwin = rating.win_prob(home_elo - away_elo)
+            win_prob.append(pwin)
+
+        # plot model
+        blue, orange = (plt.cm.Blues(.6), plt.cm.Oranges(.6))
+        plt.step(range(nsample), win_prob, color=blue)
+        plt.axhline(win_rate, color=orange, lw=1.5, dashes=(4,2))
+        plt.annotate('hcap: {} pts'.format(hcap), xycoords='data',
+                xy=(nsample, win_rate+0.02), ha='right', va='bottom')
+
+    # figure labels
+    plt.xlabel("Iteration [Games]")
+    plt.ylabel("Win %")
     plt.ylim(0, 1)
-        
+    plt.title("Handicapped win probability")
+
+@plot
+def home_field():
+    q = nfldb.Query(nfldb.connect())
+    q.game(season_type='Regular', season_year=[2015])
+
+    hfa = []
+    for game in q.as_games():
+        year = game.season_year
+        week = game.week
+        home = game.home_team
+        away = game.away_team
+
+        hfa.append(rating.predict_score('home', 'away', year, week))
+
+    plt.scatter(np.arange(len(hfa)), hfa)
 
 
 def elo_history(team, margin):

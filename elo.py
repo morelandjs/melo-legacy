@@ -18,28 +18,31 @@ nweeks = 17
 nested_dict = lambda: defaultdict(nested_dict)
 
 class Rating:
-    def __init__(self, kfactor=60, kdecay=1e6, database='elo.db'):
-        # k factor parameters
+    def __init__(self, kfactor=50, decay=0.7, database='elo.db'):
         self.kfactor = kfactor
-        self.kdecay = kdecay
+        self.decay = decay
 
-        # score and elo containers
         self.nfldb = nfldb.connect()
         self.spread_prob = self.spread_probability()
-        self.elodb = self.calc_elo()
+        self.elodb = nested_dict()
+        self.calc_elo()
 
-    def hfa(self, elodb, handicap, year, week):
+    def hfa(self, handicap, year, week):
         """
         ELO bonus for home field advantage
 
         """
-        home_rtg = self.query_elo(elodb, 'home', handicap, year, week)
-        away_rtg = self.query_elo(elodb, 'away', handicap, year, week)
+        hfa = []
+        for yr, wk in self.rewind(year, week, n=17):
+            home_rtg = self.query_elo('home', handicap, yr, wk)
+            away_rtg = self.query_elo('away', handicap, yr, wk)
 
-        hcap_diff = home_rtg['hcap'] - away_rtg['hcap']
-        fair_diff = home_rtg['fair'] - away_rtg['fair']
+            hcap_diff = home_rtg['hcap'] - away_rtg['hcap']
+            fair_diff = home_rtg['fair'] - away_rtg['fair']
 
-        return 0.5*(hcap_diff + fair_diff)
+            hfa.append(0.5*(hcap_diff + fair_diff))
+
+        return np.mean(hfa)
 
     def starting_elo(self, margin):
         """
@@ -106,7 +109,13 @@ class Rating:
                 week = nweeks
             yield year, week
 
-    def query_elo(self, elodb, team, margin, year, week):
+    def regress(self, rtg, week):
+        if week == 1:
+            rtg['fair'] = 1500. + self.decay * (rtg['fair'] - 1500.)
+            rtg['hcap'] = 1500. + self.decay * (rtg['hcap'] - 1500.)
+        return rtg
+
+    def query_elo(self, team, margin, year, week):
         """
         Queries the most recent ELO rating for a team, i.e.
         elo(year, week) for (year, week) < (query year, query week)
@@ -122,14 +131,14 @@ class Rating:
                 yield yr, wk
 
         for yr, wk in previous(year, week):
-            elo = elodb[team][margin][yr][wk]
+            elo = self.elodb[team][margin][yr][wk]
             if elo:
-                return elo.copy()
+                return self.regress(elo.copy(), wk)
 
         elo = self.starting_elo(margin)
-        elodb[team][margin][year-1][nweeks] = elo
+        self.elodb[team][margin][year-1][nweeks] = elo
 
-        return elo
+        return self.regress(elo, week)
 
 
     def elo_change(self, rating_diff, points, handicap):
@@ -138,13 +147,11 @@ class Rating:
 
         """
         prob = self.win_prob(rating_diff)
-        K = self.kfactor * np.exp(-handicap/self.kdecay)
 
-        # home team wins
         if points - handicap > 0:
-            return K * (1. - prob)
+            return self.kfactor * (1. - prob)
         else:
-            return -K * prob
+            return -self.kfactor * prob
 
     def calc_elo(self):
         """
@@ -155,10 +162,6 @@ class Rating:
         # nfldb database
         q = nfldb.Query(self.nfldb)
         q.game(season_type='Regular')
-
-        # store elo ratings
-        elodb = nested_dict()
-        elo = self.query_elo
 
         # small sorting function
         def time(game):
@@ -187,11 +190,11 @@ class Rating:
                 for handicap in range(41):
 
                     # query current elo ratings from most recent game
-                    home_rtg = elo(elodb, home, handicap, year, week)
-                    away_rtg = elo(elodb, away, handicap, year, week)
+                    home_rtg = self.query_elo(home, handicap, year, week)
+                    away_rtg = self.query_elo(away, handicap, year, week)
 
                     # disable hfa for home vs away elo calc
-                    hfa = (self.hfa(elodb, handicap, year, week)
+                    hfa = (self.hfa(handicap, year, week)
                             if scale == 1 else 0.)
 
                     # elo change when home(away) team is handicapped
@@ -218,10 +221,7 @@ class Rating:
 
                     # update elo ratings
                     for team, team_rtg in team_rtgs:
-                        elodb[team][handicap][year][week] = team_rtg
-
-        # return final elo ratings
-        return elodb
+                        self.elodb[team][handicap][year][week] = team_rtg
 
     def cdf(self, home, away, year, week):
         """
@@ -234,9 +234,9 @@ class Rating:
 
         for handicap in spreads:
             hcap = abs(handicap)
-            home_rtg = self.query_elo(self.elodb, home, hcap, year, week)
-            away_rtg = self.query_elo(self.elodb, away, hcap, year, week)
-            hfa = self.hfa(self.elodb, hcap, year, week)
+            home_rtg = self.query_elo(home, hcap, year, week)
+            away_rtg = self.query_elo(away, hcap, year, week)
+            hfa = self.hfa(hcap, year, week)
 
             if handicap < 0:
                 rtg_diff = home_rtg['fair'] - away_rtg['hcap'] + hfa
@@ -267,7 +267,8 @@ class Rating:
         
     def predict_score(self, home, away, year, week):
         # cumulative spread distribution
-        _, cprob = self.cdf(home, away, year, week)
+        spreads, cprob = self.cdf(home, away, year, week)
+
         return sum(cprob) - 40.
 
     def win_prob(self, rtg_diff):
@@ -284,6 +285,7 @@ class Rating:
 
         residuals = []
 
+        # loop over all historical games
         for n, game in enumerate(q.as_games()):
             year = game.season_year
             week = game.week
@@ -291,7 +293,7 @@ class Rating:
             away = game.away_team
 
             # allow for one season burn-in
-            if year > 2014:
+            if year > 2012 and week > 8:
                 predicted = self.predict_score(home, away, year, week)
                 observed = game.home_score - game.away_score
                 residuals.append(observed - predicted)
@@ -299,7 +301,7 @@ class Rating:
         return np.std(residuals)
 
 def main():
-    rating = Rating(kfactor=60, kdecay=1e5)
+    rating = Rating(kfactor=60, decay=0.6)
     rms_error = rating.model_accuracy()
     print(rms_error)
 
