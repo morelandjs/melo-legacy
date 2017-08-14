@@ -5,6 +5,7 @@ import sqlite3
 from collections import defaultdict
 from pathlib import Path
 from scipy.ndimage.filters import gaussian_filter1d
+from scipy.optimize import minimize
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -208,11 +209,10 @@ class Rating:
 
         # fit a quadratic polynomial
         coeff = np.polyfit([x0, x1, x2], [y0, y1, y2], 2)
+        res = minimize(lambda x: np.square(np.polyval(coeff, x) - 0.5), x1)
+        median = round(res.x * 2) / 2
 
-        print(np.polyval(coeff, x1))
-        quit()
-
-        return median, prob
+        return median, cprob[index]
         
     def predict_score(self, home, away, year, week):
         """
@@ -248,7 +248,7 @@ class Rating:
         residuals = []
 
         # loop over all historical games
-        for n, game in enumerate(q.as_games()):
+        for game in q.as_games():
             year = game.season_year
             week = game.week
             home = game.home_team
@@ -268,7 +268,6 @@ def main():
 
     """
     rating = Rating(kfactor=60, decay=0.6)
-    rating.predict_spread('CLE', 'NE', 2016, 12)
     mean_error, rms_error = rating.model_accuracy()
     print(mean_error, rms_error)
 

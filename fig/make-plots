@@ -164,8 +164,8 @@ def weekly_spreads(year=2016, week=17):
                 zorder=2, color=offblack)
 
         median, prob = rating.predict_spread(home, away, year, week)
-        ax.axvline(median, 0, prob, 
-                color=plt.cm.Oranges(.6), zorder=1, lw=1, alpha=0.8)
+        ax.axvline(median, 0, prob, color=plt.cm.Oranges(.6),
+                zorder=1, lw=1, alpha=0.8)
 
         winner = home if median > 0 else away
         ax.annotate('{} {}'.format(winner, -abs(median)), xy=(0.02,0.02),
