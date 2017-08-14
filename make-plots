@@ -120,7 +120,7 @@ def spread_frequency():
     finish()
 
 @plot
-def weekly_spreads(year=2016, week=16):
+def weekly_spreads(year=2016, week=17):
     """
     Calculate the 50-50 betting point-spread for each team.
 
@@ -195,7 +195,7 @@ def toy_model(nsample=10**4):
     for hcap in [0, 7, 14, 21]:
 
         # home team true win rate
-        spreads = home - away - hcap
+        spreads = home - away - hcap 
         win_rate = np.heaviside(spreads, 0).mean()
 
         # initialize elo ratings
@@ -229,24 +229,7 @@ def toy_model(nsample=10**4):
     plt.ylim(0, 1)
     plt.title("Handicapped win probability")
 
-@plot
-def home_field():
-    q = nfldb.Query(nfldb.connect())
-    q.game(season_type='Regular', season_year=[2015])
-
-    hfa = []
-    for game in q.as_games():
-        year = game.season_year
-        week = game.week
-        home = game.home_team
-        away = game.away_team
-
-        hfa.append(rating.predict_score('home', 'away', year, week))
-
-    plt.scatter(np.arange(len(hfa)), hfa)
-
-
-def elo_history(team, margin):
+def elo_history(team='JAC', margin=0):
     """
     Plot the ELO rating history for a given team with a 
     specified margin of victory handicap.
@@ -258,15 +241,12 @@ def elo_history(team, margin):
 
     # query database for game dates
     q = nfldb.Query(nfldb.connect())
-    q.game(season_type='Regular')
-    if team not in ('home', 'away'):
-        q.game(team=team)
+    q.game(season_type='Regular', team=team)
 
     # unpack historical elo ratings
     rtg_history = [
             (date(game),
-            self.query_elo(
-                self.elodb,
+            rating.query_elo(
                 team,
                 margin,
                 game.season_year,
@@ -285,8 +265,11 @@ def elo_history(team, margin):
     # figure properties
     plt.xlabel('Time (year, week)')
     plt.ylabel('ELO rating'.format(margin))
-    plt.title('Handicap={} pts'.format(margin))
 
+@plot
+def team_history(team='STL'):
+    for margin in range(40):
+        elo_history(team, margin)
 
 def main():
     parser = argparse.ArgumentParser()
