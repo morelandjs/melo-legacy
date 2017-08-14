@@ -1,7 +1,6 @@
 #!/usr/bin/env python2
 
 import argparse
-from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -59,10 +58,6 @@ rating = melo.Rating(database='elo.db')
 plot_functions = {}
 
 def plot(f):
-    fig = Path('fig')
-    if not fig.exists():
-        fig.mkdir()
-
     def wrapper(*args, **kwargs):
         print(f.__name__)
         f(*args, **kwargs)

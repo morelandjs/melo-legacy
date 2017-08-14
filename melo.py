@@ -1,10 +1,8 @@
 #!/usr/bin/env python2
 
-import copy
+import bisect
 import sqlite3
 from collections import defaultdict
-from functools import partial
-from itertools import chain
 from pathlib import Path
 from scipy.ndimage.filters import gaussian_filter1d
 
@@ -177,7 +175,7 @@ class Rating:
 
         """
         spreads = np.arange(-40, 41)
-        cumulative_win_prob = []
+        cprob = []
 
         for handicap in spreads:
             hcap = abs(handicap)
@@ -189,11 +187,9 @@ class Rating:
             else:
                 rtg_diff = home_rtg['hcap'] - away_rtg['fair'] + self.hfa
 
-            cumulative_win_prob.append(self.win_prob(rtg_diff))
+            cprob.append(self.win_prob(rtg_diff))
 
-        return spreads, gaussian_filter1d(
-                cumulative_win_prob, 0, mode='constant'
-                )
+        return spreads, gaussian_filter1d(cprob, 0, mode='constant')
 
     def predict_spread(self, home, away, year, week):
         """
@@ -202,17 +198,35 @@ class Rating:
 
         """
         # cumulative spread distribution
-        cdf = self.cdf(home, away, year, week)
+        spreads, cprob = self.cdf(home, away, year, week)
 
         # plot median prediction (compare to vegas spread)
-        median, prob = min(zip(*cdf), key=lambda k: abs(k[1] - 0.5))
+        index = np.square(cprob - 0.5).argmin()
+        x0, y0 = (spreads[index - 1], cprob[index - 1])
+        x1, y1 = (spreads[index], cprob[index])
+        x2, y2 = (spreads[index + 1], cprob[index + 1])
+
+        # fit a quadratic polynomial
+        coeff = np.polyfit([x0, x1, x2], [y0, y1, y2], 2)
+
+        print(np.polyval(coeff, x1))
+        quit()
 
         return median, prob
         
     def predict_score(self, home, away, year, week):
+        """
+        The model predicts the CDF of win margins, i.e. P(spread > x).
+        One can use integration by parts to calculate the expected score
+        from the CDF,
+
+        E(x) = \int x P(x)
+
+        """
         # cumulative spread distribution
         spreads, cprob = self.cdf(home, away, year, week)
 
+        # Calc via integration byE(x) = \int x P(x)
         return sum(cprob) - 40.5
 
     def win_prob(self, rtg_diff):
@@ -240,7 +254,7 @@ class Rating:
             home = game.home_team
             away = game.away_team
 
-            # allow for one season burn-in
+            # allow for two season burn-in
             if year > 2011:
                 predicted = self.predict_score(home, away, year, week)
                 observed = game.home_score - game.away_score
@@ -249,7 +263,12 @@ class Rating:
         return np.mean(residuals), np.std(residuals)
 
 def main():
+    """
+    Main function prints the model accuracy parameters and exits
+
+    """
     rating = Rating(kfactor=60, decay=0.6)
+    rating.predict_spread('CLE', 'NE', 2016, 12)
     mean_error, rms_error = rating.model_accuracy()
     print(mean_error, rms_error)
 
