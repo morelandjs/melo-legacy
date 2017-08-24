@@ -17,7 +17,7 @@ nweeks = 17
 nested_dict = lambda: defaultdict(nested_dict)
 
 class Rating:
-    def __init__(self, kfactor=40, decay=0.7, hfa=60.0, database='elo.db'):
+    def __init__(self, kfactor=60, decay=0.7, hfa=0.0, database='elo.db'):
         self.kfactor = kfactor
         self.decay = decay
         self.hfa = hfa
@@ -39,7 +39,7 @@ class Rating:
         arg = max(1/prob - 1, 1e-6)
         elo_diff = 200*np.log10(arg)
 
-        return {'fair': elo_init + elo_diff, 'hcap': elo_init - elo_diff}
+        return {'adv': elo_init + elo_diff, 'hcap': elo_init - elo_diff}
 
     def spreads(self):
         """
@@ -48,7 +48,7 @@ class Rating:
         """
         q = nfldb.Query(self.nfldb)
         q.game(season_type='Regular')
-        spreads = [abs(g.home_score - g.away_score) for g in q.as_games()]
+        spreads = [g.home_score - g.away_score for g in q.as_games()]
 
         return spreads
 
@@ -58,7 +58,8 @@ class Rating:
 
         """
         bins = np.arange(-0.5, 41.5)
-        hist, edges = np.histogram(self.spreads(), bins=bins, normed=True)
+        spreads = np.abs(self.spreads())
+        hist, edges = np.histogram(spreads, bins=bins, normed=True)
         spread = 0.5*(edges[:-1] + edges[1:])
         prob = np.cumsum(hist[::-1], dtype=float)[::-1]
 
@@ -151,15 +152,15 @@ class Rating:
                             hcap
                             )
                         for (a, b, hcap) in [
-                            ('hcap', 'fair', handicap),
-                            ('fair', 'hcap', -handicap),
+                            ('hcap', 'adv', handicap),
+                            ('adv', 'hcap', -handicap),
                             ]
                         ]
 
                 # scale update by ngames if necessary
                 home_rtg['hcap'] += bounty_home_hcap
-                away_rtg['fair'] -= bounty_home_hcap
-                home_rtg['fair'] += bounty_away_hcap
+                away_rtg['adv'] -= bounty_home_hcap
+                home_rtg['adv'] += bounty_away_hcap
                 away_rtg['hcap'] -= bounty_away_hcap
 
                 # home and away team elo data
@@ -184,13 +185,13 @@ class Rating:
             away_rtg = self.query_elo(away, hcap, year, week)
 
             if handicap < 0:
-                rtg_diff = home_rtg['fair'] - away_rtg['hcap'] + self.hfa
+                rtg_diff = home_rtg['adv'] - away_rtg['hcap'] + self.hfa
             else:
-                rtg_diff = home_rtg['hcap'] - away_rtg['fair'] + self.hfa
+                rtg_diff = home_rtg['hcap'] - away_rtg['adv'] + self.hfa
 
             cprob.append(self.win_prob(rtg_diff))
 
-        return spreads, gaussian_filter1d(cprob, 0, mode='constant')
+        return spreads, np.sort(cprob)[::-1]
 
     def predict_spread(self, home, away, year, week):
         """
@@ -255,20 +256,22 @@ class Rating:
             away = game.away_team
 
             # allow for two season burn-in
-            if year > 2011:
+            if year > 2010:
                 predicted = self.predict_score(home, away, year, week)
                 observed = game.home_score - game.away_score
                 residuals.append(observed - predicted)
 
-        return np.mean(residuals), np.std(residuals)
+        return residuals
 
 def main():
     """
     Main function prints the model accuracy parameters and exits
 
     """
-    rating = Rating(kfactor=60, decay=0.6)
-    mean_error, rms_error = rating.model_accuracy()
+    rating = Rating()
+    residuals = rating.model_accuracy()
+    mean_error = np.mean(residuals)
+    rms_error = np.std(residuals)
     print(mean_error, rms_error)
 
 if __name__ == "__main__":

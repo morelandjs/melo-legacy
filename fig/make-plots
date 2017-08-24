@@ -4,9 +4,12 @@ import argparse
 
 import matplotlib.pyplot as plt
 import numpy as np
+from itertools import product
+from scipy.stats import skellam
 
 import melo
 import nfldb
+import nflgame
 
 
 # figure size
@@ -86,17 +89,6 @@ def finish(despine=True, remove_ticks=False, pad=0.1,
 
     fig.tight_layout(pad=pad, h_pad=h_pad, w_pad=w_pad, rect=rect)
 
-def nbd(mean, std, size=1000):
-    """
-    Express negative binomial distribution as a function of its mean
-    and standard deviation.
-
-    """
-    n = -mean**2/float(mean - std**2)
-    p = mean/float(std**2)
-
-    return np.array(np.random.negative_binomial(n, p, size=size))
-
 @plot
 def spread_frequency():
     """
@@ -115,7 +107,7 @@ def spread_frequency():
     finish()
 
 @plot
-def weekly_spreads(year=2016, week=17):
+def weekly_spreads(year=2017, week=1):
     """
     Calculate the 50-50 betting point-spread for each team.
 
@@ -126,12 +118,11 @@ def weekly_spreads(year=2016, week=17):
             figsize=(textwidth, textwidth),
             )
 
-    q = nfldb.Query(nfldb.connect())
-    q.game(season_year=year, week=week, season_type='Regular')
+    nflgame_sched = nflgame.live._games_in_week(year, week)
+    for game, ax in zip(nflgame_sched, axes.flat):
 
-    for game, ax in zip(q.as_games(), axes.flat):
-        home = game.home_team
-        away = game.away_team
+        home = game['home']
+        away = game['away']
 
         spread, prob = rating.cdf(home, away, year, week)
         ax.step(spread, prob)
@@ -157,8 +148,6 @@ def weekly_spreads(year=2016, week=17):
         for loc in 'top', 'right':
             ax.spines[loc].set_color(None)
 
-        ax.grid(which='major', linewidth=1, clip_on=False)
-
         ax.annotate('{}@{}'.format(away, home), xy=(0.98,0.98),
                 ha='right', va='top', xycoords='axes fraction',
                 zorder=2, color=offblack)
@@ -172,7 +161,6 @@ def weekly_spreads(year=2016, week=17):
                 ha='left', va='bottom', xycoords='axes fraction',
                 zorder=2, color=offblack)
 
-    fig.patch.set_facecolor('white')
     fig.text(0.5, 0.0, r'home $-$ away [points]',
             ha='center', va='bottom')
     fig.text(0.01, 0.5, r'Prob(home $-$ away > x)',
@@ -182,30 +170,83 @@ def weekly_spreads(year=2016, week=17):
     fig.tight_layout(w_pad=0.4, h_pad=0.4, pad=2) 
 
 @plot
-def toy_model(nsample=10**4):
-    rating = melo.Rating(kfactor=1, database='elo.db')
-    home, away = [nbd(mean, 7, size=nsample) for mean in (14, 7)]
+def weekly_ratings(year=2017, week=1):
+    """
+    Calculate the ELO ratings for each handicap
+
+    """
+    fig, axes = plt.subplots(
+            nrows=4, ncols=4,
+            sharex=True, sharey=True,
+            figsize=(textwidth, textwidth),
+            )
+
+    nflgame_sched = nflgame.live._games_in_week(year, week)
+    for game, ax in zip(nflgame_sched, axes.flat):
+
+        rtg = 'hcap', 'fair'
+        home = game['home']
+        away = game['away']
+        teams = home, away
+
+        spread = np.arange(40)
+
+        for team, rtg in product(teams, rtg):
+            elo = [rating.query_elo(team, hcap, year, week)[rtg]
+                    for hcap in spread]
+            ax.scatter(spread, elo)
+
+        if ax.is_last_row():
+            xticks = [0, 10, 20, 30, 40]
+            ax.set_xticks(xticks)
+            ax.set_xlim(0, 40)
+
+        for axis in (ax.xaxis.get_major_ticks(),
+                ax.yaxis.get_major_ticks()):
+            for tic in axis:
+                tic.tick1On = tic.tick2On = False
+
+        for loc in 'bottom', 'left':
+            ax.spines[loc].set_color(offblack)
+            ax.spines[loc].set_linewidth(1)
+
+        for loc in 'top', 'right':
+            ax.spines[loc].set_color(None)
+
+        ax.annotate('{}@{}'.format(away, home), xy=(0.98,0.98),
+                ha='right', va='top', xycoords='axes fraction',
+                zorder=2, color=offblack)
+
+    fig.text(0.5, 0.0, r'Handicap [points]',
+            ha='center', va='bottom')
+    fig.text(0.01, 0.5, r'Elo rating',
+            ha='center', va='center', rotation=90)
+    fig.text(0.5, 0.99, r'Week {}, {}'.format(week, year),
+            ha='center', va='center', fontsize=texnormal)
+    fig.tight_layout(w_pad=0.4, h_pad=0.4, pad=2) 
+
+@plot
+def win_rate(nsample=10**4):
+    rating = melo.Rating(kfactor=2, database='elo.db')
+    spreads = skellam.rvs(14, 7, size=nsample)
 
     # loop over different handicap margins
-    for hcap in [0, 7, 14, 21]:
+    for hcap in np.arange(0, 14, 2):
 
         # home team true win rate
-        spreads = home - away - hcap 
-        win_rate = np.heaviside(spreads, 0).mean()
+        win_rate = np.heaviside(spreads - hcap, 0).mean()
 
         # initialize elo ratings
         arg = max(1/win_rate - 1, 1e-6)
         elo_diff = -200*np.log10(arg)
         home_elo = 1500. + elo_diff
         away_elo = 1500. - elo_diff
-
         win_prob = []
 
         # simulate a ficticious season
-        for home_score, away_score in zip(home, away):
-            points = home_score - away_score
+        for spread in spreads:
             elo_diff = home_elo - away_elo
-            bounty = rating.elo_change(elo_diff, points, hcap)
+            bounty = rating.elo_change(elo_diff, spread, hcap)
             home_elo += bounty
             away_elo -= bounty
             pwin = rating.win_prob(home_elo - away_elo)
@@ -216,15 +257,17 @@ def toy_model(nsample=10**4):
         plt.step(range(nsample), win_prob, color=blue)
         plt.axhline(win_rate, color=orange, lw=1.5, dashes=(4,2))
         plt.annotate('hcap: {} pts'.format(hcap), xycoords='data',
-                xy=(nsample, win_rate+0.02), ha='right', va='bottom')
+                xy=(nsample, win_rate+0.02), ha='right', va='bottom',
+                color=offblack)
 
     # figure labels
     plt.xlabel("Iteration [Games]")
     plt.ylabel("Win %")
     plt.ylim(0, 1)
     plt.title("Handicapped win probability")
+    finish()
 
-def elo_history(team='JAC', margin=0):
+def elo_history(team, handicap):
     """
     Plot the ELO rating history for a given team with a 
     specified margin of victory handicap.
@@ -237,34 +280,98 @@ def elo_history(team='JAC', margin=0):
     # query database for game dates
     q = nfldb.Query(nfldb.connect())
     q.game(season_type='Regular', team=team)
+    games = sorted(q.as_games(), key=lambda g: date(g))
 
     # unpack historical elo ratings
     rtg_history = [
             (date(game),
             rating.query_elo(
                 team,
-                margin,
+                handicap,
                 game.season_year,
                 game.week
                 ))
-            for game in sorted(q.as_games(), key=lambda g: date(g))
+            for game in games
             ]
 
-    # plot "fair" elo rating history
-    rtg_fair = [(date, rtg['fair']) for date, rtg in rtg_history]
-
-    # plot "handicapped" elo rating history
+    # return "handicapped" elo rating history
     rtg_hcap = [(date, rtg['hcap']) for date, rtg in rtg_history]
-    plt.step(*zip(*rtg_hcap), label=team)
-
-    # figure properties
-    plt.xlabel('Time (year, week)')
-    plt.ylabel('ELO rating'.format(margin))
+    return rtg_hcap
 
 @plot
-def team_history(team='STL'):
-    for margin in range(40):
-        elo_history(team, margin)
+def team_history():
+    fig, axes = plt.subplots(
+            nrows=8, ncols=4,
+            sharex=True, sharey=True,
+            figsize=(textwidth, 2*textwidth)
+            )
+
+    # query database for game dates
+    q = nfldb.Query(nfldb.connect())
+    q.game(season_type='Regular')
+    teams = set(g.home_team for g in q.as_games())
+
+    for ax, team in zip(axes.flat, sorted(teams)):
+        for hcap in np.linspace(0, 28, 5):
+            rtg_hcap = elo_history(team, hcap)
+            color = plt.cm.coolwarm(hcap/40.)
+            ax.step(*zip(*rtg_hcap), label=team, color=color)
+
+            if ax.is_last_row():
+                ax.set_xlabel("Year")
+                ax.set_xticks([2010, 2012, 2014, 2016])
+            if ax.is_first_col():
+                ax.set_ylabel("ELO rating")
+
+            title = ax.set_title(team, va='top')
+            title.set_position([.5, .95])
+
+    finish()
+
+@plot
+def model_error():
+    # create figure object
+    fig, (ax1, ax2) = plt.subplots(
+            ncols=2, sharey=True,
+            figsize=(textwidth, aspect*columnwidth)
+            )
+
+    # game spreads
+    q = nfldb.Query(nfldb.connect())
+    q.game(season_type='Regular')
+    spreads = [game.home_score - game.away_score
+            for game in q.as_games()]
+
+    # model residuals
+    residuals = rating.model_accuracy()
+    neg_residuals = [-r for r in residuals]
+
+    # compare model predictions and score spread
+    bins = np.arange(-40.5, 41.5)
+    ax1.hist(spreads, bins=bins, histtype='step',
+            normed=True, label='spreads')
+    ax1.hist(residuals, bins=bins, histtype='step',
+            normed=True, label='model')
+
+    ax1.set_xlabel("observed - predicted [points]")
+    ax1.set_ylabel("Counts")
+    ax1.set_title("Model accuracy")
+    ax1.legend()
+
+    # compare model prediction with reflection (home vs away)
+    bins = np.arange(-39, 40, 2)
+    print(bins)
+    ax2.hist(residuals, bins=bins, histtype='step',
+            normed=True, label='model')
+    ax2.hist(neg_residuals, bins=bins, histtype='step',
+            normed=True, label='model reflected')
+
+    ax2.set_xlabel("observed - predicted [points]")
+    ax2.set_title("Home-field error")
+    ax2.legend()
+
+    # figure properties
+    finish()
 
 def main():
     parser = argparse.ArgumentParser()
