@@ -56,7 +56,7 @@ plt.rcParams.update({
 })
 
 # run elo ratings simulation
-rating = melo.Rating(database='elo.db')
+rating = melo.Rating(obs='yards', database='elo.db')
 
 plot_functions = {}
 
@@ -95,15 +95,14 @@ def spread_frequency():
     Frequency of NFL spreads (margin of victory) since 2009
 
     """
-    spreads = rating.spreads()
-    bins = np.arange(-0.5, 41.5)
+    plt.hist(rating.spreads(), bins=rating.bins)
 
-    plt.hist(spreads, bins=bins)
     plt.xlabel('Spread [pts]')
     plt.ylabel('Counts [games]')
     plt.title('Frequency of NFL spreads')
     plt.annotate(r'2009-present', xy=(.9, .9),
             xycoords='axes fraction', ha='right', va='top')
+
     finish()
 
 @plot
@@ -118,23 +117,27 @@ def weekly_spreads(year=2017, week=1):
             figsize=(textwidth, textwidth),
             )
 
-    nflgame_sched = nflgame.live._games_in_week(year, week)
-    for game, ax in zip(nflgame_sched, axes.flat):
+    q = nfldb.Query(nfldb.connect())
+    q.game(season_type='Regular', season_year=year, week=week)
 
-        home = game['home']
-        away = game['away']
+    for game, ax in zip(q.as_games(), axes.flat):
+
+        home = game.home_team
+        away = game.away_team
 
         spread, prob = rating.cdf(home, away, year, week)
         ax.step(spread, prob)
 
         if ax.is_first_col():
-            ax.set_yticks([0, 0.2, 0.4, 0.6, 0.8, 1])
+            yticks = np.linspace(0, 1, 6)
+            ax.set_yticks(yticks)
             ax.set_ylim(0, 1)
 
         if ax.is_last_row():
-            xticks = [-20, -10, 0, 10, 20]
+            xmax = max(rating.range)
+            xticks = np.linspace(-xmax/2, xmax/2, 5)
             ax.set_xticks(xticks)
-            ax.set_xlim(-20, 20)
+            ax.set_xlim(-xmax/2, xmax/2)
 
         for axis in (ax.xaxis.get_major_ticks(),
                 ax.yaxis.get_major_ticks()):
@@ -154,12 +157,12 @@ def weekly_spreads(year=2017, week=1):
 
         median, prob = rating.predict_spread(home, away, year, week)
         ax.axvline(median, 0, prob, color=plt.cm.Oranges(.6),
-                zorder=1, lw=1, alpha=0.8)
+                zorder=3, lw=1, alpha=0.8)
 
         winner = home if median > 0 else away
         ax.annotate('{} {}'.format(winner, -abs(median)), xy=(0.02,0.02),
                 ha='left', va='bottom', xycoords='axes fraction',
-                zorder=2, color=offblack)
+                zorder=4, color=offblack)
 
     fig.text(0.5, 0.0, r'home $-$ away [points]',
             ha='center', va='bottom')
@@ -181,24 +184,25 @@ def weekly_ratings(year=2017, week=1):
             figsize=(textwidth, textwidth),
             )
 
-    nflgame_sched = nflgame.live._games_in_week(year, week)
-    for game, ax in zip(nflgame_sched, axes.flat):
+    q = nfldb.Query(nfldb.connect())
+    q.game(season_type='Regular', season_year=year, week=week)
 
-        home = game['home']
-        away = game['away']
+    for game, ax in zip(q.as_games(), axes.flat):
+
+        home = game.home_team
+        away = game.away_team
         teams = home, away
-
-        spread = np.arange(-40, 41)
 
         for team in teams:
             elo = [rating.query_elo(team, hcap, year, week)
-                    for hcap in spread]
-            ax.scatter(spread, elo)
+                    for hcap in rating.range]
+            ax.scatter(rating.range, elo)
 
         if ax.is_last_row():
-            xticks = [-40, -20, 0, 20, 40]
+            xmax = max(rating.range)
+            xticks = np.linspace(-xmax, xmax, 5)
             ax.set_xticks(xticks)
-            ax.set_xlim(-40, 40)
+            ax.set_xlim(-xmax, xmax)
 
         for axis in (ax.xaxis.get_major_ticks(),
                 ax.yaxis.get_major_ticks()):
@@ -278,7 +282,7 @@ def elo_history(team, handicap):
 
     # query database for game dates
     q = nfldb.Query(nfldb.connect())
-    q.game(season_type='Regular', team=team)
+    q.game(season_type='Regular', finished=True, team=team)
     games = sorted(q.as_games(), key=lambda g: date(g))
 
     # unpack historical elo ratings
@@ -307,13 +311,17 @@ def team_history():
 
     # query database for game dates
     q = nfldb.Query(nfldb.connect())
-    q.game(season_type='Regular')
+    q.game(season_type='Regular', finished=True)
     teams = set(g.home_team for g in q.as_games())
 
+    # point values
+    spreads = 0.5*(rating.ubins[:-1] + rating.ubins[1:])
+
     for ax, team in zip(axes.flat, sorted(teams)):
-        for hcap in np.linspace(0, 28, 5):
+        for hcap in spreads[::5]:
+
             rtg_hcap = elo_history(team, hcap)
-            color = plt.cm.coolwarm(hcap/40.)
+            color = plt.cm.coolwarm(hcap/max(spreads))
             ax.step(*zip(*rtg_hcap), label=team, color=color)
 
             if ax.is_last_row():
@@ -337,7 +345,7 @@ def model_error():
 
     # game spreads
     q = nfldb.Query(nfldb.connect())
-    q.game(season_type='Regular')
+    q.game(season_type='Regular', finished=True)
     spreads = [game.home_score - game.away_score
             for game in q.as_games()]
 
@@ -346,10 +354,9 @@ def model_error():
     neg_residuals = [-r for r in residuals]
 
     # compare model predictions and score spread
-    bins = np.arange(-40.5, 41.5)
-    ax1.hist(spreads, bins=bins, histtype='step',
+    ax1.hist(spreads, bins=rating.bins, histtype='step',
             normed=True, label='spreads')
-    ax1.hist(residuals, bins=bins, histtype='step',
+    ax1.hist(residuals, bins=rating.bins, histtype='step',
             normed=True, label='model')
 
     ax1.set_xlabel("observed - predicted [points]")
@@ -358,10 +365,9 @@ def model_error():
     ax1.legend()
 
     # compare model prediction with reflection (home vs away)
-    bins = np.arange(-40, 41, 2)
-    ax2.hist(residuals, bins=bins, histtype='step',
+    ax2.hist(residuals, bins=rating.bins, histtype='step',
             normed=True, label='model')
-    ax2.hist(neg_residuals, bins=bins, histtype='step',
+    ax2.hist(neg_residuals, bins=rating.bins, histtype='step',
             normed=True, label='model reflected')
 
     ax2.set_xlabel("observed - predicted [points]")
@@ -378,7 +384,7 @@ def main():
 
     if args.plots:
         for i in args.plots:
-            if i.endswith('.png'):
+            if i.endswith('.pdf'):
                 i = i[:-4]
             if i in plot_functions:
                 plot_functions[i]()

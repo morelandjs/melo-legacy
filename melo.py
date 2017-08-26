@@ -17,7 +17,14 @@ nweeks = 17
 nested_dict = lambda: defaultdict(nested_dict)
 
 class Rating:
-    def __init__(self, kfactor=60, hfa=0.0, database='elo.db'):
+    def __init__(self, obs='score', kfactor=65, hfa=65, database='elo.db'):
+        # point-spread interval attributes
+        self.bins= self.range(obs)
+        self.ubins = self.bins[-int(1+.5*len(self.bins)):]
+        self.range = 0.5*(self.bins[:-1] + self.bins[1:])
+
+        # model hyper-parameters
+        self.obs = obs
         self.kfactor = kfactor
         self.hfa = hfa
 
@@ -48,8 +55,8 @@ class Rating:
 
         """
         q = nfldb.Query(self.nfldb)
-        q.game(season_type='Regular')
-        spreads = [g.home_score - g.away_score for g in q.as_games()]
+        q.game(season_type='Regular', finished=True)
+        spreads = [self.point_diff(g) for g in q.as_games()]
 
         return spreads
 
@@ -58,9 +65,10 @@ class Rating:
         Probabilities of observing each point spread.
 
         """
-        bins = np.arange(-0.5, 41.5)
         spreads = np.abs(self.spreads())
-        hist, edges = np.histogram(spreads, bins=bins, normed=True)
+        hist, edges = np.histogram(
+                spreads, bins=self.ubins, normed=True
+                )
         spread = 0.5*(edges[:-1] + edges[1:])
         prob = np.cumsum(hist[::-1], dtype=float)[::-1]
 
@@ -98,6 +106,45 @@ class Rating:
 
         return elo
 
+    def yds(self, game, team):
+        """
+        Calculates the yards traversed by a team over the course of a
+        game.
+
+        """
+        yards = sum(
+                drive.yards_gained for drive in game.drives
+                if team == nfldb.standard_team(drive.pos_team)
+                )
+
+        return yards
+
+    def point_diff(self, game):
+        """
+        Function which returns the point difference.
+        The point type is defined by the observable argument.
+
+        """
+        home, away = (game.home_team, game.away_team)
+        point_dict = {
+                "score": game.home_score - game.away_score,
+                "yards": self.yds(game, home) - self.yds(game, away)
+                }
+
+        return point_dict[self.obs]
+
+    def range(self, obs):
+        """
+        Returns an iterator over the range of reasonable point values.
+
+        """
+        edges_dict = {
+                "score": np.arange(-40.5, 41.5, 1),
+                "yards": np.arange(-355, 365, 10)
+                }
+
+        return edges_dict[obs]
+
     def elo_change(self, rating_diff, points, handicap):
         """
         Change in home team ELO rating after a single game
@@ -118,7 +165,7 @@ class Rating:
         """
         # nfldb database
         q = nfldb.Query(self.nfldb)
-        q.game(season_type='Regular')
+        q.game(season_type='Regular', finished=True)
 
         # small sorting function
         def time(game):
@@ -136,10 +183,10 @@ class Rating:
             away = game.away_team
 
             # point differential
-            points = game.home_score - game.away_score
+            points = self.point_diff(game)
 
             # loop over all possible spread margins
-            for handicap in range(-40, 41):
+            for handicap in self.range:
 
                 # query current elo ratings from most recent game
                 home_rtg = self.query_elo(home, handicap, year, week)
@@ -163,16 +210,16 @@ class Rating:
         score home - score away > x.
 
         """
-        spreads = np.arange(-40, 41)
         cprob = []
 
-        for handicap in spreads:
+        for handicap in self.range:
             home_rtg = self.query_elo(home, handicap, year, week)
             away_rtg = self.query_elo(away, -handicap, year, week)
+
             rtg_diff = home_rtg - away_rtg + self.hfa
             cprob.append(self.win_prob(rtg_diff))
 
-        return spreads, np.sort(cprob)[::-1]
+        return self.range, gaussian_filter1d(cprob, 1.5, mode='constant')
 
     def predict_spread(self, home, away, year, week):
         """
@@ -192,7 +239,7 @@ class Rating:
         # fit a quadratic polynomial
         coeff = np.polyfit([x0, x1, x2], [y0, y1, y2], 2)
         res = minimize(lambda x: np.square(np.polyval(coeff, x) - 0.5), x1)
-        median = round(res.x * 2) / 2
+        median = 0.5 * round(res.x * 2)
 
         return median, cprob[index]
         
@@ -207,9 +254,10 @@ class Rating:
         """
         # cumulative spread distribution
         spreads, cprob = self.cdf(home, away, year, week)
+        spread_max = max(self.range)
 
         # Calc via integration byE(x) = \int x P(x)
-        return sum(cprob) - 40.5
+        return sum(cprob) - spread_max
 
     def win_prob(self, rtg_diff):
         """
@@ -225,7 +273,7 @@ class Rating:
 
         """
         q = nfldb.Query(self.nfldb)
-        q.game(season_type='Regular')
+        q.game(season_type='Regular', finished=True)
 
         residuals = []
 
@@ -239,7 +287,7 @@ class Rating:
             # allow for two season burn-in
             if year > 2010:
                 predicted = self.predict_score(home, away, year, week)
-                observed = game.home_score - game.away_score
+                observed = self.point_diff(game)
                 residuals.append(observed - predicted)
 
         return residuals
