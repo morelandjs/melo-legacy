@@ -56,7 +56,7 @@ plt.rcParams.update({
 })
 
 # run elo ratings simulation
-rating = melo.Rating(obs='yards', database='elo.db')
+rating = melo.Rating(obs='score', database='elo.db')
 
 plot_functions = {}
 
@@ -135,7 +135,7 @@ def weekly_spreads(year=2017, week=1):
 
         if ax.is_last_row():
             xmax = max(rating.range)
-            xticks = np.linspace(-xmax/2, xmax/2, 5)
+            xticks = np.linspace(-xmax/2, xmax/2, 3)
             ax.set_xticks(xticks)
             ax.set_xlim(-xmax/2, xmax/2)
 
@@ -344,10 +344,7 @@ def model_error():
             )
 
     # game spreads
-    q = nfldb.Query(nfldb.connect())
-    q.game(season_type='Regular', finished=True)
-    spreads = [game.home_score - game.away_score
-            for game in q.as_games()]
+    spreads = rating.spreads()
 
     # model residuals
     residuals = rating.model_accuracy()

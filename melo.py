@@ -17,7 +17,7 @@ nweeks = 17
 nested_dict = lambda: defaultdict(nested_dict)
 
 class Rating:
-    def __init__(self, obs='score', kfactor=65, hfa=65, database='elo.db'):
+    def __init__(self, obs='score', kfactor=60, hfa=50, database='elo.db'):
         # point-spread interval attributes
         self.bins= self.range(obs)
         self.ubins = self.bins[-int(1+.5*len(self.bins)):]
@@ -255,9 +255,10 @@ class Rating:
         # cumulative spread distribution
         spreads, cprob = self.cdf(home, away, year, week)
         spread_max = max(self.range)
+        spread_step = spreads[1] - spreads[0]
 
-        # Calc via integration byE(x) = \int x P(x)
-        return sum(cprob) - spread_max
+        # Calc via integration by parts of E(x) = \int x P(x)
+        return sum(cprob)*spread_step - spread_max
 
     def win_prob(self, rtg_diff):
         """
