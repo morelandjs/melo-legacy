@@ -184,22 +184,21 @@ def weekly_ratings(year=2017, week=1):
     nflgame_sched = nflgame.live._games_in_week(year, week)
     for game, ax in zip(nflgame_sched, axes.flat):
 
-        rtg = 'hcap', 'fair'
         home = game['home']
         away = game['away']
         teams = home, away
 
-        spread = np.arange(40)
+        spread = np.arange(-40, 41)
 
-        for team, rtg in product(teams, rtg):
-            elo = [rating.query_elo(team, hcap, year, week)[rtg]
+        for team in teams:
+            elo = [rating.query_elo(team, hcap, year, week)
                     for hcap in spread]
             ax.scatter(spread, elo)
 
         if ax.is_last_row():
-            xticks = [0, 10, 20, 30, 40]
+            xticks = [-40, -20, 0, 20, 40]
             ax.set_xticks(xticks)
-            ax.set_xlim(0, 40)
+            ax.set_xlim(-40, 40)
 
         for axis in (ax.xaxis.get_major_ticks(),
                 ax.yaxis.get_major_ticks()):
@@ -295,7 +294,7 @@ def elo_history(team, handicap):
             ]
 
     # return "handicapped" elo rating history
-    rtg_hcap = [(date, rtg['hcap']) for date, rtg in rtg_history]
+    rtg_hcap = [(date, rtg) for date, rtg in rtg_history]
     return rtg_hcap
 
 @plot
@@ -359,8 +358,7 @@ def model_error():
     ax1.legend()
 
     # compare model prediction with reflection (home vs away)
-    bins = np.arange(-39, 40, 2)
-    print(bins)
+    bins = np.arange(-40, 41, 2)
     ax2.hist(residuals, bins=bins, histtype='step',
             normed=True, label='model')
     ax2.hist(neg_residuals, bins=bins, histtype='step',

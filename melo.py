@@ -17,9 +17,8 @@ nweeks = 17
 nested_dict = lambda: defaultdict(nested_dict)
 
 class Rating:
-    def __init__(self, kfactor=60, decay=0.7, hfa=0.0, database='elo.db'):
+    def __init__(self, kfactor=60, hfa=0.0, database='elo.db'):
         self.kfactor = kfactor
-        self.decay = decay
         self.hfa = hfa
 
         self.nfldb = nfldb.connect()
@@ -35,11 +34,13 @@ class Rating:
 
         """
         elo_init = 1500.
-        prob = max(0.5*self.spread_prob[margin], 1e-6)
+        prob = max(0.5*self.spread_prob[abs(margin)], 1e-6)
         arg = max(1/prob - 1, 1e-6)
         elo_diff = 200*np.log10(arg)
 
-        return {'adv': elo_init + elo_diff, 'hcap': elo_init - elo_diff}
+        # separate positive and negative ratings
+        # i.e. home team wins by 40 =  team[40] << team[-40]
+        return elo_init - elo_diff if margin > 0 else elo_init + elo_diff
 
     def spreads(self):
         """
@@ -138,37 +139,23 @@ class Rating:
             points = game.home_score - game.away_score
 
             # loop over all possible spread margins
-            for handicap in range(41):
+            for handicap in range(-40, 41):
 
                 # query current elo ratings from most recent game
                 home_rtg = self.query_elo(home, handicap, year, week)
-                away_rtg = self.query_elo(away, handicap, year, week)
+                away_rtg = self.query_elo(away, -handicap, year, week)
 
                 # elo change when home(away) team is handicapped
-                bounty_home_hcap, bounty_away_hcap = [
-                        self.elo_change(
-                            home_rtg[a] - away_rtg[b] + self.hfa,
-                            points,
-                            hcap
-                            )
-                        for (a, b, hcap) in [
-                            ('hcap', 'adv', handicap),
-                            ('adv', 'hcap', -handicap),
-                            ]
-                        ]
+                rtg_diff = home_rtg - away_rtg + self.hfa
+                bounty = self.elo_change(rtg_diff, points, handicap)
 
                 # scale update by ngames if necessary
-                home_rtg['hcap'] += bounty_home_hcap
-                away_rtg['adv'] -= bounty_home_hcap
-                home_rtg['adv'] += bounty_away_hcap
-                away_rtg['hcap'] -= bounty_away_hcap
-
-                # home and away team elo data
-                team_rtgs = [(home, home_rtg), (away, away_rtg)]
+                home_rtg += bounty
+                away_rtg -= bounty
 
                 # update elo ratings
-                for team, team_rtg in team_rtgs:
-                    self.elodb[team][handicap][year][week] = team_rtg
+                self.elodb[home][handicap][year][week] = home_rtg
+                self.elodb[away][-handicap][year][week] = away_rtg
 
     def cdf(self, home, away, year, week):
         """
@@ -180,15 +167,9 @@ class Rating:
         cprob = []
 
         for handicap in spreads:
-            hcap = abs(handicap)
-            home_rtg = self.query_elo(home, hcap, year, week)
-            away_rtg = self.query_elo(away, hcap, year, week)
-
-            if handicap < 0:
-                rtg_diff = home_rtg['adv'] - away_rtg['hcap'] + self.hfa
-            else:
-                rtg_diff = home_rtg['hcap'] - away_rtg['adv'] + self.hfa
-
+            home_rtg = self.query_elo(home, handicap, year, week)
+            away_rtg = self.query_elo(away, -handicap, year, week)
+            rtg_diff = home_rtg - away_rtg + self.hfa
             cprob.append(self.win_prob(rtg_diff))
 
         return spreads, np.sort(cprob)[::-1]
