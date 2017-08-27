@@ -4,11 +4,11 @@ import bisect
 import sqlite3
 from collections import defaultdict
 from pathlib import Path
-from scipy.ndimage.filters import gaussian_filter1d
-from scipy.optimize import minimize
 
 import matplotlib.pyplot as plt
 import numpy as np
+from scipy.ndimage.filters import gaussian_filter1d
+from scipy.optimize import minimize
 
 import nfldb
 
@@ -17,7 +17,7 @@ nweeks = 17
 nested_dict = lambda: defaultdict(nested_dict)
 
 class Rating:
-    def __init__(self, obs='score', kfactor=60, hfa=50, database='elo.db'):
+    def __init__(self, obs='score', kfactor=60, hfa=0, database='elo.db'):
         # point-spread interval attributes
         self.bins= self.range(obs)
         self.ubins = self.bins[-int(1+.5*len(self.bins)):]
