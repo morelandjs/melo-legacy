@@ -17,7 +17,7 @@ nweeks = 17
 nested_dict = lambda: defaultdict(nested_dict)
 
 class Rating:
-    def __init__(self, obs='score', kfactor=60, hfa=0, database='elo.db'):
+    def __init__(self, obs='score', kfactor=60, hfa=60, database='elo.db'):
         # point-spread interval attributes
         self.bins= self.range(obs)
         self.ubins = self.bins[-int(1+.5*len(self.bins)):]
@@ -74,13 +74,13 @@ class Rating:
 
         return dict(zip(spread, prob))
 
-    def rewind(self, year, week, n=2):
+    def rewind(self, year, week):
         """
         Simple function to go back "one game in time".
         For example rewind(2016, 1) = (2015, 17).
 
         """
-        for _ in range(n):
+        while year >= 2009:
             if week > 1:
                 week -= 1
             else:
@@ -217,9 +217,10 @@ class Rating:
             away_rtg = self.query_elo(away, -handicap, year, week)
 
             rtg_diff = home_rtg - away_rtg + self.hfa
+
             cprob.append(self.win_prob(rtg_diff))
 
-        return self.range, gaussian_filter1d(cprob, 1.5, mode='constant')
+        return self.range, cprob
 
     def predict_spread(self, home, away, year, week):
         """
@@ -231,7 +232,7 @@ class Rating:
         spreads, cprob = self.cdf(home, away, year, week)
 
         # plot median prediction (compare to vegas spread)
-        index = np.square(cprob - 0.5).argmin()
+        index = np.square([p - 0.5 for p in cprob]).argmin()
         x0, y0 = (spreads[index - 1], cprob[index - 1])
         x1, y1 = (spreads[index], cprob[index])
         x2, y2 = (spreads[index + 1], cprob[index + 1])
@@ -241,7 +242,7 @@ class Rating:
         res = minimize(lambda x: np.square(np.polyval(coeff, x) - 0.5), x1)
         median = 0.5 * round(res.x * 2)
 
-        return median, cprob[index]
+        return median
         
     def predict_score(self, home, away, year, week):
         """
@@ -258,7 +259,7 @@ class Rating:
         spread_step = spreads[1] - spreads[0]
 
         # Calc via integration by parts of E(x) = \int x P(x)
-        return sum(cprob)*spread_step - spread_max
+        return sum(cprob)*spread_step - spread_max - 0.5*spread_step
 
     def win_prob(self, rtg_diff):
         """

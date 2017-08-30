@@ -155,8 +155,10 @@ def weekly_spreads(year=2017, week=1):
                 ha='right', va='top', xycoords='axes fraction',
                 zorder=2, color=offblack)
 
-        median, prob = rating.predict_spread(home, away, year, week)
-        ax.axvline(median, 0, prob, color=plt.cm.Oranges(.6),
+        median = rating.predict_spread(home, away, year, week)
+        index = np.square([np.ceil(s - median) for s in spread]).argmin()
+        height = prob[index]
+        ax.axvline(median, 0, height, color=plt.cm.Oranges(.6),
                 zorder=3, lw=1, alpha=0.8)
 
         winner = home if median > 0 else away
