@@ -108,14 +108,10 @@ class Rating:
         rating from the current year, week if it exists.
 
         """
-        for yr, wk in self.rewind(year, week):
-            elo = self.elodb[team][margin][yr][wk]
-            if elo: return elo.copy()
-
-        elo = self.starting_elo(margin)
-        self.elodb[team][margin][year-1][nweeks] = elo
-
-        return elo
+        try:
+            return self.elodb[team][margin][year][week]
+        except KeyError:
+            return self.starting_elo(margin)
 
     def yds(self, game, team):
         """
@@ -199,23 +195,24 @@ class Rating:
             points = self.point_diff(game)
 
             # loop over all possible spread margins
-            for handicap in self.range:
+            for hcap in self.range:
 
                 # query current elo ratings from most recent game
-                home_rtg = self.query_elo(home, handicap, year, week)
-                away_rtg = self.query_elo(away, -handicap, year, week)
+                home_rtg = self.query_elo(home, hcap, year, week)
+                away_rtg = self.query_elo(away, -hcap, year, week)
 
                 # elo change when home(away) team is handicapped
                 rtg_diff = (home_rtg - away_rtg) + self.hfa
-                bounty = self.elo_change(rtg_diff, points, handicap)
+                bounty = self.elo_change(rtg_diff, points, hcap)
 
                 # scale update by ngames if necessary
                 home_rtg += bounty
                 away_rtg -= bounty
 
-                # update elo ratings
-                self.elodb[home][handicap][year][week] = home_rtg
-                self.elodb[away][-handicap][year][week] = away_rtg
+                # update future elo ratings
+                for wk in range(week, nweeks):
+                    self.elodb[home][hcap][year][week] = home_rtg
+                    self.elodb[away][-hcap][year][week] = away_rtg
 
     def cdf(self, home, away, year, week):
         """
