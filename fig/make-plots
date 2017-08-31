@@ -376,6 +376,29 @@ def model_error():
     # figure properties
     finish()
 
+@plot
+def decorrelation():
+
+
+    fig = plt.figure(figsize=(columnwidth, aspect*columnwidth))
+
+    elo_change = {}
+
+    for week in range(1, 18):
+        q = nfldb.Query(nfldb.connect())
+        q.game(season_type='Regular', finished=True, week=week)
+        for game in q.as_games():
+            home = game.home_team
+            away = game.away_team
+            year = game.season_year
+            rtg_before = rating.query_elo(home, 0, year, week)
+
+            year, week = next(rating.rewind(year, week))
+            rtg_after = rating.query_elo(home, 0, year, week)
+
+            plt.scatter(week, rtg_after - rtg_before)
+    finish()
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('plots', nargs='*')

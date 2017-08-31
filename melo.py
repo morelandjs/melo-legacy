@@ -17,7 +17,9 @@ nweeks = 17
 nested_dict = lambda: defaultdict(nested_dict)
 
 class Rating:
-    def __init__(self, obs='score', kfactor=60, hfa=60, database='elo.db'):
+    def __init__(self, obs='score', kfactor=60, hfa=60, decay=.3,
+            database='elo.db'):
+
         # point-spread interval attributes
         self.bins= self.range(obs)
         self.ubins = self.bins[-int(1+.5*len(self.bins)):]
@@ -27,6 +29,7 @@ class Rating:
         self.obs = obs
         self.kfactor = kfactor
         self.hfa = hfa
+        self.decay = decay
 
         self.nfldb = nfldb.connect()
         self.spread_prob = self.spread_probability()
@@ -87,6 +90,14 @@ class Rating:
                 year -= 1
                 week = nweeks
             yield year, week
+
+    def tweak(self, rating, week):
+        # TODO add special cases for week 1 and week 17
+
+        factor = {
+                17: 250
+                }
+        return rating
 
     def query_elo(self, team, margin, year, week):
         """
@@ -161,6 +172,8 @@ class Rating:
         """
         This function calculates ELO ratings for every team
         for every value of the spread.
+        The rating reflects the posterior knowledge after the 
+        given week.
 
         """
         # nfldb database
@@ -193,7 +206,7 @@ class Rating:
                 away_rtg = self.query_elo(away, -handicap, year, week)
 
                 # elo change when home(away) team is handicapped
-                rtg_diff = home_rtg - away_rtg + self.hfa
+                rtg_diff = (home_rtg - away_rtg) + self.hfa
                 bounty = self.elo_change(rtg_diff, points, handicap)
 
                 # scale update by ngames if necessary
