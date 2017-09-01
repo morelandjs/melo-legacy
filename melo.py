@@ -77,41 +77,32 @@ class Rating:
 
         return dict(zip(spread, prob))
 
-    def rewind(self, year, week):
+    def next(self, year, week, size=nweeks):
         """
-        Simple function to go back "one game in time".
-        For example rewind(2016, 1) = (2015, 17).
+        Simple function to go "one game forward in time".
+        For example next(2015, 17) = (2016, 1).
 
         """
-        while year >= 2009:
-            if week > 1:
-                week -= 1
+        for _ in range(size):
+            if week < nweeks:
+                week += 1
             else:
-                year -= 1
-                week = nweeks
+                year += 1
+                week = 1
             yield year, week
-
-    def tweak(self, rating, week):
-        # TODO add special cases for week 1 and week 17
-
-        factor = {
-                17: 250
-                }
-        return rating
 
     def query_elo(self, team, margin, year, week):
         """
-        Queries the most recent ELO rating for a team, i.e.
-        elo(year, week) for (year, week) < (query year, query week)
+        Queries the most recent ELO rating for a team before the
+        given week.
 
-        If the team name is one of ("home", "away"), then return the
-        rating from the current year, week if it exists.
+        If the rating does not exist, initialize it to a sensible
+        starting value.
 
         """
-        try:
-            return self.elodb[team][margin][year][week]
-        except KeyError:
-            return self.starting_elo(margin)
+        elo = self.elodb[team][margin][year][week]
+        if elo: return elo.copy()
+        return self.starting_elo(margin)
 
     def yds(self, game, team):
         """
@@ -202,7 +193,7 @@ class Rating:
                 away_rtg = self.query_elo(away, -hcap, year, week)
 
                 # elo change when home(away) team is handicapped
-                rtg_diff = (home_rtg - away_rtg) + self.hfa
+                rtg_diff = home_rtg - away_rtg + self.hfa
                 bounty = self.elo_change(rtg_diff, points, hcap)
 
                 # scale update by ngames if necessary
@@ -210,9 +201,9 @@ class Rating:
                 away_rtg -= bounty
 
                 # update future elo ratings
-                for wk in range(week, nweeks):
-                    self.elodb[home][hcap][year][week] = home_rtg
-                    self.elodb[away][-hcap][year][week] = away_rtg
+                for yr, wk in self.next(year, week):
+                    self.elodb[home][hcap][yr][wk] = home_rtg
+                    self.elodb[away][-hcap][yr][wk] = away_rtg
 
     def cdf(self, home, away, year, week):
         """
