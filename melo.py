@@ -17,8 +17,7 @@ nweeks = 17
 nested_dict = lambda: defaultdict(nested_dict)
 
 class Rating:
-    def __init__(self, obs='score', kfactor=60, hfa=60, decay=.3,
-            database='elo.db'):
+    def __init__(self, obs='score', kfactor=60, hfa=60, database='elo.db'):
 
         # point-spread interval attributes
         self.bins= self.range(obs)
@@ -29,7 +28,6 @@ class Rating:
         self.obs = obs
         self.kfactor = kfactor
         self.hfa = hfa
-        self.decay = decay
 
         self.nfldb = nfldb.connect()
         self.spread_prob = self.spread_probability()
@@ -77,13 +75,12 @@ class Rating:
 
         return dict(zip(spread, prob))
 
-    def next(self, year, week, size=nweeks):
+    def cycle(self, year, week, n=2):
         """
-        Simple function to go "one game forward in time".
-        For example next(2015, 17) = (2016, 1).
-
+        Simple function to go forward "one game in time".
+        For example rewind(2015, 17) = (2016, 1).
         """
-        for _ in range(size):
+        for _ in range(n):
             if week < nweeks:
                 week += 1
             else:
@@ -93,15 +90,14 @@ class Rating:
 
     def query_elo(self, team, margin, year, week):
         """
-        Queries the most recent ELO rating for a team before the
-        given week.
-
-        If the rating does not exist, initialize it to a sensible
-        starting value.
-
+        Queries the most recent ELO rating for a team, i.e.
+        elo(year, week) for (year, week) < (query year, query week)
+        If the team name is one of ("home", "away"), then return the
+        rating from the current year, week if it exists.
         """
         elo = self.elodb[team][margin][year][week]
         if elo: return elo.copy()
+
         return self.starting_elo(margin)
 
     def yds(self, game, team):
@@ -186,24 +182,24 @@ class Rating:
             points = self.point_diff(game)
 
             # loop over all possible spread margins
-            for hcap in self.range:
+            for handicap in self.range:
 
                 # query current elo ratings from most recent game
-                home_rtg = self.query_elo(home, hcap, year, week)
-                away_rtg = self.query_elo(away, -hcap, year, week)
+                home_rtg = self.query_elo(home, handicap, year, week)
+                away_rtg = self.query_elo(away, -handicap, year, week)
 
                 # elo change when home(away) team is handicapped
                 rtg_diff = home_rtg - away_rtg + self.hfa
-                bounty = self.elo_change(rtg_diff, points, hcap)
+                bounty = self.elo_change(rtg_diff, points, handicap)
 
                 # scale update by ngames if necessary
                 home_rtg += bounty
                 away_rtg -= bounty
 
-                # update future elo ratings
-                for yr, wk in self.next(year, week):
-                    self.elodb[home][hcap][yr][wk] = home_rtg
-                    self.elodb[away][-hcap][yr][wk] = away_rtg
+                # update elo ratings
+                for yr, wk in self.cycle(year, week):
+                    self.elodb[home][handicap][yr][wk] = home_rtg
+                    self.elodb[away][-handicap][yr][wk] = away_rtg
 
     def cdf(self, home, away, year, week):
         """
