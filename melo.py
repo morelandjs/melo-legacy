@@ -13,8 +13,36 @@ from scipy.optimize import minimize
 import nfldb
 
 
-nweeks = 17
 nested_dict = lambda: defaultdict(nested_dict)
+
+class Date:
+    """
+    Creates a cyclic date object with year and week
+    attributes.
+    
+    date.next and date.prev function calls increment
+    and decrement the date object.
+
+    """
+    def __init__(self, year, week):
+        self.year = year
+        self.week = week
+        self.nweeks = 17
+
+    @property
+    def next(self):
+        if self.week < self.nweeks:
+            return Date(self.year, self.week + 1)
+        else:
+            return Date(self.year + 1, 1)
+
+    @property
+    def prev(self):
+        if self.week > 1:
+            return Date(self.year, self.week - 1)
+        else:
+            return Date(self.year - 1, self.nweeks)
+
 
 class Rating:
     def __init__(self, obs='score', kfactor=60, hfa=60, database='elo.db'):
@@ -75,28 +103,18 @@ class Rating:
 
         return dict(zip(spread, prob))
 
-    def cycle(self, year, week, n=2):
-        """
-        Simple function to go forward "one game in time".
-        For example rewind(2015, 17) = (2016, 1).
-        """
-        for _ in range(n):
-            if week < nweeks:
-                week += 1
-            else:
-                year += 1
-                week = 1
-            yield year, week
-
-    def query_elo(self, team, margin, year, week):
+    def elo(self, team, margin, year, week):
         """
         Queries the most recent ELO rating for a team, i.e.
         elo(year, week) for (year, week) < (query year, query week)
         If the team name is one of ("home", "away"), then return the
         rating from the current year, week if it exists.
         """
-        elo = self.elodb[team][margin][year][week]
-        if elo: return elo.copy()
+        date = Date(year, week)
+
+        for d in date, date.prev:
+            elo = self.elodb[team][margin][d.year][d.week]
+            if elo: return elo.copy()
 
         return self.starting_elo(margin)
 
@@ -170,9 +188,9 @@ class Rating:
         # loop over historical games in chronological order
         for game in sorted(q.as_games(), key=lambda g: time(g)):
 
-            # game time
-            year = game.season_year
-            week = game.week
+            # game date
+            date = Date(game.season_year, game.week)
+            year, week = (date.year, date.week)
 
             # team names
             home = game.home_team
@@ -182,24 +200,24 @@ class Rating:
             points = self.point_diff(game)
 
             # loop over all possible spread margins
-            for handicap in self.range:
+            for hcap in self.range:
 
                 # query current elo ratings from most recent game
-                home_rtg = self.query_elo(home, handicap, year, week)
-                away_rtg = self.query_elo(away, -handicap, year, week)
+                home_rtg = self.elo(home, hcap, year, week)
+                away_rtg = self.elo(away, -hcap, year, week)
 
                 # elo change when home(away) team is handicapped
                 rtg_diff = home_rtg - away_rtg + self.hfa
-                bounty = self.elo_change(rtg_diff, points, handicap)
+                bounty = self.elo_change(rtg_diff, points, hcap)
 
                 # scale update by ngames if necessary
                 home_rtg += bounty
                 away_rtg -= bounty
 
                 # update elo ratings
-                for yr, wk in self.cycle(year, week):
-                    self.elodb[home][handicap][yr][wk] = home_rtg
-                    self.elodb[away][-handicap][yr][wk] = away_rtg
+                next_year, next_week = (date.next.year, date.next.week)
+                self.elodb[home][hcap][next_year][next_week] = home_rtg
+                self.elodb[away][-hcap][next_year][next_week] = away_rtg
 
     def cdf(self, home, away, year, week):
         """
@@ -210,8 +228,8 @@ class Rating:
         cprob = []
 
         for handicap in self.range:
-            home_rtg = self.query_elo(home, handicap, year, week)
-            away_rtg = self.query_elo(away, -handicap, year, week)
+            home_rtg = self.elo(home, handicap, year, week)
+            away_rtg = self.elo(away, -handicap, year, week)
 
             rtg_diff = home_rtg - away_rtg + self.hfa
 

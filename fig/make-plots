@@ -196,7 +196,7 @@ def weekly_ratings(year=2017, week=1):
         teams = home, away
 
         for team in teams:
-            elo = [rating.query_elo(team, hcap, year, week)
+            elo = [rating.elo(team, hcap, year, week)
                     for hcap in rating.range]
             ax.scatter(rating.range, elo)
 
@@ -290,7 +290,7 @@ def elo_history(team, handicap):
     # unpack historical elo ratings
     rtg_history = [
             (date(game),
-            rating.query_elo(
+            rating.elo(
                 team,
                 handicap,
                 game.season_year,
