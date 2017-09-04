@@ -3,6 +3,7 @@
 import bisect
 import sqlite3
 from collections import defaultdict
+from functools import total_ordering
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -15,6 +16,7 @@ import nfldb
 
 nested_dict = lambda: defaultdict(nested_dict)
 
+@total_ordering
 class Date:
     """
     Creates a cyclic date object with year and week
@@ -25,9 +27,20 @@ class Date:
 
     """
     def __init__(self, year, week):
+        self.nweeks = 17
         self.year = year
         self.week = week
-        self.nweeks = 17
+
+    def __eq__(self, other):
+        return (self.year, self.week) == (other.year, other.week)
+
+    def __lt__(self, other):
+        return (self.year, self.week) < (other.year, other.week)
+
+    def __sub__(self, other):
+        dy = (self.year - other.year)
+        dw = (self.week - other.week)
+        return dy*self.nweeks + dw 
 
     @property
     def next(self):
@@ -45,7 +58,12 @@ class Date:
 
 
 class Rating:
-    def __init__(self, obs='score', kfactor=60, hfa=60, database='elo.db'):
+    """
+    Rating class calculates margin-dependent Elo ratings.
+
+    """
+    def __init__(self, obs='score', kfactor=60, hfa=60, decay=50,
+            regress=0.7, database='elo.db'):
 
         # point-spread interval attributes
         self.bins= self.range(obs)
@@ -56,6 +74,9 @@ class Rating:
         self.obs = obs
         self.kfactor = kfactor
         self.hfa = hfa
+        self.decay = decay
+        self.regress = regress
+        self.last_game = Date(2016, 17)
 
         self.nfldb = nfldb.connect()
         self.spread_prob = self.spread_probability()
@@ -103,15 +124,36 @@ class Rating:
 
         return dict(zip(spread, prob))
 
+    def regress_to_mean(self, rtg, margin, factor):
+        """
+        Regress Elo rating to the mean. Used to project future
+        games and update ratings after the offseason.
+
+        """
+        default_rtg = self.starting_elo(margin)
+
+        return default_rtg + factor * (rtg - default_rtg)
+
     def elo(self, team, margin, year, week):
         """
         Queries the most recent ELO rating for a team, i.e.
         elo(year, week) for (year, week) < (query year, query week)
-        If the team name is one of ("home", "away"), then return the
-        rating from the current year, week if it exists.
+
         """
         date = Date(year, week)
+        date_last = self.last_game.next
 
+        # extrapolate Elo with information decay for future dates
+        if date > date_last:
+            last_year, last_week = (date_last.year, date_last.week)
+            elo = self.elodb[team][margin][last_year][last_week]
+
+            elapsed = float(date - date_last)
+            factor = np.exp(-elapsed/self.decay)
+
+            return self.regress_to_mean(elo, margin, factor)
+
+        # return the most recent Elo rating, account for bye weeks
         for d in date, date.prev:
             elo = self.elodb[team][margin][d.year][d.week]
             if elo: return elo.copy()
@@ -181,12 +223,9 @@ class Rating:
         q = nfldb.Query(self.nfldb)
         q.game(season_type='Regular', finished=True)
 
-        # small sorting function
-        def time(game):
-            return game.season_year, game.week
-
         # loop over historical games in chronological order
-        for game in sorted(q.as_games(), key=lambda g: time(g)):
+        for game in sorted(q.as_games(),
+                key=lambda g: Date(g.season_year, g.week)):
 
             # game date
             date = Date(game.season_year, game.week)
@@ -216,8 +255,12 @@ class Rating:
 
                 # update elo ratings
                 next_year, next_week = (date.next.year, date.next.week)
-                self.elodb[home][hcap][next_year][next_week] = home_rtg
-                self.elodb[away][-hcap][next_year][next_week] = away_rtg
+                updates = [(home, hcap, home_rtg), (away, -hcap, away_rtg)]
+
+                for (team, hcap, rtg) in updates: 
+                    if next_year > year:
+                        rtg = self.regress_to_mean(rtg, hcap, self.regress)
+                    self.elodb[team][hcap][next_year][next_week] = rtg
 
     def cdf(self, home, away, year, week):
         """
@@ -319,6 +362,7 @@ def main():
     mean_error = np.mean(residuals)
     rms_error = np.std(residuals)
     print(mean_error, rms_error)
+
 
 if __name__ == "__main__":
     main()
