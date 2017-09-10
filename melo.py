@@ -1,20 +1,13 @@
 #!/usr/bin/env python2
 
-import bisect
-import sqlite3
 from collections import defaultdict
 from functools import total_ordering
-from pathlib import Path
 
-import matplotlib.pyplot as plt
 import numpy as np
-from scipy.ndimage.filters import gaussian_filter1d
 from scipy.optimize import minimize
 
 import nfldb
 
-
-nested_dict = lambda: defaultdict(nested_dict)
 
 @total_ordering
 class Date:
@@ -64,6 +57,9 @@ class Rating:
     """
     def __init__(self, obs='score', kfactor=60, hfa=60, decay=50,
             regress=0.7, database='elo.db'):
+
+        # function to initialize a nested dictionary
+        nested_dict = lambda: defaultdict(nested_dict)
 
         # point-spread interval attributes
         self.bins= self.range(obs)
