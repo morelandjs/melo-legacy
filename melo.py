@@ -4,7 +4,7 @@ from collections import defaultdict
 from functools import total_ordering
 
 import numpy as np
-from scipy.optimize import minimize
+from scipy import optimize
 
 import nfldb
 
@@ -55,29 +55,45 @@ class Rating:
     Rating class calculates margin-dependent Elo ratings.
 
     """
-    def __init__(self, obs='score', kfactor=60, hfa=60, decay=50,
+    def __init__(self, mode='points', kfactor=60, hfa=60, decay=50,
             regress=0.7, database='elo.db'):
 
         # function to initialize a nested dictionary
         nested_dict = lambda: defaultdict(nested_dict)
 
         # point-spread interval attributes
-        self.bins= self.range(obs)
+        self.bins= self.range(mode)
         self.ubins = self.bins[-int(1+.5*len(self.bins)):]
         self.range = 0.5*(self.bins[:-1] + self.bins[1:])
 
         # model hyper-parameters
-        self.obs = obs
+        self.mode = mode
         self.kfactor = kfactor
         self.hfa = hfa
         self.decay = decay
         self.regress = regress
-        self.last_game = Date(2016, 17)
 
         self.nfldb = nfldb.connect()
+        self.last_game = self.last_played() 
         self.spread_prob = self.spread_probability()
         self.elodb = nested_dict()
         self.calc_elo()
+
+    def last_played(self):
+        """
+        Date(year, week) of most recent completed game.
+
+        """
+        q = nfldb.Query(self.nfldb)
+        q.game(season_type='Regular', finished=True)
+
+        # look up most recent game
+        prev_game = sorted(
+                q.as_games(),
+                key=lambda g: Date(g.season_year, g.week)
+                ).pop()
+
+        return Date(prev_game.season_year, prev_game.week)
 
     def starting_elo(self, margin):
         """
@@ -162,10 +178,26 @@ class Rating:
         game.
 
         """
-        yards = sum(
-                drive.yards_gained for drive in game.drives
-                if team == nfldb.standard_team(drive.pos_team)
-                )
+        yards = 0
+
+        for drive in filter(
+                lambda d: nfldb.standard_team(d.pos_team)==team,
+                game.drives
+                ):
+    
+            try:
+                side, yardline = str(drive.end_field)
+                field = {'OPP': 100 - int(yardline), 'OWN': int(yardline)}
+                progress = field[side]
+            except ValueError:
+                progress = 50
+
+            if drive.result == 'Touchdown':
+                yards += 100
+            elif drive.result == 'Field Goal':
+                yards += progress + (3/7)*(100 - progress)
+            else:
+                yards += progress
 
         return yards
 
@@ -181,9 +213,9 @@ class Rating:
                 "yards": self.yds(game, home) - self.yds(game, away)
                 }
 
-        return point_dict[self.obs]
+        return point_dict[self.mode]
 
-    def range(self, obs):
+    def range(self, mode):
         """
         Returns an iterator over the range of reasonable point values.
 
@@ -193,7 +225,7 @@ class Rating:
                 "yards": np.arange(-355, 365, 10)
                 }
 
-        return edges_dict[obs]
+        return edges_dict[mode]
 
     def elo_change(self, rating_diff, points, handicap):
         """
@@ -276,7 +308,7 @@ class Rating:
 
         return self.range, cprob
 
-    def predict_spread(self, home, away, year, week):
+    def predict_spread(self, home, away, year, week, perc=0.5):
         """
         Predict the spread for a matchup, given current knowledge of each
         team's ELO ratings.
@@ -286,17 +318,18 @@ class Rating:
         spreads, cprob = self.cdf(home, away, year, week)
 
         # plot median prediction (compare to vegas spread)
-        index = np.square([p - 0.5 for p in cprob]).argmin()
+        index = np.square([p - perc for p in cprob]).argmin()
         x0, y0 = (spreads[index - 1], cprob[index - 1])
         x1, y1 = (spreads[index], cprob[index])
         x2, y2 = (spreads[index + 1], cprob[index + 1])
 
         # fit a quadratic polynomial
         coeff = np.polyfit([x0, x1, x2], [y0, y1, y2], 2)
-        res = minimize(lambda x: np.square(np.polyval(coeff, x) - 0.5), x1)
-        median = 0.5 * round(res.x * 2)
+        res = optimize.minimize(
+                lambda x: np.square(np.polyval(coeff, x) - perc), x1
+                )
 
-        return median
+        return float(res.x)
         
     def predict_score(self, home, away, year, week):
         """
