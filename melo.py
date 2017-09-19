@@ -186,7 +186,7 @@ class Rating:
                 ):
     
             try:
-                side, yardline = str(drive.end_field)
+                side, yardline = str(drive.end_field).split()
                 field = {'OPP': 100 - int(yardline), 'OWN': int(yardline)}
                 progress = field[side]
             except ValueError:
@@ -209,7 +209,7 @@ class Rating:
         """
         home, away = (game.home_team, game.away_team)
         point_dict = {
-                "score": game.home_score - game.away_score,
+                "points": game.home_score - game.away_score,
                 "yards": self.yds(game, home) - self.yds(game, away)
                 }
 
@@ -221,8 +221,8 @@ class Rating:
 
         """
         edges_dict = {
-                "score": np.arange(-40.5, 41.5, 1),
-                "yards": np.arange(-355, 365, 10)
+                "points": np.arange(-40.5, 41.5, 1),
+                "yards": np.arange(-375, 385, 10)
                 }
 
         return edges_dict[mode]
@@ -330,7 +330,7 @@ class Rating:
                 )
 
         return float(res.x)
-        
+
     def predict_score(self, home, away, year, week):
         """
         The model predicts the CDF of win margins, i.e. P(spread > x).
@@ -367,7 +367,8 @@ class Rating:
         residuals = []
 
         # loop over all historical games
-        for game in q.as_games():
+        for game in sorted(q.as_games(),
+                key=lambda g: Date(g.season_year, g.week)):
             year = game.season_year
             week = game.week
             home = game.home_team

@@ -3,8 +3,10 @@
 import argparse
 
 import matplotlib.pyplot as plt
+import matplotlib.patches as patches
 import numpy as np
 from itertools import product
+from matplotlib import ticker
 from scipy.stats import skellam
 from scipy.ndimage.filters import gaussian_filter1d
 
@@ -19,7 +21,9 @@ resolution = 72.27
 columnwidth = 246/resolution
 textwidth = 510/resolution
 textiny, texsmall, texnormal = 8.0, 9.25, 10.0
-offblack = '#262626'
+offblack = '#333333'
+blue = '#1b6394'
+orange = '#F1A107'
 
 # figure style
 plt.style.use('fivethirtyeight')
@@ -49,6 +53,11 @@ plt.rcParams.update({
     'ytick.minor.size': 1.3,
     'xtick.major.pad': 1.8,
     'ytick.major.pad': 1.8,
+    'text.color': offblack,
+   #'axes.edgecolor': offblack,
+    'axes.labelcolor': offblack,
+    'xtick.color': offblack,
+    'ytick.color': offblack,
     'legend.numpoints': 1,
     'legend.scatterpoints': 1,
     'legend.frameon': False,
@@ -57,7 +66,7 @@ plt.rcParams.update({
 })
 
 # run elo ratings simulation
-rating = melo.Rating(obs='score', database='elo.db')
+rating = melo.Rating(mode='points', database='elo.db')
 
 plot_functions = {}
 
@@ -65,12 +74,14 @@ def plot(f):
     def wrapper(*args, **kwargs):
         print(f.__name__)
         f(*args, **kwargs)
+        #plt.savefig('{}.png'.format(f.__name__), dpi=200)
         plt.savefig('{}.pdf'.format(f.__name__))
         plt.close()
 
     plot_functions[f.__name__] = wrapper
 
     return wrapper
+
 
 def finish(despine=True, remove_ticks=False, pad=0.1,
         h_pad=None, w_pad=None, rect=[0, 0, 1, 1]):
@@ -90,6 +101,23 @@ def finish(despine=True, remove_ticks=False, pad=0.1,
 
     fig.tight_layout(pad=pad, h_pad=h_pad, w_pad=w_pad, rect=rect)
 
+
+def set_loc(ax, xy=None, nbins=5, steps=[1, 2, 3, 4, 5, 10],
+            prune=None, minor=0):
+    if xy == 'x':
+        axes = ax.xaxis,
+    elif xy == 'y':
+        axes = ax.yaxis,
+    else:
+        axes = ax.xaxis, ax.yaxis
+
+    for axis in axes:
+        axis.set_major_locator(
+            ticker.MaxNLocator(nbins=nbins, steps=steps, prune=prune)
+        )
+        if minor:
+            axis.set_minor_locator(ticker.AutoMinorLocator(minor))
+
 @plot
 def spread_frequency():
     """
@@ -107,7 +135,7 @@ def spread_frequency():
     finish()
 
 @plot
-def weekly_spreads(year=2017, week=1):
+def weekly_spreads(year=2017, week=3):
     """
     Calculate the 50-50 betting point-spread for each team.
 
@@ -165,7 +193,7 @@ def weekly_spreads(year=2017, week=1):
                 zorder=3, lw=1, alpha=0.8)
 
         winner = home if median > 0 else away
-        ax.annotate('{} {}'.format(winner, -abs(median)), xy=(0.02,0.02),
+        ax.annotate('{} {}'.format(winner, -abs(int(median))), xy=(0.02,0.02),
                 ha='left', va='bottom', xycoords='axes fraction',
                 zorder=4, color=offblack)
 
@@ -178,7 +206,7 @@ def weekly_spreads(year=2017, week=1):
     fig.tight_layout(w_pad=0.4, h_pad=0.4, pad=2) 
 
 @plot
-def weekly_ratings(year=2017, week=1):
+def weekly_ratings(year=2017, week=3):
     """
     Calculate the ELO ratings for each handicap
 
@@ -235,7 +263,7 @@ def weekly_ratings(year=2017, week=1):
 
 @plot
 def win_rate(nsample=10**4):
-    rating = melo.Rating(kfactor=2, database='elo.db')
+    rating = melo.Rating(kfactor=2, mode='points')
     spreads = skellam.rvs(14, 7, size=nsample)
 
     # loop over different handicap margins
@@ -378,6 +406,69 @@ def model_error():
 
     # figure properties
     finish()
+
+@plot
+def web_spreads(year=2017, week=3):
+    # create figure object
+    fig = plt.figure(figsize=(columnwidth, 2*columnwidth))
+    ax = plt.gca()
+
+    q = nfldb.Query(nfldb.connect())
+    q.game(season_type='Regular', season_year=year, week=week)
+
+    # loop over games in the week
+    for shift, game in enumerate(q.as_games(), start=1):
+
+        home, away = (game.home_team, game.away_team)
+
+        median = rating.predict_spread(home, away, year, week)
+        integer_median = int(round(median))
+
+        box1, box2 = [
+                rating.predict_spread(home, away, year, week, perc=p)
+                for p in (.25, .75)
+                ]
+
+        box_lo, box_hi = (min(box1, box2), max(box1, box2))
+
+        line1, line2 = [ 
+                rating.predict_spread(home, away, year, week, perc=p)
+                for p in (.05, .95)
+                ]
+
+        line_lo, line_hi = (min(line1, line2), max(line1, line2))
+
+        box = patches.Rectangle(
+                (box_lo, shift-.2), box_hi - box_lo, 0.4,
+                color=blue, alpha=.8, lw=0
+                )
+
+        ax.add_patch(box)
+        plt.plot((line_lo, box_lo), (shift, shift),
+                color=blue, alpha=.8, lw=1.4)
+        plt.plot((box_hi, line_hi), (shift, shift),
+                color=blue, alpha=.8, lw=1.4)
+        plt.plot((median, median), (shift-.2, shift+.2),
+                color=orange, lw=1.4)
+
+        plt.annotate(home, xy=(37, shift), xycoords='data',
+                ha='center', va='center', clip_on=False)
+        plt.annotate(away, xy=(-37, shift), xycoords='data',
+                ha='center', va='center', clip_on=False)
+        plt.annotate(integer_median, xy=(median, shift+.4),
+                xycoords='data', ha='center', va='center',
+                fontsize=9, clip_on=False)
+
+    plt.annotate('AWAY', xy=(0, 1), xycoords='axes fraction',
+            clip_on=False, ha='center', va='top', color='.7')
+    plt.annotate('HOME', xy=(1, 1), xycoords='axes fraction',
+            clip_on=False, ha='center', va='top', color='.7')
+
+    plt.xlim(-37, 37)
+    plt.ylim(0, 17)
+    plt.yticks([])
+    plt.xlabel(r'$\mathrm{home} - \mathrm{away}$ [points]')
+    finish(rect=(0.07, 0, 0.93, 0.99))
 
 
 def main():
