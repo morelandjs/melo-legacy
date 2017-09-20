@@ -55,23 +55,23 @@ class Rating:
     Rating class calculates margin-dependent Elo ratings.
 
     """
-    def __init__(self, mode='points', kfactor=60, hfa=60, decay=50,
-            regress=0.7, database='elo.db'):
+    def __init__(self, obs='points', mode='spread', kfactor=60, hfa=60,
+            decay=50, regress=0.7, database='elo.db'):
 
         # function to initialize a nested dictionary
         nested_dict = lambda: defaultdict(nested_dict)
 
-        # point-spread interval attributes
-        self.bins= self.range(mode)
-        self.ubins = self.bins[-int(1+.5*len(self.bins)):]
-        self.range = 0.5*(self.bins[:-1] + self.bins[1:])
-
         # model hyper-parameters
+        self.obs = obs
         self.mode = mode
         self.kfactor = kfactor
         self.hfa = hfa
         self.decay = decay
         self.regress = regress
+
+        # point-spread interval attributes
+        self.bins= self.range(obs)
+        self.range = 0.5*(self.bins[:-1] + self.bins[1:])
 
         self.nfldb = nfldb.connect()
         self.last_game = self.last_played() 
@@ -103,7 +103,7 @@ class Rating:
 
         """
         elo_init = 1500.
-        prob = max(0.5*self.spread_prob[abs(margin)], 1e-6)
+        prob = max(self.spread_prob[abs(margin)], 1e-6)
         arg = max(1/prob - 1, 1e-6)
         elo_diff = 200*np.log10(arg)
 
@@ -127,9 +127,10 @@ class Rating:
         Probabilities of observing each point spread.
 
         """
-        spreads = np.abs(self.spreads())
+        spreads = self.spreads()
+        reversed_spreads = [-s for s in spreads]
         hist, edges = np.histogram(
-                spreads, bins=self.ubins, normed=True
+                spreads + reversed_spreads, bins=self.bins, normed=True
                 )
         spread = 0.5*(edges[:-1] + edges[1:])
         prob = np.cumsum(hist[::-1], dtype=float)[::-1]
@@ -208,24 +209,45 @@ class Rating:
 
         """
         home, away = (game.home_team, game.away_team)
-        point_dict = {
+
+        spread_dict = {
                 "points": game.home_score - game.away_score,
                 "yards": self.yds(game, home) - self.yds(game, away)
                 }
 
-        return point_dict[self.mode]
+        total_dict = {
+                "points": game.home_score + game.away_score,
+                "yards": self.yds(game, home) + self.yds(game, away)
+                }
 
-    def range(self, mode):
+        mode_dict = {
+            "spread": spread_dict[self.obs],
+            "total": total_dict[self.obs]
+            }
+
+        return mode_dict[self.mode]
+
+    def range(self, obs):
         """
         Returns an iterator over the range of reasonable point values.
 
         """
-        edges_dict = {
-                "points": np.arange(-40.5, 41.5, 1),
-                "yards": np.arange(-375, 385, 10)
-                }
+        spread_dict = {
+            "points": np.arange(-40.5, 41.5, 1),
+            "yards": np.arange(-375, 385, 10)
+            }
 
-        return edges_dict[mode]
+        total_dict = {
+            "points": np.arange(-0.5, 80.5, 1),
+            "yards": np.arange(-5, 1005, 10)
+            }
+
+        mode_dict = {
+            "spread": spread_dict[obs],
+            "total": total_dict[obs]
+            }
+
+        return mode_dict[self.mode]
 
     def elo_change(self, rating_diff, points, handicap):
         """
@@ -392,7 +414,6 @@ def main():
     mean_error = np.mean(residuals)
     rms_error = np.std(residuals)
     print(mean_error, rms_error)
-
 
 if __name__ == "__main__":
     main()

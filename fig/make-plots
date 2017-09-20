@@ -54,7 +54,6 @@ plt.rcParams.update({
     'xtick.major.pad': 1.8,
     'ytick.major.pad': 1.8,
     'text.color': offblack,
-   #'axes.edgecolor': offblack,
     'axes.labelcolor': offblack,
     'xtick.color': offblack,
     'ytick.color': offblack,
@@ -66,7 +65,7 @@ plt.rcParams.update({
 })
 
 # run elo ratings simulation
-rating = melo.Rating(mode='points', database='elo.db')
+rating = melo.Rating(obs='points', database='elo.db')
 
 plot_functions = {}
 
@@ -263,7 +262,7 @@ def weekly_ratings(year=2017, week=3):
 
 @plot
 def win_rate(nsample=10**4):
-    rating = melo.Rating(kfactor=2, mode='points')
+    rating = melo.Rating(kfactor=2, obs='points')
     spreads = skellam.rvs(14, 7, size=nsample)
 
     # loop over different handicap margins
@@ -348,10 +347,10 @@ def team_history():
     teams = set(g.home_team for g in q.as_games())
 
     # point values
-    spreads = 0.5*(rating.ubins[:-1] + rating.ubins[1:])
+    spreads = [r for r in rating.range[::5] if r > 0]
 
     for ax, team in zip(axes.flat, sorted(teams)):
-        for hcap in spreads[::5]:
+        for hcap in spreads:
 
             rtg_hcap = elo_history(team, hcap)
             color = plt.cm.coolwarm(hcap/max(spreads))
@@ -410,7 +409,7 @@ def model_error():
 @plot
 def web_spreads(year=2017, week=3):
     # create figure object
-    fig = plt.figure(figsize=(columnwidth, 2*columnwidth))
+    fig = plt.figure(figsize=(columnwidth, columnwidth/aspect))
     ax = plt.gca()
 
     q = nfldb.Query(nfldb.connect())
@@ -422,6 +421,7 @@ def web_spreads(year=2017, week=3):
         home, away = (game.home_team, game.away_team)
 
         median = rating.predict_spread(home, away, year, week)
+        mean = rating.predict_score(home, away, year, week)
         integer_median = int(round(median))
 
         box1, box2 = [
@@ -439,17 +439,18 @@ def web_spreads(year=2017, week=3):
         line_lo, line_hi = (min(line1, line2), max(line1, line2))
 
         box = patches.Rectangle(
-                (box_lo, shift-.2), box_hi - box_lo, 0.4,
+                (box_lo, shift-.15), box_hi - box_lo, 0.3,
                 color=blue, alpha=.8, lw=0
                 )
 
         ax.add_patch(box)
         plt.plot((line_lo, box_lo), (shift, shift),
-                color=blue, alpha=.8, lw=1.4)
+                color=blue, alpha=.8, lw=1.2)
         plt.plot((box_hi, line_hi), (shift, shift),
-                color=blue, alpha=.8, lw=1.4)
-        plt.plot((median, median), (shift-.2, shift+.2),
-                color=orange, lw=1.4)
+                color=blue, alpha=.8, lw=1.2)
+        plt.plot((median, median), (shift-.15, shift+.15),
+                color=orange, lw=1.2)
+        plt.scatter(mean, shift, color=orange, zorder=4)
 
         plt.annotate(home, xy=(37, shift), xycoords='data',
                 ha='center', va='center', clip_on=False)
