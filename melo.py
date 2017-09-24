@@ -4,7 +4,7 @@ from collections import defaultdict
 from functools import total_ordering
 
 import numpy as np
-from scipy import optimize
+from scipy.optimize import minimize
 
 import nfldb
 
@@ -55,7 +55,7 @@ class Rating:
     Rating class calculates margin-dependent Elo ratings.
 
     """
-    def __init__(self, obs='points', mode='spread', kfactor=60, hfa=60,
+    def __init__(self, obs='points', mode='spread', kfactor=60, hfa=58,
             decay=50, regress=0.7, database='elo.db'):
 
         # function to initialize a nested dictionary
@@ -238,7 +238,7 @@ class Rating:
             }
 
         total_dict = {
-            "points": np.arange(-0.5, 80.5, 1),
+            "points": np.arange(-0.5, 90.5, 1),
             "yards": np.arange(-5, 1005, 10)
             }
 
@@ -334,7 +334,6 @@ class Rating:
         """
         Predict the spread for a matchup, given current knowledge of each
         team's ELO ratings.
-
         """
         # cumulative spread distribution
         spreads, cprob = self.cdf(home, away, year, week)
@@ -347,11 +346,9 @@ class Rating:
 
         # fit a quadratic polynomial
         coeff = np.polyfit([x0, x1, x2], [y0, y1, y2], 2)
-        res = optimize.minimize(
-                lambda x: np.square(np.polyval(coeff, x) - perc), x1
-                )
+        res = minimize(lambda x: np.square(np.polyval(coeff, x) - perc), x1)
 
-        return float(res.x)
+        return res.x
 
     def predict_score(self, home, away, year, week):
         """
@@ -414,6 +411,16 @@ def main():
     mean_error = np.mean(residuals)
     rms_error = np.std(residuals)
     print(mean_error, rms_error)
+
+    date = rating.last_game.next
+
+    q = nfldb.Query(rating.nfldb)
+    q.game(season_type='Regular')
+    d = {game.home_team: rating.elo(game.home_team, 0, date.year, date.week)
+            for game in q.as_games()}
+
+    for team in sorted(d, key=d.get, reverse=True):
+        print(team, d[team])
 
 if __name__ == "__main__":
     main()
