@@ -28,7 +28,7 @@ blue = '#1b6394'
 orange = '#F1A107'
 
 # figure style
-#plt.style.use('fivethirtyeight')
+plt.style.use('fivethirtyeight')
 
 plt.rcParams.update({
     #'font.family': 'serif',
@@ -69,7 +69,7 @@ plt.rcParams.update({
 })
 
 # run elo ratings simulation
-rating = melo.Rating(obs='points', database='elo.db')
+rating = melo.Rating(obs='yards', database='elo.db')
 
 plot_functions = {}
 
@@ -571,7 +571,7 @@ def paper_spreads(year=2017, week=2):
     finish(pad=1)
 
 @plot
-def web_spreads(year=2017, week=3):
+def web_spreads(year=2017, week=4):
     # create figure object
     fig = plt.figure(figsize=(columnwidth, columnwidth/aspect))
     ax = plt.gca()

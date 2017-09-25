@@ -73,6 +73,9 @@ class Rating:
         self.bins= self.range(obs)
         self.range = 0.5*(self.bins[:-1] + self.bins[1:])
 
+        # list of team names
+        self.teams = set()
+
         self.nfldb = nfldb.connect()
         self.last_game = self.last_played() 
         self.spread_prob = self.spread_probability()
@@ -87,13 +90,19 @@ class Rating:
         q = nfldb.Query(self.nfldb)
         q.game(season_type='Regular', finished=True)
 
+        last_game = {}
+
         # look up most recent game
-        prev_game = sorted(
+        for game in sorted(
                 q.as_games(),
                 key=lambda g: Date(g.season_year, g.week)
-                ).pop()
+                ):
 
-        return Date(prev_game.season_year, prev_game.week)
+            date = Date(game.season_year, game.week)
+            last_game.update({game.home_team: date, game.away_team: date})
+            self.teams.update([game.home_team, game.away_team])
+
+        return last_game
 
     def starting_elo(self, margin):
         """
@@ -154,7 +163,7 @@ class Rating:
 
         """
         date = Date(year, week)
-        date_last = self.last_game.next
+        date_last = self.last_game[team].next
 
         # extrapolate Elo with information decay for future dates
         if date > date_last:
@@ -234,7 +243,7 @@ class Rating:
         """
         spread_dict = {
             "points": np.arange(-40.5, 41.5, 1),
-            "yards": np.arange(-375, 385, 10)
+            "yards": np.arange(-505, 515, 10)
             }
 
         total_dict = {
@@ -340,15 +349,20 @@ class Rating:
 
         # plot median prediction (compare to vegas spread)
         index = np.square([p - perc for p in cprob]).argmin()
-        x0, y0 = (spreads[index - 1], cprob[index - 1])
-        x1, y1 = (spreads[index], cprob[index])
-        x2, y2 = (spreads[index + 1], cprob[index + 1])
+        if index in (1, len(cprob) - 2): 
+            x0, y0 = (spreads[index - 1], cprob[index - 1])
+            x1, y1 = (spreads[index], cprob[index])
+            x2, y2 = (spreads[index + 1], cprob[index + 1])
 
-        # fit a quadratic polynomial
-        coeff = np.polyfit([x0, x1, x2], [y0, y1, y2], 2)
-        res = minimize(lambda x: np.square(np.polyval(coeff, x) - perc), x1)
+            # fit a quadratic polynomial
+            coeff = np.polyfit([x0, x1, x2], [y0, y1, y2], 2)
+            res = minimize(
+                    lambda x: np.square(np.polyval(coeff, x) - perc), x1
+                  )
 
-        return res.x
+            return res.x
+
+        return spreads[index]
 
     def predict_score(self, home, away, year, week):
         """
@@ -412,15 +426,15 @@ def main():
     rms_error = np.std(residuals)
     print(mean_error, rms_error)
 
-    date = rating.last_game.next
+    rank = {}
 
-    q = nfldb.Query(rating.nfldb)
-    q.game(season_type='Regular')
-    d = {game.home_team: rating.elo(game.home_team, 0, date.year, date.week)
-            for game in q.as_games()}
+    for team in rating.teams:
+        date = rating.last_game[team].next
+        elo = rating.elo(team, 0, date.year, date.week)
+        rank.update({team: elo})
 
-    for team in sorted(d, key=d.get, reverse=True):
-        print(team, d[team])
+    for team in sorted(rank, key=rank.get, reverse=True):
+        print(team, rank[team])
 
 if __name__ == "__main__":
     main()
