@@ -424,7 +424,8 @@ def main():
     residuals = rating.model_accuracy()
     mean_error = np.mean(residuals)
     rms_error = np.std(residuals)
-    print(mean_error, rms_error)
+    print "residual mean:", mean_error
+    print "residual std:", rms_error
 
     rank = {}
 
@@ -434,7 +435,7 @@ def main():
         rank.update({team: elo})
 
     for team in sorted(rank, key=rank.get, reverse=True):
-        print(team, rank[team])
+        print team, int(rank[team])
 
 if __name__ == "__main__":
     main()

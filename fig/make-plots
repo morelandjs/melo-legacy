@@ -69,7 +69,7 @@ plt.rcParams.update({
 })
 
 # run elo ratings simulation
-rating = melo.Rating(obs='yards', database='elo.db')
+rating = melo.Rating(obs='points', database='elo.db')
 
 plot_functions = {}
 
