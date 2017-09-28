@@ -7,6 +7,7 @@ import numpy as np
 from scipy.optimize import minimize
 
 import nfldb
+import matplotlib.pyplot as plt
 
 
 @total_ordering
@@ -55,7 +56,7 @@ class Rating:
     Rating class calculates margin-dependent Elo ratings.
 
     """
-    def __init__(self, obs='points', mode='spread', kfactor=60, hfa=58,
+    def __init__(self, obs='yards', mode='spread', kfactor=60, hfa=58,
             decay=50, regress=0.7, database='elo.db'):
 
         # function to initialize a nested dictionary
@@ -112,9 +113,9 @@ class Rating:
 
         """
         elo_init = 1500.
-        prob = max(self.spread_prob[abs(margin)], 1e-6)
-        arg = max(1/prob - 1, 1e-6)
-        elo_diff = 200*np.log10(arg)
+        prob = self.spread_prob[abs(margin)]
+        arg = np.clip(1./prob - 1., 1e-12, 1e12)
+        elo_diff = 200.*np.log10(arg)
 
         # separate positive and negative ratings
         # i.e. home team wins by 40 =  team[40] << team[-40]
@@ -128,7 +129,7 @@ class Rating:
         q = nfldb.Query(self.nfldb)
         q.game(season_type='Regular', finished=True)
         spreads = [self.point_diff(g) for g in q.as_games()]
-
+        
         return spreads
 
     def spread_probability(self):
@@ -142,7 +143,8 @@ class Rating:
                 spreads + reversed_spreads, bins=self.bins, normed=True
                 )
         spread = 0.5*(edges[:-1] + edges[1:])
-        prob = np.cumsum(hist[::-1], dtype=float)[::-1]
+        bin_width = edges[1] - edges[0]
+        prob = bin_width * np.cumsum(hist[::-1], dtype=float)[::-1]
 
         return dict(zip(spread, prob))
 
@@ -188,7 +190,7 @@ class Rating:
         game.
 
         """
-        yards = 0
+        yards = 0.
 
         for drive in filter(
                 lambda d: nfldb.standard_team(d.pos_team)==team,
@@ -225,7 +227,7 @@ class Rating:
                 }
 
         total_dict = {
-                "points": game.home_score + game.away_score,
+                "points": game.home_score + game.away_score - 44,
                 "yards": self.yds(game, home) + self.yds(game, away)
                 }
 
@@ -243,11 +245,11 @@ class Rating:
         """
         spread_dict = {
             "points": np.arange(-40.5, 41.5, 1),
-            "yards": np.arange(-505, 515, 10)
+            "yards": np.arange(-495, 505, 10)
             }
 
         total_dict = {
-            "points": np.arange(-0.5, 90.5, 1),
+            "points": np.arange(-45.5, 46.5, 1),
             "yards": np.arange(-5, 1005, 10)
             }
 

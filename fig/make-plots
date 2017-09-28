@@ -18,12 +18,15 @@ import nflgame
 # figure size
 aspect = 1/1.618
 resolution = 72.27
-columnwidth = 246/resolution
-textwidth = 510/resolution
+#columnwidth = 246/resolution
+#textwidth = 510/resolution
+columnwidth = 180/resolution
+textwidth = 373/resolution
 textheight = 672/resolution
-textiny, texsmall, texnormal = 8.0, 9.25, 10.0
-#offblack = '#333333'
-offblack = '0'
+#textiny, texsmall, texnormal = 8.0, 9.25, 10.0
+textiny, texsmall, texnormal = 7.0, 8.25, 9.0
+offblack = '#333333'
+#offblack = '0'
 blue = '#1b6394'
 orange = '#F1A107'
 
@@ -69,7 +72,7 @@ plt.rcParams.update({
 })
 
 # run elo ratings simulation
-rating = melo.Rating(obs='points', database='elo.db')
+rating = melo.Rating(obs='points', mode='total', database='elo.db')
 
 plot_functions = {}
 
@@ -77,8 +80,8 @@ def plot(f):
     def wrapper(*args, **kwargs):
         print(f.__name__)
         f(*args, **kwargs)
-        #plt.savefig('{}.png'.format(f.__name__), dpi=200)
-        plt.savefig('{}.pdf'.format(f.__name__))
+        plt.savefig('{}.png'.format(f.__name__), dpi=200)
+        #plt.savefig('{}.pdf'.format(f.__name__))
         plt.close()
 
     plot_functions[f.__name__] = wrapper
@@ -509,6 +512,34 @@ def example_distribution():
     finish()
 
 @plot
+def rankings():
+    # figure dimensions
+    figsize = (columnwidth, columnwidth)
+    fig = plt.figure(figsize=figsize)
+
+    points, yards = ({}, {})
+
+    for obs, rank in ('points', points), ('yards', yards):
+        rating = melo.Rating(obs=obs)
+
+        for team in rating.teams:
+            date = rating.last_game[team].next
+            elo = rating.elo(team, 0, date.year, date.week)
+            rank.update({team: elo})
+
+    for team in rating.teams:
+        x, y = (points[team], yards[team])
+        plt.scatter(x, y, color=blue)
+        plt.annotate(team, xy=(x+10, y), xycoords='data',
+                ha='left', va='center', fontsize=textiny)
+
+    plt.xlim(1250, 1750)
+    plt.ylim(1250, 1750)
+    plt.xlabel('Scores ball [Elo]')
+    plt.ylabel('Moves ball [Elo]')
+    finish(pad=1)
+
+@plot
 def paper_spreads(year=2017, week=2):
     # create figure object
     figsize = (textwidth, aspect*columnwidth)
@@ -624,16 +655,17 @@ def web_spreads(year=2017, week=4):
                 xycoords='data', ha='center', va='center',
                 fontsize=9, clip_on=False)
 
-    plt.annotate('AWAY', xy=(0, 1), xycoords='axes fraction',
-            clip_on=False, ha='center', va='top', color='.7')
-    plt.annotate('HOME', xy=(1, 1), xycoords='axes fraction',
-            clip_on=False, ha='center', va='top', color='.7')
+    plt.annotate('AWAY', xy=(0, 1.02), xycoords='axes fraction',
+            clip_on=False, ha='center', va='center', color='.7')
+    plt.annotate('HOME', xy=(1, 1.02), xycoords='axes fraction',
+            clip_on=False, ha='center', va='center', color='.7')
 
     plt.xlim(-37, 37)
-    plt.ylim(0, 17)
+    plt.ylim(.5, 16.5)
     plt.yticks([])
+    plt.xticks([-30, -20, -10, 0, 10, 20, 30])
     plt.xlabel(r'$\mathrm{home} - \mathrm{away}$ [points]')
-    finish(rect=(0.07, 0, 0.93, 0.99))
+    finish(rect=(0.07, 0, 0.93, 0.97))
 
 
 def main():
