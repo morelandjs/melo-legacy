@@ -9,7 +9,6 @@ from skopt import gp_minimize
 
 import nfldb
 
-import matplotlib.pyplot as plt
 
 @total_ordering
 class Date:
@@ -57,22 +56,28 @@ class Rating:
     Rating class calculates margin-dependent Elo ratings.
 
     """
-    def __init__(self, obs='points', mode='spread', kfactor=59,
-                 decay=50, regress=0.64, database='elo.db'):
+    def __init__(self, obs='points', mode='spread', database='elo.db',
+                 kfactor=None, hfa=None, regress=None, decay=None):
 
         # function to initialize a nested dictionary
         def nested_dict():
             return defaultdict(nested_dict)
 
+        # short function to toggle defaults
+        def opt(defaults, manual):
+            return defaults if manual is None else manual
+
         # model hyper-parameters
         self.obs = obs
         self.mode = mode
-        self.kfactor = kfactor
         self.decay = decay
+        self.kfactor = kfactor
         self.regress = regress
 
-        # home field advantage
-        self.hfa = {'spread': 56, 'total': 0}[mode]
+        # default hyper-parameter settings
+        self.hfa = opt({'spread': 56, 'total': 0}[mode], hfa)
+        self.kfactor = opt({'spread': 59, 'total': 48}[mode], kfactor)
+        self.regress = opt({'spread': .64, 'total': .68}[mode], regress)
 
         # point-spread interval attributes
         self.bins = self.bin_edges(obs)
@@ -119,8 +124,8 @@ class Rating:
         TINY = 1e-3
         elo_init = 1500.
 
-        margin = {'spread': margin, 'total': abs(margin)}[self.mode]
-        spread_prob = self.spread_prob[margin]
+        phys_margin = {'spread': margin, 'total': abs(margin)}[self.mode]
+        spread_prob = self.spread_prob[phys_margin]
         P = np.clip(spread_prob, TINY, 1 - TINY)
 
         elo_diff = (
@@ -157,34 +162,6 @@ class Rating:
 
         return dict(zip(spread, prob))
 
-    def regress_to_mean(self, rtg, margin, factor):
-        """
-        Regress Elo rating to the mean. Used to project future
-        games and update ratings after the offseason.
-
-        """
-        default_rtg = self.starting_elo(margin)
-
-        return default_rtg + factor * (rtg - default_rtg)
-
-    def adjust_injuries(self, team, year, week):
-        """
-        Add or subtract an injury bonus/penalty to the Elo rating
-
-        """
-        andrew_luck = (team == 'IND' and year == 2017 and week > 12)
-        carson_palmer = (team == 'ARI' and year == 2017 and 7 < week < 15)
-        aaron_rodgers = (team == 'GB' and year == 2017 and week > 6)
-
-        if andrew_luck:
-            return 100
-        elif aaron_rodgers:
-            return -100
-        elif carson_palmer:
-            return -75
-        else:
-            return 0
-
     def elo(self, team, margin, year, week):
         """
         Queries the most recent ELO rating for a team, i.e.
@@ -201,13 +178,10 @@ class Rating:
 
             # number of weeks since last game (don't count bye weeks)
             elapsed = date - date_last - 1
-            factor = np.exp(-elapsed/self.decay)
-
-            # adjust for injuries
-            elo += self.adjust_injuries(team, year, week)
+            week_decay = np.exp(-elapsed/self.decay)
 
             # regress Elo to the mean
-            return self.regress_to_mean(elo, margin, factor)
+            return self.regress_to_mean(elo, week_decay, margin)
 
         # return the most recent Elo rating, account for bye weeks
         for d in date, date.prev:
@@ -279,7 +253,7 @@ class Rating:
 
         return {"spread": spread, "total": total}[self.mode]
 
-    def elo_change(self, rating_diff, points, handicap):
+    def elo_change(self, rating_diff, points, hcap):
         """
         Change in home team ELO rating after a single game
 
@@ -287,9 +261,20 @@ class Rating:
         prob = self.win_prob(rating_diff)
         win = self.kfactor * (1. - prob)
         lose = -self.kfactor * prob
+        sign = np.sign(hcap)
 
-        # TODO fix this for point totals
-        return win if points > handicap else lose
+        pts = {'spread': points, 'total': sign*points}[self.mode]
+
+        return win if pts > hcap else lose
+
+    def regress_to_mean(self, rtg, factor, hcap):
+        """
+        Regress an Elo rating to it's default (resting) value
+
+        """
+        default_rtg = self.starting_elo(hcap)
+
+        return default_rtg + factor * (rtg - default_rtg)
 
     def calc_elo(self):
         """
@@ -319,14 +304,8 @@ class Rating:
             # point differential
             points = self.point_diff(game)
 
-            # hcap range changes based on mode
-            hcap_range = {
-                    'spread': self.range,
-                    'total': self.range[self.range > 0],
-                    }[self.mode]
-
             # loop over all possible spread margins
-            for hcap in hcap_range:
+            for hcap in self.range:
 
                 # query current elo ratings from most recent game
                 home_rtg = self.elo(home, hcap, year, week)
@@ -345,8 +324,10 @@ class Rating:
                 updates = [(home, hcap, home_rtg), (away, -hcap, away_rtg)]
 
                 for (team, hcap, rtg) in updates:
+
+                    # regress Elo to the mean
                     if next_year > year:
-                        rtg = self.regress_to_mean(rtg, hcap, self.regress)
+                        rtg = self.regress_to_mean(rtg, self.regress, hcap)
 
                     self.elodb[team][hcap][next_year][next_week] = rtg
 
@@ -450,7 +431,7 @@ class Rating:
             # allow for one season burn-in
             if year > 2009:
                 predicted = self.predict_score(home, away, year, week)
-                observed = game.home_score - game.away_score
+                observed = self.point_diff(game)
                 residuals.append(observed - predicted)
 
         return residuals
@@ -466,14 +447,14 @@ class Rating:
             parameters: kfactor, decay, regress.
 
             """
-            kfactor, decay, regress = parameters
-            rating = Rating(kfactor=kfactor, decay=decay, regress=regress)
+            kfactor, regress = parameters
+            rating = Rating(kfactor=kfactor, regress=regress)
             residuals = rating.model_accuracy()
             mean_abs_error = np.abs(residuals).mean()
             return mean_abs_error
 
-        bounds = [(10, 100), (10, 10**3, "log-uniform"), (0.1, 1)]
-        res_gp = gp_minimize(objective, bounds, n_calls=10, random_state=0)
+        bounds = [(10, 100), (0.1, 1)]
+        res_gp = gp_minimize(objective, bounds, n_calls=100, random_state=0)
 
         print("Best score: {:.4f}".format(res_gp.fun))
         print("Best parameters: {}".format(res_gp.x))
@@ -481,18 +462,18 @@ class Rating:
 
 def main():
     """
-    Main function prints the model accuracy parameters and exits
+    Main function prints the model accuracy diagnostics and exits
 
     """
-    rating = Rating(database='elo.db')
+    rating = Rating(mode='spread')
     residuals = rating.model_accuracy()
     mean_error = np.mean(residuals)
     rms_error = np.std(residuals)
     mean_abs_error = np.abs(residuals).mean()
 
-    print("residual mean:", mean_error)
-    print("residual std:", rms_error)
-    print("residual abs error:", mean_abs_error)
+    print("mean:", mean_error)
+    print("std dev:", rms_error)
+    print("mean abs error:", mean_abs_error)
 
 
 if __name__ == "__main__":
