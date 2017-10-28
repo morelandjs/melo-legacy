@@ -1,0 +1,257 @@
+Date,Visitor,Visitor Score,Home Team,Home Score,Line,Total Line 
+09/08/2011,New Orleans Saints,34,Green Bay Packers,42,5,48
+09/11/2011,Pittsburgh Steelers,7,Baltimore Ravens,35,1.5,37
+09/11/2011,Detroit Lions,27,Tampa Bay Buccaneers,20,1.5,43.5
+09/11/2011,Atlanta Falcons,12,Chicago Bears,30,-1.5,41
+09/11/2011,Buffalo Bills,41,Kansas City Chiefs,7,3.5,40
+09/11/2011,Indianapolis Colts,7,Houston Texans,34,9,44
+09/11/2011,Philadelphia Eagles,31,St Louis Rams,13,-4,44.5
+09/11/2011,Cincinnati Bengals,27,Cleveland Browns,17,7,36.5
+09/11/2011,Tennessee Titans,14,Jacksonville Jaguars,16,-1.5,38
+09/11/2011,New York Giants,14,Washington Redskins,28,-2,40
+09/11/2011,Carolina Panthers,21,Arizona Cardinals,28,7,37.5
+09/11/2011,Seattle Seahawks,17,San Francisco 49ers,33,6,38
+09/11/2011,Minnesota Vikings,17,San Diego Chargers,24,8.5,43
+09/11/2011,Dallas Cowboys,24,New York Jets,27,6,41
+09/12/2011,New England Patriots,38,Miami Dolphins,24,-7.5,47
+09/12/2011,Oakland Raiders,23,Denver Broncos,20,3,42
+09/18/2011,Chicago Bears,13,New Orleans Saints,30,5,46.5
+09/18/2011,Kansas City Chiefs,3,Detroit Lions,48,9,45
+09/18/2011,Jacksonville Jaguars,3,New York Jets,32,9,38.5
+09/18/2011,Oakland Raiders,35,Buffalo Bills,38,4,41
+09/18/2011,Arizona Cardinals,21,Washington Redskins,22,4.5,45
+09/18/2011,Baltimore Ravens,13,Tennessee Titans,26,-6,39
+09/18/2011,Seattle Seahawks,0,Pittsburgh Steelers,24,14,40
+09/18/2011,Green Bay Packers,30,Carolina Panthers,23,-11,45
+09/18/2011,Tampa Bay Buccaneers,24,Minnesota Vikings,20,1,41
+09/18/2011,Cleveland Browns,27,Indianapolis Colts,19,-1.5,39
+09/18/2011,Dallas Cowboys,27,San Francisco 49ers,24,-3,41.5
+09/18/2011,Houston Texans,23,Miami Dolphins,13,-3,47.5
+09/18/2011,San Diego Chargers,21,New England Patriots,35,7,53.5
+09/18/2011,Cincinnati Bengals,22,Denver Broncos,24,3,41
+09/18/2011,Philadelphia Eagles,31,Atlanta Falcons,35,-2.5,49.5
+09/19/2011,St Louis Rams,16,New York Giants,28,7,44
+09/25/2011,San Francisco 49ers,13,Cincinnati Bengals,8,1,38.5
+09/25/2011,New England Patriots,31,Buffalo Bills,34,-7.5,54.5
+09/25/2011,Houston Texans,33,New Orleans Saints,40,4,51
+09/25/2011,New York Giants,29,Philadelphia Eagles,16,8,46.5
+09/25/2011,Miami Dolphins,16,Cleveland Browns,17,-2,42.5
+09/25/2011,Denver Broncos,14,Tennessee Titans,17,7,44
+09/25/2011,Detroit Lions,26,Minnesota Vikings,23,-3,45
+09/25/2011,Jacksonville Jaguars,10,Carolina Panthers,16,3.5,43.5
+09/25/2011,Kansas City Chiefs,17,San Diego Chargers,20,14.5,44.5
+09/25/2011,New York Jets,24,Oakland Raiders,34,-3,41
+09/25/2011,Baltimore Ravens,37,St Louis Rams,7,-6,42
+09/25/2011,Atlanta Falcons,13,Tampa Bay Buccaneers,16,1,45
+09/25/2011,Arizona Cardinals,10,Seattle Seahawks,13,-3,43
+09/25/2011,Green Bay Packers,27,Chicago Bears,17,-5,45.5
+09/25/2011,Pittsburgh Steelers,23,Indianapolis Colts,20,-11,39.5
+09/26/2011,Washington Redskins,16,Dallas Cowboys,18,3.5,45
+10/02/2011,Detroit Lions,34,Dallas Cowboys,30,2.5,46.5
+10/02/2011,New Orleans Saints,23,Jacksonville Jaguars,10,-9,45
+10/02/2011,San Francisco 49ers,24,Philadelphia Eagles,23,10,43.5
+10/02/2011,Washington Redskins,17,St Louis Rams,10,-3,44
+10/02/2011,Tennessee Titans,31,Cleveland Browns,13,1.5,37.5
+10/02/2011,Buffalo Bills,20,Cincinnati Bengals,23,-3,43
+10/02/2011,Minnesota Vikings,17,Kansas City Chiefs,22,-3,40
+10/02/2011,Carolina Panthers,29,Chicago Bears,34,7,42
+10/02/2011,Pittsburgh Steelers,10,Houston Texans,17,4,46.5
+10/02/2011,Atlanta Falcons,30,Seattle Seahawks,28,-6,39
+10/02/2011,New York Giants,31,Arizona Cardinals,27,-1.5,45
+10/02/2011,Miami Dolphins,16,San Diego Chargers,26,7,45
+10/02/2011,Denver Broncos,23,Green Bay Packers,49,12,46.5
+10/02/2011,New England Patriots,31,Oakland Raiders,19,-6.5,55.5
+10/02/2011,New York Jets,17,Baltimore Ravens,34,5,43.5
+10/03/2011,Indianapolis Colts,17,Tampa Bay Buccaneers,24,10,40.5
+10/09/2011,Kansas City Chiefs,28,Indianapolis Colts,24,1.5,38
+10/09/2011,Arizona Cardinals,10,Minnesota Vikings,34,3.5,45
+10/09/2011,Philadelphia Eagles,24,Buffalo Bills,31,-3,53
+10/09/2011,Oakland Raiders,25,Houston Texans,20,4.5,48.5
+10/09/2011,New Orleans Saints,30,Carolina Panthers,27,-6.5,51.5
+10/09/2011,Cincinnati Bengals,30,Jacksonville Jaguars,20,-2.5,37
+10/09/2011,Tennessee Titans,17,Pittsburgh Steelers,38,3,40
+10/09/2011,Seattle Seahawks,36,New York Giants,25,10,43.5
+10/09/2011,Tampa Bay Buccaneers,3,San Francisco 49ers,48,3,41.5
+10/09/2011,New York Jets,21,New England Patriots,30,7.5,50
+10/09/2011,San Diego Chargers,29,Denver Broncos,24,-3.5,46.5
+10/09/2011,Green Bay Packers,25,Atlanta Falcons,14,-6.5,53
+10/10/2011,Chicago Bears,13,Detroit Lions,24,7,47
+10/16/2011,St Louis Rams,3,Green Bay Packers,24,14,47.5
+10/16/2011,Jacksonville Jaguars,13,Pittsburgh Steelers,17,12.5,40
+10/16/2011,Philadelphia Eagles,20,Washington Redskins,13,-3,46.5
+10/16/2011,San Francisco 49ers,25,Detroit Lions,19,5,45
+10/16/2011,Carolina Panthers,17,Atlanta Falcons,31,3.5,49.5
+10/16/2011,Indianapolis Colts,17,Cincinnati Bengals,27,4.5,40.5
+10/16/2011,Buffalo Bills,24,New York Giants,27,3,49
+10/16/2011,Houston Texans,14,Baltimore Ravens,29,7,43.5
+10/16/2011,Cleveland Browns,17,Oakland Raiders,24,6.5,45
+10/16/2011,Dallas Cowboys,16,New England Patriots,20,7,54.5
+10/16/2011,New Orleans Saints,20,Tampa Bay Buccaneers,26,-6.5,49.5
+10/16/2011,Minnesota Vikings,10,Chicago Bears,39,2.5,42
+10/17/2011,Miami Dolphins,6,New York Jets,24,7.5,41.5
+10/23/2011,Chicago Bears,24,Tampa Bay Buccaneers,18,-2,44
+10/23/2011,Washington Redskins,20,Carolina Panthers,33,2.5,44.5
+10/23/2011,San Diego Chargers,21,New York Jets,27,-1,43.5
+10/23/2011,Seattle Seahawks,3,Cleveland Browns,6,3,41
+10/23/2011,Houston Texans,41,Tennessee Titans,7,2.5,44
+10/23/2011,Denver Broncos,18,Miami Dolphins,15,-1,41.5
+10/23/2011,Atlanta Falcons,23,Detroit Lions,16,4.5,47
+10/23/2011,Kansas City Chiefs,28,Oakland Raiders,0,3.5,41.5
+10/23/2011,Pittsburgh Steelers,32,Arizona Cardinals,20,-4.5,46.5
+10/23/2011,St Louis Rams,7,Dallas Cowboys,34,14,43
+10/23/2011,Green Bay Packers,33,Minnesota Vikings,27,-11,47
+10/23/2011,Indianapolis Colts,7,New Orleans Saints,62,14,49
+10/24/2011,Baltimore Ravens,7,Jacksonville Jaguars,12,-10.5,39
+10/30/2011,Indianapolis Colts,10,Tennessee Titans,27,7.5,43.5
+10/30/2011,Jacksonville Jaguars,14,Houston Texans,24,10,41
+10/30/2011,Minnesota Vikings,24,Carolina Panthers,21,3,47
+10/30/2011,New Orleans Saints,21,St Louis Rams,31,-14,48.5
+10/30/2011,Arizona Cardinals,27,Baltimore Ravens,30,11.5,43
+10/30/2011,Miami Dolphins,17,New York Giants,20,10,43.5
+10/30/2011,Washington Redskins,0,Buffalo Bills,23,4,46.5
+10/30/2011,Detroit Lions,45,Denver Broncos,10,-3.5,43.5
+10/30/2011,New England Patriots,17,Pittsburgh Steelers,25,-3,52
+10/30/2011,Cleveland Browns,10,San Francisco 49ers,20,9.5,38.5
+10/30/2011,Cincinnati Bengals,34,Seattle Seahawks,12,-1.5,37.5
+10/30/2011,Dallas Cowboys,7,Philadelphia Eagles,34,3,49.5
+10/31/2011,San Diego Chargers,20,Kansas City Chiefs,23,-3,44.5
+11/06/2011,Atlanta Falcons,31,Indianapolis Colts,7,-7,45.5
+11/06/2011,Tampa Bay Buccaneers,16,New Orleans Saints,27,9,50.5
+11/06/2011,Cleveland Browns,12,Houston Texans,30,10.5,41
+11/06/2011,New York Jets,27,Buffalo Bills,11,2.5,45
+11/06/2011,Miami Dolphins,31,Kansas City Chiefs,3,4,40.5
+11/06/2011,San Francisco 49ers,19,Washington Redskins,11,-4.5,37.5
+11/06/2011,Seattle Seahawks,13,Dallas Cowboys,23,11,45
+11/06/2011,Denver Broncos,38,Oakland Raiders,24,7.5,42.5
+11/06/2011,Cincinnati Bengals,24,Tennessee Titans,17,3,41.5
+11/06/2011,St Louis Rams,13,Arizona Cardinals,19,3,41.5
+11/06/2011,New York Giants,24,New England Patriots,20,9,51
+11/06/2011,Green Bay Packers,45,San Diego Chargers,38,-6,51
+11/06/2011,Baltimore Ravens,23,Pittsburgh Steelers,20,3.5,42
+11/07/2011,Chicago Bears,30,Philadelphia Eagles,24,8,47.5
+11/10/2011,Oakland Raiders,24,San Diego Chargers,17,7,48
+11/13/2011,Pittsburgh Steelers,24,Cincinnati Bengals,17,-4,40.5
+11/13/2011,Denver Broncos,17,Kansas City Chiefs,10,3.5,42.5
+11/13/2011,Jacksonville Jaguars,17,Indianapolis Colts,3,-3,37.5
+11/13/2011,Buffalo Bills,7,Dallas Cowboys,44,4.5,49
+11/13/2011,Houston Texans,37,Tampa Bay Buccaneers,9,-4,45.5
+11/13/2011,Tennessee Titans,30,Carolina Panthers,3,3.5,47.5
+11/13/2011,Washington Redskins,9,Miami Dolphins,20,4,38
+11/13/2011,New Orleans Saints,26,Atlanta Falcons,23,1,50
+11/13/2011,Detroit Lions,13,Chicago Bears,37,3,42.5
+11/13/2011,St Louis Rams,13,Cleveland Browns,12,3,36.5
+11/13/2011,Arizona Cardinals,21,Philadelphia Eagles,17,13,47.5
+11/13/2011,Baltimore Ravens,17,Seattle Seahawks,22,-7,39
+11/13/2011,New York Giants,20,San Francisco 49ers,27,4,42.5
+11/13/2011,New England Patriots,37,New York Jets,16,2.5,47
+11/14/2011,Minnesota Vikings,7,Green Bay Packers,45,13,50
+11/17/2011,New York Jets,13,Denver Broncos,17,-6.5,38.5
+11/20/2011,Tennessee Titans,17,Atlanta Falcons,23,6.5,44
+11/20/2011,Buffalo Bills,8,Miami Dolphins,35,3,44
+11/20/2011,Cincinnati Bengals,24,Baltimore Ravens,31,7,40.5
+11/20/2011,Jacksonville Jaguars,10,Cleveland Browns,14,1.5,34.5
+11/20/2011,Oakland Raiders,27,Minnesota Vikings,21,2,46.5
+11/20/2011,Carolina Panthers,35,Detroit Lions,49,7,47.5
+11/20/2011,Tampa Bay Buccaneers,26,Green Bay Packers,35,13.5,49
+11/20/2011,Dallas Cowboys,27,Washington Redskins,24,-7,43
+11/20/2011,Arizona Cardinals,7,San Francisco 49ers,23,10,40.5
+11/20/2011,Seattle Seahawks,24,St Louis Rams,7,3,40
+11/20/2011,San Diego Chargers,20,Chicago Bears,31,4.5,45.5
+11/20/2011,Philadelphia Eagles,17,New York Giants,10,6,45.5
+11/21/2011,Kansas City Chiefs,3,New England Patriots,34,17,47
+11/24/2011,Green Bay Packers,27,Detroit Lions,15,-4.5,55
+11/24/2011,Miami Dolphins,19,Dallas Cowboys,20,7,46
+11/24/2011,San Francisco 49ers,6,Baltimore Ravens,16,3.5,40.5
+11/27/2011,Arizona Cardinals,23,St Louis Rams,20,2.5,40
+11/27/2011,Buffalo Bills,24,New York Jets,28,9.5,42.5
+11/27/2011,Cleveland Browns,20,Cincinnati Bengals,23,7,38
+11/27/2011,Houston Texans,20,Jacksonville Jaguars,13,-6.5,37
+11/27/2011,Carolina Panthers,27,Indianapolis Colts,19,-3.5,46.5
+11/27/2011,Tampa Bay Buccaneers,17,Tennessee Titans,23,3,44
+11/27/2011,Minnesota Vikings,14,Atlanta Falcons,24,10,44
+11/27/2011,Chicago Bears,20,Oakland Raiders,25,3,41
+11/27/2011,Washington Redskins,23,Seattle Seahawks,17,3,37.5
+11/27/2011,New England Patriots,38,Philadelphia Eagles,20,-3.5,50.5
+11/27/2011,Denver Broncos,16,San Diego Chargers,13,5.5,42
+11/27/2011,Pittsburgh Steelers,13,Kansas City Chiefs,9,-10.5,40.5
+11/28/2011,New York Giants,24,New Orleans Saints,49,7,51
+12/01/2011,Philadelphia Eagles,14,Seattle Seahawks,31,-3,43.5
+12/04/2011,Tennessee Titans,23,Buffalo Bills,17,1,44
+12/04/2011,Kansas City Chiefs,10,Chicago Bears,3,9,35
+12/04/2011,Oakland Raiders,14,Miami Dolphins,34,3,43
+12/04/2011,Cincinnati Bengals,7,Pittsburgh Steelers,35,7,43
+12/04/2011,Baltimore Ravens,24,Cleveland Browns,10,-7,38.5
+12/04/2011,New York Jets,34,Washington Redskins,19,-3,38.5
+12/04/2011,Atlanta Falcons,10,Houston Texans,17,-2,38
+12/04/2011,Carolina Panthers,38,Tampa Bay Buccaneers,19,-2.5,46.5
+12/04/2011,Detroit Lions,17,New Orleans Saints,31,9,54.5
+12/04/2011,Denver Broncos,35,Minnesota Vikings,32,1.5,37.5
+12/04/2011,St Louis Rams,0,San Francisco 49ers,26,14.5,38.5
+12/04/2011,Dallas Cowboys,13,Arizona Cardinals,19,-4.5,46.5
+12/04/2011,Green Bay Packers,38,New York Giants,35,-7,54
+12/04/2011,Indianapolis Colts,24,New England Patriots,31,20.5,48.5
+12/05/2011,San Diego Chargers,38,Jacksonville Jaguars,14,-3,39.5
+12/08/2011,Cleveland Browns,3,Pittsburgh Steelers,14,14,40
+12/11/2011,Indianapolis Colts,10,Baltimore Ravens,24,16.5,41.5
+12/11/2011,Houston Texans,20,Cincinnati Bengals,19,3,37
+12/11/2011,Oakland Raiders,16,Green Bay Packers,46,11.5,49.5
+12/11/2011,Kansas City Chiefs,10,New York Jets,37,10.5,35.5
+12/11/2011,Minnesota Vikings,28,Detroit Lions,34,10,47
+12/11/2011,New Orleans Saints,22,Tennessee Titans,17,-3.5,48
+12/11/2011,Philadelphia Eagles,26,Miami Dolphins,10,3,44.5
+12/11/2011,New England Patriots,34,Washington Redskins,27,-7.5,47
+12/11/2011,Atlanta Falcons,31,Carolina Panthers,23,-3,47.5
+12/11/2011,Tampa Bay Buccaneers,14,Jacksonville Jaguars,41,-3,42
+12/11/2011,San Francisco 49ers,19,Arizona Cardinals,21,-3.5,40
+12/11/2011,Chicago Bears,10,Denver Broncos,13,3.5,35.5
+12/11/2011,Buffalo Bills,10,San Diego Chargers,37,7,49
+12/11/2011,New York Giants,37,Dallas Cowboys,34,4.5,50.5
+12/12/2011,St Louis Rams,13,Seattle Seahawks,30,9.5,37
+12/15/2011,Jacksonville Jaguars,14,Atlanta Falcons,41,13.5,42
+12/17/2011,Dallas Cowboys,31,Tampa Bay Buccaneers,15,-7,47
+12/18/2011,Washington Redskins,23,New York Giants,10,6,46.5
+12/18/2011,Green Bay Packers,14,Kansas City Chiefs,19,-11.5,46
+12/18/2011,New Orleans Saints,42,Minnesota Vikings,20,-7.5,53.5
+12/18/2011,Seattle Seahawks,38,Chicago Bears,14,3.5,35
+12/18/2011,Miami Dolphins,30,Buffalo Bills,23,1.5,40.5
+12/18/2011,Carolina Panthers,28,Houston Texans,13,6,45.5
+12/18/2011,Tennessee Titans,13,Indianapolis Colts,27,-6.5,41.5
+12/18/2011,Cincinnati Bengals,20,St Louis Rams,13,-7,39
+12/18/2011,Detroit Lions,28,Oakland Raiders,27,-1.5,47.5
+12/18/2011,New England Patriots,41,Denver Broncos,23,-7.5,47.5
+12/18/2011,New York Jets,19,Philadelphia Eagles,45,3,44
+12/18/2011,Cleveland Browns,17,Arizona Cardinals,20,6.5,37.5
+12/18/2011,Baltimore Ravens,14,San Diego Chargers,34,-2.5,44
+12/19/2011,Pittsburgh Steelers,3,San Francisco 49ers,20,3,37
+12/22/2011,Houston Texans,16,Indianapolis Colts,19,-7,40.5
+12/24/2011,Oakland Raiders,16,Kansas City Chiefs,13,3,43
+12/24/2011,Denver Broncos,14,Buffalo Bills,40,-3,43.5
+12/24/2011,Jacksonville Jaguars,17,Tennessee Titans,23,8.5,38.5
+12/24/2011,Arizona Cardinals,16,Cincinnati Bengals,23,4,41
+12/24/2011,Miami Dolphins,24,New England Patriots,27,7.5,49.5
+12/24/2011,Cleveland Browns,14,Baltimore Ravens,20,11,38
+12/24/2011,New York Giants,29,New York Jets,14,3,46
+12/24/2011,Minnesota Vikings,33,Washington Redskins,26,6,43
+12/24/2011,Tampa Bay Buccaneers,16,Carolina Panthers,48,7.5,48
+12/24/2011,St Louis Rams,0,Pittsburgh Steelers,27,10,34
+12/24/2011,San Diego Chargers,10,Detroit Lions,38,-1,53
+12/24/2011,San Francisco 49ers,19,Seattle Seahawks,17,-2.5,37
+12/24/2011,Philadelphia Eagles,20,Dallas Cowboys,7,-2.5,50
+12/25/2011,Chicago Bears,21,Green Bay Packers,35,13,42
+12/26/2011,Atlanta Falcons,16,New Orleans Saints,45,7,52.5
+01/01/2012,Washington Redskins,10,Philadelphia Eagles,34,7,44.5
+01/01/2012,Tampa Bay Buccaneers,24,Atlanta Falcons,45,9.5,45
+01/01/2012,San Francisco 49ers,34,St Louis Rams,27,-12.5,34.5
+01/01/2012,Chicago Bears,17,Minnesota Vikings,13,2.5,42
+01/01/2012,Detroit Lions,41,Green Bay Packers,45,-6.5,42
+01/01/2012,Dallas Cowboys,14,New York Giants,31,3,47.5
+01/01/2012,Carolina Panthers,17,New Orleans Saints,45,7,55
+01/01/2012,Tennessee Titans,23,Houston Texans,22,-2,38.5
+01/01/2012,Baltimore Ravens,24,Cincinnati Bengals,16,-2.5,38
+01/01/2012,Pittsburgh Steelers,13,Cleveland Browns,9,-7,33
+01/01/2012,Indianapolis Colts,13,Jacksonville Jaguars,19,3,37
+01/01/2012,New York Jets,17,Miami Dolphins,19,2,39
+01/01/2012,Buffalo Bills,21,New England Patriots,49,10,50
+01/01/2012,San Diego Chargers,38,Oakland Raiders,26,3,48.5
+01/01/2012,Kansas City Chiefs,7,Denver Broncos,3,2,37.5
+01/01/2012,Seattle Seahawks,20,Arizona Cardinals,23,2.5,40.5

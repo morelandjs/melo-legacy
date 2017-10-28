@@ -1,0 +1,257 @@
+Date,Visitor,Visitor Score,Home Team,Home Score,Line,Total Line
+09/09/2010,Minnesota Vikings,9,New Orleans Saints,14,5,49.5
+09/12/2010,Carolina Panthers,18,New York Giants,31,6,41
+09/12/2010,Miami Dolphins,15,Buffalo Bills,10,-3,39
+09/12/2010,Atlanta Falcons,9,Pittsburgh Steelers,15,-1.5,39.5
+09/12/2010,Detroit Lions,14,Chicago Bears,19,6.5,45
+09/12/2010,Cincinnati Bengals,24,New England Patriots,38,5.5,45
+09/12/2010,Cleveland Browns,14,Tampa Bay Buccaneers,17,2.5,37
+09/12/2010,Denver Broncos,17,Jacksonville Jaguars,24,3,41.5
+09/12/2010,Indianapolis Colts,24,Houston Texans,34,-1,48
+09/12/2010,Oakland Raiders,13,Tennessee Titans,38,6.5,40
+09/12/2010,Green Bay Packers,27,Philadelphia Eagles,20,-3,48
+09/12/2010,San Francisco 49ers,6,Seattle Seahawks,31,-3,37
+09/12/2010,Arizona Cardinals,17,St Louis Rams,13,-3,39.5
+09/12/2010,Dallas Cowboys,7,Washington Redskins,13,-3,40
+09/13/2010,Baltimore Ravens,10,New York Jets,9,1,36.5
+09/13/2010,San Diego Chargers,14,Kansas City Chiefs,21,-4,45.5
+09/19/2010,Kansas City Chiefs,16,Cleveland Browns,14,3,38
+09/19/2010,Buffalo Bills,7,Green Bay Packers,34,13,43
+09/19/2010,Baltimore Ravens,10,Cincinnati Bengals,15,-3,39.5
+09/19/2010,Pittsburgh Steelers,19,Tennessee Titans,11,6,37
+09/19/2010,Philadelphia Eagles,35,Detroit Lions,32,-6.5,41
+09/19/2010,Chicago Bears,27,Dallas Cowboys,20,7,41.5
+09/19/2010,Tampa Bay Buccaneers,20,Carolina Panthers,7,4,37.5
+09/19/2010,Arizona Cardinals,7,Atlanta Falcons,41,7,43.5
+09/19/2010,Miami Dolphins,14,Minnesota Vikings,10,6,41
+09/19/2010,St Louis Rams,14,Oakland Raiders,16,3,37.5
+09/19/2010,Seattle Seahawks,14,Denver Broncos,31,3.5,41
+09/19/2010,Houston Texans,30,Washington Redskins,27,-3,42.5
+09/19/2010,Jacksonville Jaguars,13,San Diego Chargers,38,7,45
+09/19/2010,New England Patriots,14,New York Jets,28,-3,39.5
+09/19/2010,New York Giants,14,Indianapolis Colts,38,4,48.5
+09/20/2010,New Orleans Saints,25,San Francisco 49ers,22,-5,43.5
+09/26/2010,Tennessee Titans,29,New York Giants,10,3,43.5
+09/26/2010,Buffalo Bills,30,New England Patriots,38,14.5,43
+09/26/2010,Cleveland Browns,17,Baltimore Ravens,24,12.5,36.5
+09/26/2010,Pittsburgh Steelers,38,Tampa Bay Buccaneers,13,-3,33
+09/26/2010,Cincinnati Bengals,20,Carolina Panthers,7,-3.5,37
+09/26/2010,Atlanta Falcons,27,New Orleans Saints,24,3,49.5
+09/26/2010,San Francisco 49ers,10,Kansas City Chiefs,31,-3,38
+09/26/2010,Detroit Lions,10,Minnesota Vikings,24,13,43
+09/26/2010,Dallas Cowboys,27,Houston Texans,13,2.5,47.5
+09/26/2010,Washington Redskins,16,St Louis Rams,30,-5,39
+09/26/2010,Philadelphia Eagles,28,Jacksonville Jaguars,3,-3,45
+09/26/2010,Indianapolis Colts,27,Denver Broncos,13,-6,47
+09/26/2010,San Diego Chargers,20,Seattle Seahawks,27,-4,44
+09/26/2010,Oakland Raiders,23,Arizona Cardinals,24,5.5,39
+09/26/2010,New York Jets,31,Miami Dolphins,23,2.5,36
+09/27/2010,Green Bay Packers,17,Chicago Bears,20,-3,46.5
+10/03/2010,Denver Broncos,26,Tennessee Titans,20,6.5,43.5
+10/03/2010,Baltimore Ravens,17,Pittsburgh Steelers,14,2.5,34.5
+10/03/2010,Cincinnati Bengals,20,Cleveland Browns,23,-2.5,37
+10/03/2010,Detroit Lions,26,Green Bay Packers,28,14.5,46
+10/03/2010,Carolina Panthers,14,New Orleans Saints,16,12.5,44
+10/03/2010,San Francisco 49ers,14,Atlanta Falcons,16,7,42.5
+10/03/2010,Seattle Seahawks,3,St Louis Rams,20,-2,40
+10/03/2010,New York Jets,38,Buffalo Bills,14,-6,37
+10/03/2010,Indianapolis Colts,28,Jacksonville Jaguars,31,-7,46
+10/03/2010,Houston Texans,31,Oakland Raiders,24,-3.5,44
+10/03/2010,Arizona Cardinals,10,San Diego Chargers,41,9.5,46.5
+10/03/2010,Washington Redskins,17,Philadelphia Eagles,12,5,43.5
+10/03/2010,Chicago Bears,3,New York Giants,17,3.5,44
+10/04/2010,New England Patriots,41,Miami Dolphins,14,-1,48
+10/10/2010,Denver Broncos,17,Baltimore Ravens,31,8,39.5
+10/10/2010,Jacksonville Jaguars,36,Buffalo Bills,26,2.5,41.5
+10/10/2010,Kansas City Chiefs,9,Indianapolis Colts,19,7.5,46.5
+10/10/2010,St Louis Rams,6,Detroit Lions,44,3,42.5
+10/10/2010,Atlanta Falcons,20,Cleveland Browns,10,-3,41.5
+10/10/2010,Tampa Bay Buccaneers,24,Cincinnati Bengals,21,7,38.5
+10/10/2010,Chicago Bears,23,Carolina Panthers,6,3,33
+10/10/2010,Green Bay Packers,13,Washington Redskins,16,-3,45.5
+10/10/2010,New York Giants,34,Houston Texans,10,3,48.5
+10/10/2010,New Orleans Saints,20,Arizona Cardinals,30,-7,45.5
+10/10/2010,San Diego Chargers,27,Oakland Raiders,35,-7,44
+10/10/2010,Tennessee Titans,34,Dallas Cowboys,27,7,43
+10/10/2010,Philadelphia Eagles,27,San Francisco 49ers,24,3,38.5
+10/11/2010,Minnesota Vikings,20,New York Jets,29,4.5,40
+10/17/2010,San Diego Chargers,17,St Louis Rams,20,-8.5,45
+10/17/2010,Kansas City Chiefs,31,Houston Texans,35,4.5,46
+10/17/2010,Baltimore Ravens,20,New England Patriots,23,3,44.5
+10/17/2010,New Orleans Saints,31,Tampa Bay Buccaneers,6,-5.5,44
+10/17/2010,Atlanta Falcons,17,Philadelphia Eagles,31,1.5,43
+10/17/2010,Detroit Lions,20,New York Giants,28,10,45.5
+10/17/2010,Seattle Seahawks,23,Chicago Bears,20,6,38
+10/17/2010,Miami Dolphins,23,Green Bay Packers,20,3,44
+10/17/2010,Cleveland Browns,10,Pittsburgh Steelers,28,14,37.5
+10/17/2010,New York Jets,24,Denver Broncos,20,-3.5,43
+10/17/2010,Oakland Raiders,9,San Francisco 49ers,17,7,41
+10/17/2010,Dallas Cowboys,21,Minnesota Vikings,24,1.5,44
+10/17/2010,Indianapolis Colts,27,Washington Redskins,24,-3,45
+10/18/2010,Tennessee Titans,30,Jacksonville Jaguars,3,-3,43.5
+10/24/2010,Pittsburgh Steelers,23,Miami Dolphins,22,-3,40.5
+10/24/2010,Cincinnati Bengals,32,Atlanta Falcons,39,3.5,43
+10/24/2010,Jacksonville Jaguars,20,Kansas City Chiefs,42,9,39
+10/24/2010,Philadelphia Eagles,19,Tennessee Titans,37,3,42
+10/24/2010,Washington Redskins,17,Chicago Bears,14,3,40
+10/24/2010,Cleveland Browns,30,New Orleans Saints,17,12.5,44
+10/24/2010,Buffalo Bills,34,Baltimore Ravens,37,12.5,40
+10/24/2010,San Francisco 49ers,20,Carolina Panthers,23,-2.5,35.5
+10/24/2010,St Louis Rams,17,Tampa Bay Buccaneers,18,3,39
+10/24/2010,Arizona Cardinals,10,Seattle Seahawks,22,6.5,40.5
+10/24/2010,New England Patriots,23,San Diego Chargers,20,1.5,49.5
+10/24/2010,Oakland Raiders,59,Denver Broncos,14,7,43
+10/24/2010,Minnesota Vikings,24,Green Bay Packers,28,2.5,44.5
+10/25/2010,New York Giants,41,Dallas Cowboys,35,3.5,45.5
+10/31/2010,Denver Broncos,16,San Francisco 49ers,24,2.5,41.5
+10/31/2010,Jacksonville Jaguars,35,Dallas Cowboys,17,6.5,44
+10/31/2010,Washington Redskins,25,Detroit Lions,37,3,45
+10/31/2010,Green Bay Packers,9,New York Jets,0,6,42
+10/31/2010,Carolina Panthers,10,St Louis Rams,20,2.5,37
+10/31/2010,Miami Dolphins,22,Cincinnati Bengals,14,1,44
+10/31/2010,Buffalo Bills,10,Kansas City Chiefs,13,7,46
+10/31/2010,Tennessee Titans,25,San Diego Chargers,33,6,45
+10/31/2010,Tampa Bay Buccaneers,38,Arizona Cardinals,35,3,38
+10/31/2010,Seattle Seahawks,3,Oakland Raiders,33,2,40.5
+10/31/2010,Minnesota Vikings,18,New England Patriots,28,5.5,45
+10/31/2010,Pittsburgh Steelers,10,New Orleans Saints,20,1,45.5
+11/01/2010,Houston Texans,17,Indianapolis Colts,30,5.5,51
+11/07/2010,Chicago Bears,22,Buffalo Bills,19,-3,41.5
+11/07/2010,San Diego Chargers,29,Houston Texans,23,-3,49.5
+11/07/2010,New Orleans Saints,34,Carolina Panthers,3,-6.5,40.5
+11/07/2010,Arizona Cardinals,24,Minnesota Vikings,27,7.5,42.5
+11/07/2010,Tampa Bay Buccaneers,21,Atlanta Falcons,27,9,45.5
+11/07/2010,New York Jets,23,Detroit Lions,20,-5.5,42
+11/07/2010,Miami Dolphins,10,Baltimore Ravens,26,5,41
+11/07/2010,New England Patriots,14,Cleveland Browns,34,-4,43.5
+11/07/2010,New York Giants,41,Seattle Seahawks,7,-7.5,40.5
+11/07/2010,Kansas City Chiefs,20,Oakland Raiders,23,0,41
+11/07/2010,Indianapolis Colts,24,Philadelphia Eagles,26,3,47
+11/07/2010,Dallas Cowboys,7,Green Bay Packers,45,7,45.5
+11/08/2010,Pittsburgh Steelers,27,Cincinnati Bengals,21,-5.5,41.5
+11/11/2010,Baltimore Ravens,21,Atlanta Falcons,26,1,44
+11/14/2010,Cincinnati Bengals,17,Indianapolis Colts,23,7,47
+11/14/2010,Houston Texans,24,Jacksonville Jaguars,31,0,48.5
+11/14/2010,Tennessee Titans,17,Miami Dolphins,29,1,43
+11/14/2010,Minnesota Vikings,13,Chicago Bears,27,-1,41.5
+11/14/2010,Detroit Lions,12,Buffalo Bills,14,1.5,45
+11/14/2010,New York Jets,26,Cleveland Browns,20,-3.5,37
+11/14/2010,Carolina Panthers,16,Tampa Bay Buccaneers,31,7,37
+11/14/2010,Kansas City Chiefs,29,Denver Broncos,49,-1,44.5
+11/14/2010,St Louis Rams,20,San Francisco 49ers,23,4.5,39
+11/14/2010,Seattle Seahawks,36,Arizona Cardinals,18,4,41.5
+11/14/2010,Dallas Cowboys,33,New York Giants,20,12.5,46.5
+11/14/2010,New England Patriots,39,Pittsburgh Steelers,26,4.5,45
+11/15/2010,Philadelphia Eagles,59,Washington Redskins,28,-3.5,43.5
+11/18/2010,Chicago Bears,16,Miami Dolphins,0,2,40
+11/21/2010,Oakland Raiders,3,Pittsburgh Steelers,35,7,41
+11/21/2010,Houston Texans,27,New York Jets,30,6.5,46
+11/21/2010,Baltimore Ravens,37,Carolina Panthers,13,-13.5,37
+11/21/2010,Washington Redskins,19,Tennessee Titans,16,7,44.5
+11/21/2010,Detroit Lions,19,Dallas Cowboys,35,7,44.5
+11/21/2010,Green Bay Packers,31,Minnesota Vikings,3,-3,45
+11/21/2010,Buffalo Bills,49,Cincinnati Bengals,31,4,41
+11/21/2010,Cleveland Browns,20,Jacksonville Jaguars,24,2.5,43
+11/21/2010,Arizona Cardinals,13,Kansas City Chiefs,31,7,45
+11/21/2010,Seattle Seahawks,19,New Orleans Saints,34,11,45
+11/21/2010,Atlanta Falcons,34,St Louis Rams,17,-3.5,43.5
+11/21/2010,Tampa Bay Buccaneers,21,San Francisco 49ers,0,3.5,41.5
+11/21/2010,Indianapolis Colts,28,New England Patriots,31,4.5,50
+11/21/2010,New York Giants,17,Philadelphia Eagles,27,3.5,48
+11/22/2010,Denver Broncos,14,San Diego Chargers,35,9,50
+11/25/2010,New England Patriots,45,Detroit Lions,24,-7.5,50.5
+11/25/2010,New Orleans Saints,30,Dallas Cowboys,27,-4.5,49
+11/25/2010,Cincinnati Bengals,10,New York Jets,26,9.5,43.5
+11/28/2010,Minnesota Vikings,17,Washington Redskins,13,-2.5,44
+11/28/2010,Pittsburgh Steelers,19,Buffalo Bills,16,-7,44
+11/28/2010,Tennessee Titans,0,Houston Texans,20,5,46.5
+11/28/2010,Jacksonville Jaguars,20,New York Giants,24,7.5,44
+11/28/2010,Carolina Panthers,23,Cleveland Browns,24,7.5,37.5
+11/28/2010,Tampa Bay Buccaneers,10,Baltimore Ravens,17,7.5,41.5
+11/28/2010,Philadelphia Eagles,26,Chicago Bears,31,-3.5,43
+11/28/2010,Green Bay Packers,17,Atlanta Falcons,20,2,48
+11/28/2010,Miami Dolphins,33,Oakland Raiders,17,3,38
+11/28/2010,Kansas City Chiefs,42,Seattle Seahawks,24,-2,45
+11/28/2010,St Louis Rams,36,Denver Broncos,33,3,45
+11/28/2010,San Diego Chargers,36,Indianapolis Colts,14,2,51
+11/29/2010,San Francisco 49ers,27,Arizona Cardinals,6,-2,42
+12/02/2010,Houston Texans,24,Philadelphia Eagles,34,8,49.5
+12/05/2010,Buffalo Bills,14,Minnesota Vikings,38,5,44
+12/05/2010,Cleveland Browns,13,Miami Dolphins,10,6,43.5
+12/05/2010,Jacksonville Jaguars,17,Tennessee Titans,6,3,43.5
+12/05/2010,Denver Broncos,6,Kansas City Chiefs,10,8,48.5
+12/05/2010,Washington Redskins,7,New York Giants,31,7.5,43
+12/05/2010,Chicago Bears,24,Detroit Lions,20,-5.5,43.5
+12/05/2010,San Francisco 49ers,16,Green Bay Packers,34,9,41
+12/05/2010,New Orleans Saints,34,Cincinnati Bengals,30,-7,45.5
+12/05/2010,Atlanta Falcons,28,Tampa Bay Buccaneers,24,-3,43.5
+12/05/2010,Oakland Raiders,28,San Diego Chargers,13,13,44.5
+12/05/2010,Carolina Panthers,14,Seattle Seahawks,31,5,40
+12/05/2010,Dallas Cowboys,38,Indianapolis Colts,35,5.5,48
+12/05/2010,St Louis Rams,19,Arizona Cardinals,6,-3.5,44
+12/05/2010,Pittsburgh Steelers,13,Baltimore Ravens,10,3,39
+12/06/2010,New York Jets,3,New England Patriots,45,4,44.5
+12/09/2010,Indianapolis Colts,30,Tennessee Titans,28,-4,44
+12/12/2010,Oakland Raiders,31,Jacksonville Jaguars,38,3.5,41.5
+12/12/2010,Cincinnati Bengals,7,Pittsburgh Steelers,23,8,39.5
+12/12/2010,New England Patriots,36,Chicago Bears,7,-3,37
+12/12/2010,Cleveland Browns,6,Buffalo Bills,13,0,39
+12/12/2010,Green Bay Packers,3,Detroit Lions,7,-7,46
+12/12/2010,Atlanta Falcons,31,Carolina Panthers,10,-7.5,41
+12/12/2010,Tampa Bay Buccaneers,17,Washington Redskins,16,-1.5,41.5
+12/12/2010,St Louis Rams,13,New Orleans Saints,31,9,47
+12/12/2010,Seattle Seahawks,21,San Francisco 49ers,40,5,43
+12/12/2010,Miami Dolphins,10,New York Jets,6,5.5,38
+12/12/2010,Denver Broncos,13,Arizona Cardinals,43,-4,44
+12/12/2010,Kansas City Chiefs,0,San Diego Chargers,31,10,45.5
+12/12/2010,Philadelphia Eagles,30,Dallas Cowboys,27,-4,51
+12/13/2010,Baltimore Ravens,34,Houston Texans,28,-3,47
+12/13/2010,New York Giants,21,Minnesota Vikings,3,-5.5,44
+12/16/2010,San Francisco 49ers,7,San Diego Chargers,34,10.5,45
+12/19/2010,Kansas City Chiefs,27,St Louis Rams,13,3,42.5
+12/19/2010,Houston Texans,17,Tennessee Titans,31,1,47
+12/19/2010,Jacksonville Jaguars,24,Indianapolis Colts,34,4.5,48
+12/19/2010,Arizona Cardinals,12,Carolina Panthers,19,2.5,37.5
+12/19/2010,Cleveland Browns,17,Cincinnati Bengals,19,0,41
+12/19/2010,Buffalo Bills,17,Miami Dolphins,14,5.5,40
+12/19/2010,Philadelphia Eagles,38,New York Giants,31,3,47
+12/19/2010,Washington Redskins,30,Dallas Cowboys,33,9.5,44.5
+12/19/2010,Detroit Lions,23,Tampa Bay Buccaneers,20,4,43
+12/19/2010,New Orleans Saints,24,Baltimore Ravens,30,2.5,44.5
+12/19/2010,Atlanta Falcons,34,Seattle Seahawks,18,-6,46.5
+12/19/2010,New York Jets,22,Pittsburgh Steelers,17,4,35.5
+12/19/2010,Denver Broncos,23,Oakland Raiders,39,8,42
+12/19/2010,Green Bay Packers,27,New England Patriots,31,14.5,43.5
+12/20/2010,Chicago Bears,40,Minnesota Vikings,14,-7,33
+12/23/2010,Carolina Panthers,3,Pittsburgh Steelers,27,14.5,38
+12/25/2010,Dallas Cowboys,26,Arizona Cardinals,27,-7.5,45
+12/26/2010,Detroit Lions,34,Miami Dolphins,27,3.5,41
+12/26/2010,Washington Redskins,20,Jacksonville Jaguars,17,6.5,45
+12/26/2010,San Francisco 49ers,17,St Louis Rams,25,2.5,40
+12/26/2010,Seattle Seahawks,15,Tampa Bay Buccaneers,38,6,43.5
+12/26/2010,New England Patriots,34,Buffalo Bills,3,-9,45.5
+12/26/2010,New York Jets,34,Chicago Bears,38,3,36
+12/26/2010,Baltimore Ravens,20,Cleveland Browns,10,-4,40
+12/26/2010,Tennessee Titans,14,Kansas City Chiefs,34,4,42.5
+12/26/2010,Indianapolis Colts,31,Oakland Raiders,26,-2.5,47.5
+12/26/2010,Houston Texans,23,Denver Broncos,24,-2.5,49.5
+12/26/2010,New York Giants,17,Green Bay Packers,45,3,43
+12/26/2010,San Diego Chargers,20,Cincinnati Bengals,34,-8,43.5
+12/27/2010,New Orleans Saints,17,Atlanta Falcons,14,2.5,49.5
+12/28/2010,Minnesota Vikings,24,Philadelphia Eagles,14,14.5,44.5
+01/02/2011,Oakland Raiders,31,Kansas City Chiefs,10,4.5,43.5
+01/02/2011,Miami Dolphins,7,New England Patriots,38,6,44
+01/02/2011,Tennessee Titans,20,Indianapolis Colts,23,9.5,48
+01/02/2011,Jacksonville Jaguars,17,Houston Texans,34,4,48
+01/02/2011,Pittsburgh Steelers,41,Cleveland Browns,9,-6.5,38
+01/02/2011,Cincinnati Bengals,7,Baltimore Ravens,13,9.5,43
+01/02/2011,Minnesota Vikings,13,Detroit Lions,20,3.5,43.5
+01/02/2011,New York Giants,17,Washington Redskins,14,-4,44.5
+01/02/2011,Chicago Bears,3,Green Bay Packers,10,10.5,43.5
+01/02/2011,Dallas Cowboys,14,Philadelphia Eagles,13,0,43.5
+01/02/2011,Buffalo Bills,7,New York Jets,38,1.5,38
+01/02/2011,Carolina Panthers,10,Atlanta Falcons,31,14.5,41.5
+01/02/2011,Tampa Bay Buccaneers,23,New Orleans Saints,13,7,47
+01/02/2011,St Louis Rams,6,Seattle Seahawks,16,-3,41.5
+01/02/2011,Arizona Cardinals,7,San Francisco 49ers,38,6,39
+01/02/2011,San Diego Chargers,33,Denver Broncos,28,-3.5,47.5

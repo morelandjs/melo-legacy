@@ -1,0 +1,225 @@
+Date,Visitor,Visitor Score,Home Team,Home Score,Line,Total Line
+09/05/1993,Atlanta Falcons,13,Detroit Lions,30,5,44
+09/05/1993,Cincinnati Bengals,14,Cleveland Browns,27,7.5,35.5
+09/05/1993,Denver Broncos,26,New York Jets,20,0,36.5
+09/05/1993,Houston Oilers,21,New Orleans Saints,33,3,39
+09/05/1993,Kansas City Chiefs,27,Tampa Bay Buccaneers,3,-7,36
+09/05/1993,Miami Dolphins,24,Indianapolis Colts,20,-6,36.5
+09/05/1993,Minnesota Vikings,7,Los Angeles Raiders,24,-3,36
+09/05/1993,New England Patriots,14,Buffalo Bills,38,14,38.5
+09/05/1993,New York Giants,26,Chicago Bears,20,1,35
+09/05/1993,Phoenix Cardinals,17,Philadelphia Eagles,23,6.5,37.5
+09/05/1993,Los Angeles Rams,6,Green Bay Packers,36,6.5,38.5
+09/05/1993,Seattle Seahawks,12,San Diego Chargers,18,11,33
+09/05/1993,San Francisco 49ers,24,Pittsburgh Steelers,13,-6,36
+09/06/1993,Dallas Cowboys,16,Washington Redskins,35,2.5,40
+09/12/1993,Buffalo Bills,13,Dallas Cowboys,10,5,44.5
+09/12/1993,Chicago Bears,7,Minnesota Vikings,10,7,36
+09/12/1993,Detroit Lions,19,New England Patriots,16,-7,38
+09/12/1993,Indianapolis Colts,9,Cincinnati Bengals,6,-2,36
+09/12/1993,New York Jets,24,Miami Dolphins,14,9,39.5
+09/12/1993,Kansas City Chiefs,0,Houston Oilers,30,3,41
+09/12/1993,New Orleans Saints,34,Atlanta Falcons,31,-3.5,39.5
+09/12/1993,Philadelphia Eagles,20,Green Bay Packers,17,3.5,40
+09/12/1993,Phoenix Cardinals,17,Washington Redskins,10,10,40.5
+09/12/1993,Pittsburgh Steelers,0,Los Angeles Rams,27,-3,35.5
+09/12/1993,Los Angeles Raiders,17,Seattle Seahawks,13,-3,33
+09/12/1993,San Diego Chargers,17,Denver Broncos,34,3,36
+09/12/1993,Tampa Bay Buccaneers,7,New York Giants,23,10,37.5
+09/13/1993,San Francisco 49ers,13,Cleveland Browns,23,-6.5,39
+09/19/1993,Atlanta Falcons,30,San Francisco 49ers,37,13.5,47
+09/19/1993,Cincinnati Bengals,7,Pittsburgh Steelers,34,8.5,34
+09/19/1993,Cleveland Browns,19,Los Angeles Raiders,16,3,35
+09/19/1993,Dallas Cowboys,17,Phoenix Cardinals,10,-6.5,38.5
+09/19/1993,Detroit Lions,3,New Orleans Saints,14,5,41
+09/19/1993,Houston Oilers,17,San Diego Chargers,18,2.5,38
+09/19/1993,Los Angeles Rams,10,New York Giants,20,7,37
+09/19/1993,Seattle Seahawks,17,New England Patriots,14,2.5,32
+09/19/1993,Washington Redskins,31,Philadelphia Eagles,34,5.5,36
+09/20/1993,Denver Broncos,7,Kansas City Chiefs,15,6,43
+09/26/1993,Cleveland Browns,10,Indianapolis Colts,23,-2.5,33
+09/26/1993,Green Bay Packers,13,Minnesota Vikings,15,3,36.5
+09/26/1993,Miami Dolphins,22,Buffalo Bills,13,6,39
+09/26/1993,New England Patriots,7,New York Jets,45,9.5,36.5
+09/26/1993,Phoenix Cardinals,20,Detroit Lions,26,5,36.5
+09/26/1993,Los Angeles Rams,28,Houston Oilers,13,10.5,39.5
+09/26/1993,Seattle Seahawks,19,Cincinnati Bengals,10,-3,31.5
+09/26/1993,San Francisco 49ers,13,New Orleans Saints,16,-1,41
+09/26/1993,Tampa Bay Buccaneers,17,Chicago Bears,47,7,33.5
+09/27/1993,Pittsburgh Steelers,45,Atlanta Falcons,17,3,42.5
+10/03/1993,Atlanta Falcons,0,Chicago Bears,6,6,44
+10/03/1993,Detroit Lions,10,Tampa Bay Buccaneers,27,-7,37.5
+10/03/1993,Green Bay Packers,14,Dallas Cowboys,36,11,37
+10/03/1993,Indianapolis Colts,13,Denver Broncos,35,8.5,36.5
+10/03/1993,Minnesota Vikings,19,San Francisco 49ers,38,9.5,39
+10/03/1993,New Orleans Saints,37,Los Angeles Rams,6,-4,38
+10/03/1993,New York Giants,14,Buffalo Bills,17,6,43
+10/03/1993,Philadelphia Eagles,35,New York Jets,30,1,40.5
+10/03/1993,Los Angeles Raiders,9,Kansas City Chiefs,24,9,36.5
+10/03/1993,San Diego Chargers,14,Seattle Seahawks,31,-3.5,31.5
+10/04/1993,Washington Redskins,10,Miami Dolphins,17,4,41
+10/10/1993,Chicago Bears,17,Philadelphia Eagles,6,7,36.5
+10/10/1993,Cincinnati Bengals,15,Kansas City Chiefs,17,14,35
+10/10/1993,Dallas Cowboys,27,Indianapolis Colts,3,-11,38
+10/10/1993,Denver Broncos,27,Green Bay Packers,30,2.5,40
+10/10/1993,New York Jets,20,Los Angeles Raiders,24,2.5,37
+10/10/1993,Miami Dolphins,24,Cleveland Browns,14,-2,36.5
+10/10/1993,New England Patriots,23,Phoenix Cardinals,21,10,37
+10/10/1993,New York Giants,41,Washington Redskins,7,3.5,37
+10/10/1993,San Diego Chargers,3,Pittsburgh Steelers,16,5,37
+10/10/1993,Tampa Bay Buccaneers,0,Minnesota Vikings,15,9.5,36.6
+10/11/1993,Houston Oilers,7,Buffalo Bills,35,3.5,41
+10/14/1993,Los Angeles Rams,24,Atlanta Falcons,30,1,43
+10/17/1993,Cleveland Browns,28,Cincinnati Bengals,17,-5.5,34
+10/17/1993,Houston Oilers,28,New England Patriots,14,-6.5,36
+10/17/1993,Kansas City Chiefs,17,San Diego Chargers,14,-4,34
+10/17/1993,New Orleans Saints,14,Pittsburgh Steelers,37,-3,33
+10/17/1993,Philadelphia Eagles,10,New York Giants,21,7.5,35.5
+10/17/1993,Seattle Seahawks,10,Detroit Lions,30,5.5,34.5
+10/17/1993,San Francisco 49ers,17,Dallas Cowboys,26,6.5,43
+10/17/1993,Washington Redskins,6,Phoenix Cardinals,36,-1.5,37.5
+10/18/1993,Los Angeles Raiders,23,Denver Broncos,20,6.5,39
+10/24/1993,Atlanta Falcons,26,New Orleans Saints,15,11,43
+10/24/1993,Buffalo Bills,19,New York Jets,10,-3,41
+10/24/1993,Cincinnati Bengals,12,Houston Oilers,28,13.5,39
+10/24/1993,Detroit Lions,16,Los Angeles Rams,13,-1,37.5
+10/24/1993,Green Bay Packers,37,Tampa Bay Buccaneers,14,-6,36.5
+10/24/1993,Indianapolis Colts,27,Miami Dolphins,41,7.5,35.5
+10/24/1993,New England Patriots,9,Seattle Seahawks,10,8.5,33
+10/24/1993,Phoenix Cardinals,14,San Francisco 49ers,28,10.5,42.5
+10/24/1993,Pittsburgh Steelers,23,Cleveland Browns,28,-2,34.5
+10/25/1993,Minnesota Vikings,19,Chicago Bears,12,3,34
+10/31/1993,Chicago Bears,3,Green Bay Packers,17,6.5,35
+10/31/1993,Dallas Cowboys,23,Philadelphia Eagles,10,-10.5,38.5
+10/31/1993,Detroit Lions,30,Minnesota Vikings,27,4,35
+10/31/1993,New York Jets,10,New York Giants,6,6.5,37
+10/31/1993,Kansas City Chiefs,10,Miami Dolphins,30,-1,36
+10/31/1993,New England Patriots,6,Indianapolis Colts,9,7,35.5
+10/31/1993,New Orleans Saints,20,Phoenix Cardinals,17,-3,38
+10/31/1993,Los Angeles Rams,17,San Francisco 49ers,40,13,43.5
+10/31/1993,San Diego Chargers,30,Los Angeles Raiders,23,4,34.5
+10/31/1993,Seattle Seahawks,17,Denver Broncos,28,8.5,36.5
+10/31/1993,Tampa Bay Buccaneers,31,Atlanta Falcons,24,9.5,42.5
+11/01/1993,Washington Redskins,10,Buffalo Bills,24,9,40.5
+11/07/1993,Buffalo Bills,13,New England Patriots,10,-9.5,37
+11/07/1993,Denver Broncos,29,Cleveland Browns,14,2.5,37
+11/07/1993,Indianapolis Colts,24,Washington Redskins,30,6.5,38
+11/07/1993,Miami Dolphins,10,New York Jets,27,-1.5,38.5
+11/07/1993,New York Giants,9,Dallas Cowboys,31,10,37
+11/07/1993,Philadelphia Eagles,3,Phoenix Cardinals,16,2,36
+11/07/1993,Pittsburgh Steelers,24,Cincinnati Bengals,16,-9.5,35.5
+11/07/1993,Los Angeles Raiders,16,Chicago Bears,14,-2,33.5
+11/07/1993,San Diego Chargers,30,Minnesota Vikings,17,4,36
+11/07/1993,Seattle Seahawks,14,Houston Oilers,24,9,37.5
+11/07/1993,Tampa Bay Buccaneers,0,Detroit Lions,23,12,40
+11/08/1993,Green Bay Packers,16,Kansas City Chiefs,23,4,37
+11/14/1993,Atlanta Falcons,13,Los Angeles Rams,0,3,43
+11/14/1993,Chicago Bears,16,San Diego Chargers,13,8.5,34.5
+11/14/1993,Cleveland Browns,5,Seattle Seahawks,22,3,34
+11/14/1993,Green Bay Packers,19,New Orleans Saints,17,6,37.5
+11/14/1993,Houston Oilers,38,Cincinnati Bengals,3,-8,37
+11/14/1993,New York Jets,31,Indianapolis Colts,17,-4.5,37.5
+11/14/1993,Kansas City Chiefs,31,Los Angeles Raiders,20,3,36.5
+11/14/1993,Miami Dolphins,19,Philadelphia Eagles,14,-6,36.5
+11/14/1993,Minnesota Vikings,26,Denver Broncos,23,7,38
+11/14/1993,Phoenix Cardinals,15,Dallas Cowboys,20,12.5,38
+11/14/1993,San Francisco 49ers,45,Tampa Bay Buccaneers,21,-14.5,42
+11/14/1993,Washington Redskins,6,New York Giants,20,7.5,37
+11/15/1993,Buffalo Bills,0,Pittsburgh Steelers,23,3,40
+11/21/1993,Chicago Bears,19,Kansas City Chiefs,17,10,35
+11/21/1993,Cincinnati Bengals,12,New York Jets,17,15.5,37.5
+11/21/1993,Dallas Cowboys,14,Atlanta Falcons,27,-10,41.5
+11/21/1993,Detroit Lions,17,Green Bay Packers,26,3.5,36.5
+11/21/1993,Houston Oilers,27,Cleveland Browns,20,-4.5,36
+11/21/1993,Indianapolis Colts,9,Buffalo Bills,23,13,37
+11/21/1993,Minnesota Vikings,10,Tampa Bay Buccaneers,23,-8,38
+11/21/1993,New England Patriots,13,Miami Dolphins,17,8,34.5
+11/21/1993,New York Giants,7,Philadelphia Eagles,3,-5,34.5
+11/21/1993,Pittsburgh Steelers,13,Denver Broncos,37,3,37.5
+11/21/1993,Los Angeles Raiders,12,San Diego Chargers,7,3.5,36.5
+11/21/1993,Washington Redskins,6,Los Angeles Rams,10,2,37.5
+11/22/1993,New Orleans Saints,7,San Francisco 49ers,42,8,41.5
+11/25/1993,Chicago Bears,10,Detroit Lions,6,7,36
+11/25/1993,Miami Dolphins,16,Dallas Cowboys,14,10,37
+11/28/1993,Buffalo Bills,7,Kansas City Chiefs,23,3,37
+11/28/1993,Cleveland Browns,14,Atlanta Falcons,17,6.5,39
+11/28/1993,Denver Broncos,17,Seattle Seahawks,9,-3,37
+11/28/1993,New York Jets,6,New England Patriots,0,-4,35
+11/28/1993,New Orleans Saints,17,Minnesota Vikings,14,2.5,37
+11/28/1993,Philadelphia Eagles,17,Washington Redskins,14,2.5,34.5
+11/28/1993,Phoenix Cardinals,17,New York Giants,19,7,35.5
+11/28/1993,Pittsburgh Steelers,3,Houston Oilers,23,3.5,39.5
+11/28/1993,Los Angeles Raiders,10,Cincinnati Bengals,16,-9,35.5
+11/28/1993,San Francisco 49ers,35,Los Angeles Rams,10,-13,43
+11/28/1993,Tampa Bay Buccaneers,10,Green Bay Packers,13,12.5,37.5
+11/29/1993,San Diego Chargers,31,Indianapolis Colts,0,-2,37
+12/05/1993,Atlanta Falcons,17,Houston Oilers,33,7.5,42
+12/05/1993,Cincinnati Bengals,8,San Francisco 49ers,21,24,44
+12/05/1993,Denver Broncos,10,San Diego Chargers,13,3,37.5
+12/05/1993,Green Bay Packers,17,Chicago Bears,30,1.5,32
+12/05/1993,Indianapolis Colts,9,New York Jets,6,10.5,35
+12/05/1993,Kansas City Chiefs,31,Seattle Seahawks,16,-7,35.5
+12/05/1993,Minnesota Vikings,13,Detroit Lions,0,3,35.5
+12/05/1993,New England Patriots,14,Pittsburgh Steelers,17,11,34
+12/05/1993,New Orleans Saints,13,Cleveland Browns,17,-4,33
+12/05/1993,New York Giants,19,Miami Dolphins,14,3.5,36
+12/05/1993,Los Angeles Raiders,25,Buffalo Bills,24,7,34
+12/05/1993,Los Angeles Rams,10,Phoenix Cardinals,38,7,37
+12/05/1993,Washington Redskins,23,Tampa Bay Buccaneers,17,2.5,36.6
+12/06/1993,Philadelphia Eagles,17,Dallas Cowboys,23,16,37
+12/11/1993,New York Jets,3,Washington Redskins,0,-3,34.5
+12/11/1993,San Francisco 49ers,24,Atlanta Falcons,27,-8,48
+12/12/1993,Buffalo Bills,10,Philadelphia Eagles,7,-4,33.5
+12/12/1993,Chicago Bears,10,Tampa Bay Buccaneers,13,-5,34
+12/12/1993,Cincinnati Bengals,2,New England Patriots,7,5.5,31
+12/12/1993,Cleveland Browns,17,Houston Oilers,19,10,39.5
+12/12/1993,Dallas Cowboys,37,Minnesota Vikings,20,-7,37
+12/12/1993,Detroit Lions,21,Phoenix Cardinals,14,7,35
+12/12/1993,Green Bay Packers,20,San Diego Chargers,13,3,35.5
+12/12/1993,Indianapolis Colts,6,New York Giants,20,11,33
+12/12/1993,Kansas City Chiefs,21,Denver Broncos,27,1,37
+12/12/1993,Los Angeles Rams,23,New Orleans Saints,20,14,36.5
+12/12/1993,Seattle Seahawks,23,Los Angeles Raiders,27,8.5,36
+12/13/1993,Pittsburgh Steelers,21,Miami Dolphins,20,3.5,36.5
+12/18/1993,Dallas Cowboys,28,New York Jets,7,-7,36.5
+12/18/1993,Denver Broncos,13,Chicago Bears,3,-1.5,33
+12/19/1993,Atlanta Falcons,17,Washington Redskins,30,-3,37
+12/19/1993,Buffalo Bills,47,Miami Dolphins,34,3.5,36
+12/19/1993,Houston Oilers,26,Pittsburgh Steelers,17,3.5,36
+12/19/1993,Minnesota Vikings,21,Green Bay Packers,17,6.5,33.5
+12/19/1993,New England Patriots,20,Cleveland Browns,17,5.5,31
+12/19/1993,Philadelphia Eagles,20,Indianapolis Colts,10,-1.5,32.5
+12/19/1993,Phoenix Cardinals,30,Seattle Seahawks,27,2,35.5
+12/19/1993,Los Angeles Rams,3,Cincinnati Bengals,15,-1,32.5
+12/19/1993,San Diego Chargers,24,Kansas City Chiefs,28,8.5,36
+12/19/1993,San Francisco 49ers,55,Detroit Lions,17,-8,41
+12/19/1993,Tampa Bay Buccaneers,20,Los Angeles Raiders,27,9.5,37
+12/20/1993,New York Giants,24,New Orleans Saints,14,1,35.5
+12/25/1993,Houston Oilers,10,San Francisco 49ers,7,7.5,47
+12/26/1993,Atlanta Falcons,17,Cincinnati Bengals,21,-3.5,34
+12/26/1993,Cleveland Browns,42,Los Angeles Rams,14,-2,35
+12/26/1993,Detroit Lions,20,Chicago Bears,14,3,28
+12/26/1993,Indianapolis Colts,0,New England Patriots,38,6,28
+12/26/1993,New York Jets,14,Buffalo Bills,16,7,31
+12/26/1993,Kansas City Chiefs,10,Minnesota Vikings,30,-3,37
+12/26/1993,New Orleans Saints,26,Philadelphia Eagles,37,3,29.5
+12/26/1993,New York Giants,6,Phoenix Cardinals,17,-3,35
+12/26/1993,Pittsburgh Steelers,6,Seattle Seahawks,16,-3,36
+12/26/1993,Los Angeles Raiders,0,Green Bay Packers,28,3,32.5
+12/26/1993,Tampa Bay Buccaneers,17,Denver Broncos,10,13.5,38
+12/26/1993,Washington Redskins,3,Dallas Cowboys,38,17,38
+12/27/1993,Miami Dolphins,20,San Diego Chargers,45,1,38
+12/31/1993,Minnesota Vikings,14,Washington Redskins,9,-7,33
+01/02/1994,Buffalo Bills,30,Indianapolis Colts,10,-11,36
+01/02/1994,Chicago Bears,6,Los Angeles Rams,20,-3,33
+01/02/1994,Cincinnati Bengals,13,New Orleans Saints,20,6,34
+01/02/1994,Cleveland Browns,9,Pittsburgh Steelers,16,5,33
+01/02/1994,Dallas Cowboys,16,New York Giants,13,-6.5,35
+01/02/1994,Denver Broncos,30,Los Angeles Raiders,33,3,38.5
+01/02/1994,Green Bay Packers,20,Detroit Lions,30,-1,37
+01/02/1994,New York Jets,0,Houston Oilers,24,5.5,38.5
+01/02/1994,Miami Dolphins,27,New England Patriots,33,0,34
+01/02/1994,Phoenix Cardinals,27,Atlanta Falcons,10,2,41
+01/02/1994,San Diego Chargers,32,Tampa Bay Buccaneers,17,0,38
+01/02/1994,Seattle Seahawks,24,Kansas City Chiefs,34,8.5,34
+01/03/1994,Philadelphia Eagles,37,San Francisco 49ers,34,10.5,41

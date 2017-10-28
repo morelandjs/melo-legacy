@@ -1,0 +1,257 @@
+Date,Visitor,Visitor Score,Home Team,Home Score,Line,Total Line
+09/08/2005,Oakland Raiders,20,New England Patriots,30,7.5,50
+09/11/2005,Denver Broncos,10,Miami Dolphins,34,-4.5,38.5
+09/11/2005,Cincinnati Bengals,27,Cleveland Browns,13,-3.5,44.5
+09/11/2005,Houston Texans,7,Buffalo Bills,22,4.5,39
+09/11/2005,Tennessee Titans,7,Pittsburgh Steelers,34,7,40.5
+09/11/2005,Chicago Bears,7,Washington Redskins,9,6,33
+09/11/2005,New Orleans Saints,23,Carolina Panthers,20,6.5,45.5
+09/11/2005,Tampa Bay Buccaneers,24,Minnesota Vikings,13,6,43.5
+09/11/2005,Seattle Seahawks,14,Jacksonville Jaguars,26,3,40
+09/11/2005,New York Jets,7,Kansas City Chiefs,27,3,48.5
+09/11/2005,Arizona Cardinals,19,New York Giants,42,1.5,37.5
+09/11/2005,St Louis Rams,25,San Francisco 49ers,28,-4.5,46
+09/11/2005,Green Bay Packers,3,Detroit Lions,17,3,46
+09/11/2005,Dallas Cowboys,28,San Diego Chargers,24,5,41
+09/11/2005,Indianapolis Colts,24,Baltimore Ravens,7,-3,47
+09/12/2005,Philadelphia Eagles,10,Atlanta Falcons,14,-2,41.5
+09/18/2005,Baltimore Ravens,10,Tennessee Titans,25,-3.5,36
+09/18/2005,Pittsburgh Steelers,27,Houston Texans,7,-4.5,39.5
+09/18/2005,Jacksonville Jaguars,3,Indianapolis Colts,10,9,46
+09/18/2005,Detroit Lions,6,Chicago Bears,38,-2.5,34
+09/18/2005,Minnesota Vikings,8,Cincinnati Bengals,37,3,47
+09/18/2005,San Francisco 49ers,3,Philadelphia Eagles,42,11.5,43
+09/18/2005,Buffalo Bills,3,Tampa Bay Buccaneers,19,2.5,35
+09/18/2005,New England Patriots,17,Carolina Panthers,27,-3,44
+09/18/2005,Atlanta Falcons,18,Seattle Seahawks,21,1,41.5
+09/18/2005,St Louis Rams,17,Arizona Cardinals,12,-1,44
+09/18/2005,Miami Dolphins,7,New York Jets,17,6,37
+09/18/2005,Cleveland Browns,26,Green Bay Packers,24,7,43
+09/18/2005,San Diego Chargers,17,Denver Broncos,20,3,44
+09/18/2005,Kansas City Chiefs,23,Oakland Raiders,17,-1.5,53
+09/19/2005,Washington Redskins,14,Dallas Cowboys,13,6,36
+09/19/2005,New Orleans Saints,10,New York Giants,27,3,43
+09/25/2005,Tennessee Titans,27,St Louis Rams,31,6.5,46
+09/25/2005,Oakland Raiders,20,Philadelphia Eagles,23,8.5,47
+09/25/2005,Cincinnati Bengals,24,Chicago Bears,7,-3,39
+09/25/2005,Jacksonville Jaguars,26,New York Jets,20,2.5,34.5
+09/25/2005,New Orleans Saints,16,Minnesota Vikings,33,3.5,44.5
+09/25/2005,Carolina Panthers,24,Miami Dolphins,27,-3.5,37.5
+09/25/2005,Cleveland Browns,6,Indianapolis Colts,13,13.5,47
+09/25/2005,Atlanta Falcons,24,Buffalo Bills,16,3,36
+09/25/2005,Tampa Bay Buccaneers,17,Green Bay Packers,16,-3,38
+09/25/2005,Arizona Cardinals,12,Seattle Seahawks,37,6.5,42
+09/25/2005,New England Patriots,23,Pittsburgh Steelers,20,3,41.5
+09/25/2005,Dallas Cowboys,34,San Francisco 49ers,31,-6.5,41
+09/25/2005,New York Giants,23,San Diego Chargers,45,5.5,42.5
+09/26/2005,Kansas City Chiefs,10,Denver Broncos,30,2.5,49
+10/02/2005,San Diego Chargers,41,New England Patriots,17,5.5,47
+10/02/2005,Denver Broncos,20,Jacksonville Jaguars,7,4,37.5
+10/02/2005,Houston Texans,10,Cincinnati Bengals,16,9.5,41.5
+10/02/2005,Indianapolis Colts,31,Tennessee Titans,10,-7,45
+10/02/2005,Philadelphia Eagles,37,Kansas City Chiefs,31,2.5,46.5
+10/02/2005,Detroit Lions,13,Tampa Bay Buccaneers,17,6.5,35
+10/02/2005,St Louis Rams,24,New York Giants,44,3,46
+10/02/2005,Buffalo Bills,7,New Orleans Saints,19,-1,38.5
+10/02/2005,Seattle Seahawks,17,Washington Redskins,20,2,37
+10/02/2005,New York Jets,3,Baltimore Ravens,13,7.5,31.5
+10/02/2005,Minnesota Vikings,10,Atlanta Falcons,30,6,44.5
+10/02/2005,Dallas Cowboys,13,Oakland Raiders,19,3,46
+10/02/2005,San Francisco 49ers,14,Arizona Cardinals,31,3,42
+10/03/2005,Green Bay Packers,29,Carolina Panthers,32,3,43
+10/09/2005,Chicago Bears,10,Cleveland Browns,20,3,35
+10/09/2005,New Orleans Saints,3,Green Bay Packers,52,3,41
+10/09/2005,Tampa Bay Buccaneers,12,New York Jets,14,-3.5,32
+10/09/2005,Seattle Seahawks,37,St Louis Rams,31,3,48
+10/09/2005,New England Patriots,31,Atlanta Falcons,28,2.5,43.5
+10/09/2005,Miami Dolphins,14,Buffalo Bills,20,2.5,33
+10/09/2005,Baltimore Ravens,17,Detroit Lions,35,2,33
+10/09/2005,Tennessee Titans,34,Houston Texans,20,1.5,40.5
+10/09/2005,Indianapolis Colts,28,San Francisco 49ers,3,-14,47
+10/09/2005,Carolina Panthers,24,Arizona Cardinals,20,-3,42
+10/09/2005,Philadelphia Eagles,10,Dallas Cowboys,33,-3.5,44
+10/09/2005,Washington Redskins,19,Denver Broncos,21,7,34.5
+10/09/2005,Cincinnati Bengals,20,Jacksonville Jaguars,23,3,38
+10/10/2005,Pittsburgh Steelers,24,San Diego Chargers,22,3,45.5
+10/16/2005,New York Giants,13,Dallas Cowboys,16,3.5,45.5
+10/16/2005,Carolina Panthers,21,Detroit Lions,20,0,42
+10/16/2005,Atlanta Falcons,34,New Orleans Saints,31,-4,42
+10/16/2005,Minnesota Vikings,3,Chicago Bears,28,2,37.5
+10/16/2005,Washington Redskins,21,Kansas City Chiefs,28,6.5,42.5
+10/16/2005,Cincinnati Bengals,31,Tennessee Titans,23,-3,44.5
+10/16/2005,Jacksonville Jaguars,23,Pittsburgh Steelers,17,5,36
+10/16/2005,Cleveland Browns,3,Baltimore Ravens,16,4,33.5
+10/16/2005,Miami Dolphins,13,Tampa Bay Buccaneers,27,4.5,33
+10/16/2005,New England Patriots,20,Denver Broncos,28,3,44
+10/16/2005,New York Jets,17,Buffalo Bills,27,3,33
+10/16/2005,San Diego Chargers,27,Oakland Raiders,14,0,50.5
+10/16/2005,Houston Texans,10,Seattle Seahawks,42,8.5,45.5
+10/17/2005,St Louis Rams,28,Indianapolis Colts,45,13,50.5
+10/21/2005,Kansas City Chiefs,30,Miami Dolphins,20,-1,42.5
+10/23/2005,New Orleans Saints,17,St Louis Rams,28,5,50
+10/23/2005,Green Bay Packers,20,Minnesota Vikings,23,2,46
+10/23/2005,Indianapolis Colts,38,Houston Texans,20,-14.5,44.5
+10/23/2005,Pittsburgh Steelers,27,Cincinnati Bengals,13,3,43
+10/23/2005,San Diego Chargers,17,Philadelphia Eagles,20,4,47
+10/23/2005,Detroit Lions,13,Cleveland Browns,10,3,36
+10/23/2005,San Francisco 49ers,17,Washington Redskins,52,11.5,38
+10/23/2005,Dallas Cowboys,10,Seattle Seahawks,13,3,45.5
+10/23/2005,Buffalo Bills,17,Oakland Raiders,38,3,42
+10/23/2005,Baltimore Ravens,6,Chicago Bears,10,1,32
+10/23/2005,Tennessee Titans,10,Arizona Cardinals,20,3,45
+10/23/2005,Denver Broncos,23,New York Giants,24,2,46.5
+10/24/2005,New York Jets,14,Atlanta Falcons,27,7.5,41
+10/30/2005,Washington Redskins,0,New York Giants,36,3,41
+10/30/2005,Green Bay Packers,14,Cincinnati Bengals,21,7,46
+10/30/2005,Chicago Bears,19,Detroit Lions,13,3,32.5
+10/30/2005,Minnesota Vikings,13,Carolina Panthers,38,8,44
+10/30/2005,Oakland Raiders,34,Tennessee Titans,25,-2,46
+10/30/2005,Arizona Cardinals,13,Dallas Cowboys,34,7,41
+10/30/2005,Cleveland Browns,16,Houston Texans,19,2,37.5
+10/30/2005,Miami Dolphins,21,New Orleans Saints,6,2,41
+10/30/2005,Jacksonville Jaguars,21,St Louis Rams,24,-3,43
+10/30/2005,Kansas City Chiefs,20,San Diego Chargers,28,5,51
+10/30/2005,Tampa Bay Buccaneers,10,San Francisco 49ers,15,-11.5,37
+10/30/2005,Philadelphia Eagles,21,Denver Broncos,49,3,44
+10/30/2005,Buffalo Bills,16,New England Patriots,21,7,43.5
+10/31/2005,Baltimore Ravens,19,Pittsburgh Steelers,20,8.5,33
+11/06/2005,Detroit Lions,14,Minnesota Vikings,27,-1.5,37.5
+11/06/2005,San Diego Chargers,31,New York Jets,26,-5.5,41.5
+11/06/2005,Tennessee Titans,14,Cleveland Browns,20,3,39
+11/06/2005,Oakland Raiders,23,Kansas City Chiefs,27,4.5,51.5
+11/06/2005,Chicago Bears,20,New Orleans Saints,17,-2.5,34.5
+11/06/2005,Cincinnati Bengals,21,Baltimore Ravens,9,-3.5,36
+11/06/2005,Carolina Panthers,34,Tampa Bay Buccaneers,14,0,36.5
+11/06/2005,Houston Texans,14,Jacksonville Jaguars,21,11,37.5
+11/06/2005,Atlanta Falcons,17,Miami Dolphins,10,-2,39.5
+11/06/2005,New York Giants,24,San Francisco 49ers,6,-9.5,42
+11/06/2005,Seattle Seahawks,33,Arizona Cardinals,19,-4.5,44
+11/06/2005,Pittsburgh Steelers,20,Green Bay Packers,10,-6.5,42
+11/06/2005,Philadelphia Eagles,10,Washington Redskins,17,0,41
+11/07/2005,Indianapolis Colts,40,New England Patriots,21,-3,46.5
+11/13/2005,Kansas City Chiefs,3,Buffalo Bills,14,2.5,42.5
+11/13/2005,Washington Redskins,35,Tampa Bay Buccaneers,36,-1,34
+11/13/2005,New England Patriots,23,Miami Dolphins,16,-2.5,40
+11/13/2005,San Francisco 49ers,9,Chicago Bears,17,12,33
+11/13/2005,Minnesota Vikings,24,New York Giants,21,10,45
+11/13/2005,Arizona Cardinals,21,Detroit Lions,29,4,40
+11/13/2005,Baltimore Ravens,3,Jacksonville Jaguars,30,8,34
+11/13/2005,Houston Texans,17,Indianapolis Colts,31,17,45
+11/13/2005,New York Jets,3,Carolina Panthers,30,9.5,40.5
+11/13/2005,Denver Broncos,31,Oakland Raiders,17,-2.5,47
+11/13/2005,St Louis Rams,16,Seattle Seahawks,31,7,48.5
+11/13/2005,Green Bay Packers,33,Atlanta Falcons,25,9.5,42
+11/13/2005,Cleveland Browns,21,Pittsburgh Steelers,34,7.5,34.5
+11/14/2005,Dallas Cowboys,21,Philadelphia Eagles,20,3,40
+11/20/2005,Carolina Panthers,3,Chicago Bears,13,-3,34.5
+11/20/2005,Jacksonville Jaguars,31,Tennessee Titans,28,-4,38
+11/20/2005,Indianapolis Colts,45,Cincinnati Bengals,37,-4.5,48.5
+11/20/2005,New Orleans Saints,17,New England Patriots,24,10,45
+11/20/2005,Arizona Cardinals,38,St Louis Rams,28,9,48
+11/20/2005,Tampa Bay Buccaneers,30,Atlanta Falcons,27,6,38
+11/20/2005,Oakland Raiders,16,Washington Redskins,13,6,42
+11/20/2005,Detroit Lions,7,Dallas Cowboys,20,8,39
+11/20/2005,Philadelphia Eagles,17,New York Giants,27,3.5,43
+11/20/2005,Miami Dolphins,0,Cleveland Browns,22,2.5,34.5
+11/20/2005,Seattle Seahawks,27,San Francisco 49ers,25,-12,42.5
+11/20/2005,Buffalo Bills,10,San Diego Chargers,48,9,42
+11/20/2005,New York Jets,0,Denver Broncos,27,13,41
+11/20/2005,Pittsburgh Steelers,13,Baltimore Ravens,16,-4,34.5
+11/20/2005,Kansas City Chiefs,45,Houston Texans,17,-6.5,44.5
+11/21/2005,Minnesota Vikings,20,Green Bay Packers,17,3.5,45
+11/24/2005,Atlanta Falcons,27,Detroit Lions,7,-3,40.5
+11/24/2005,Denver Broncos,24,Dallas Cowboys,21,1.5,41
+11/27/2005,New England Patriots,16,Kansas City Chiefs,26,3,51
+11/27/2005,Baltimore Ravens,29,Cincinnati Bengals,42,9,36.5
+11/27/2005,Carolina Panthers,13,Buffalo Bills,9,-4,36.5
+11/27/2005,Chicago Bears,13,Tampa Bay Buccaneers,10,3,33
+11/27/2005,San Diego Chargers,23,Washington Redskins,17,-3,44
+11/27/2005,Cleveland Browns,12,Minnesota Vikings,24,3.5,40
+11/27/2005,San Francisco 49ers,22,Tennessee Titans,33,7,42.5
+11/27/2005,St Louis Rams,33,Houston Texans,27,-3.5,44.5
+11/27/2005,Jacksonville Jaguars,24,Arizona Cardinals,17,-3.5,41.5
+11/27/2005,Miami Dolphins,33,Oakland Raiders,21,7,42.5
+11/27/2005,New York Giants,21,Seattle Seahawks,24,5.5,47.5
+11/27/2005,Green Bay Packers,14,Philadelphia Eagles,19,3.5,41.5
+11/27/2005,New Orleans Saints,21,New York Jets,19,-1,37
+11/28/2005,Pittsburgh Steelers,7,Indianapolis Colts,26,8,47
+12/04/2005,Buffalo Bills,23,Miami Dolphins,24,3,35.5
+12/04/2005,Cincinnati Bengals,38,Pittsburgh Steelers,31,4,43
+12/04/2005,Houston Texans,15,Baltimore Ravens,16,7,37
+12/04/2005,Tennessee Titans,3,Indianapolis Colts,35,14,47.5
+12/04/2005,Jacksonville Jaguars,20,Cleveland Browns,14,-3,36.5
+12/04/2005,Dallas Cowboys,10,New York Giants,17,3,41
+12/04/2005,Green Bay Packers,7,Chicago Bears,19,7,32
+12/04/2005,Minnesota Vikings,21,Detroit Lions,16,-3,38
+12/04/2005,Atlanta Falcons,6,Carolina Panthers,24,3,43.5
+12/04/2005,Tampa Bay Buccaneers,10,New Orleans Saints,3,-3.5,39
+12/04/2005,Arizona Cardinals,17,San Francisco 49ers,10,-3,43.5
+12/04/2005,Washington Redskins,24,St Louis Rams,9,-3,45
+12/04/2005,New York Jets,3,New England Patriots,16,7.5,42.5
+12/04/2005,Denver Broncos,27,Kansas City Chiefs,31,0,47
+12/04/2005,Oakland Raiders,10,San Diego Chargers,34,10,50.5
+12/05/2005,Seattle Seahawks,42,Philadelphia Eagles,0,-3,44
+12/11/2005,Tampa Bay Buccaneers,20,Carolina Panthers,10,5.5,37
+12/11/2005,New England Patriots,35,Buffalo Bills,7,-3.5,38
+12/11/2005,St Louis Rams,13,Minnesota Vikings,27,7,45.5
+12/11/2005,Chicago Bears,9,Pittsburgh Steelers,21,4,32
+12/11/2005,Oakland Raiders,10,New York Jets,26,-3,37.5
+12/11/2005,Indianapolis Colts,26,Jacksonville Jaguars,18,-7.5,43
+12/11/2005,Houston Texans,10,Tennessee Titans,13,6.5,44
+12/11/2005,Cleveland Browns,20,Cincinnati Bengals,23,12.5,41.5
+12/11/2005,Washington Redskins,17,Arizona Cardinals,13,-3,41.5
+12/11/2005,New York Giants,26,Philadelphia Eagles,23,-3,40
+12/11/2005,San Francisco 49ers,3,Seattle Seahawks,41,15.5,45
+12/11/2005,Miami Dolphins,23,San Diego Chargers,21,13.5,45
+12/11/2005,Baltimore Ravens,10,Denver Broncos,12,14,40.5
+12/11/2005,Kansas City Chiefs,28,Dallas Cowboys,31,3,44
+12/11/2005,Detroit Lions,13,Green Bay Packers,16,5.5,37
+12/12/2005,New Orleans Saints,17,Atlanta Falcons,36,10,44
+12/17/2005,Tampa Bay Buccaneers,0,New England Patriots,28,4.5,36
+12/17/2005,Kansas City Chiefs,17,New York Giants,27,3,45.5
+12/17/2005,Denver Broncos,28,Buffalo Bills,17,-8,35
+12/18/2005,Pittsburgh Steelers,18,Minnesota Vikings,3,-3,41.5
+12/18/2005,San Diego Chargers,26,Indianapolis Colts,17,7.5,51
+12/18/2005,San Francisco 49ers,9,Jacksonville Jaguars,10,14.5,39.5
+12/18/2005,Seattle Seahawks,28,Tennessee Titans,24,-7.5,45
+12/18/2005,Arizona Cardinals,19,Houston Texans,30,-1,43.5
+12/18/2005,New York Jets,20,Miami Dolphins,24,7.5,35.5
+12/18/2005,Carolina Panthers,27,New Orleans Saints,10,-7,40.5
+12/18/2005,Dallas Cowboys,7,Washington Redskins,35,3,36
+12/18/2005,Cincinnati Bengals,41,Detroit Lions,17,-7.5,44
+12/18/2005,Cleveland Browns,9,Oakland Raiders,7,3,40.5
+12/18/2005,Philadelphia Eagles,17,St Louis Rams,16,3,44
+12/18/2005,Atlanta Falcons,3,Chicago Bears,16,3,30.5
+12/19/2005,Green Bay Packers,3,Baltimore Ravens,48,3.5,33
+12/24/2005,Buffalo Bills,37,Cincinnati Bengals,27,13,44
+12/24/2005,Pittsburgh Steelers,41,Cleveland Browns,0,-7,33
+12/24/2005,San Diego Chargers,7,Kansas City Chiefs,20,1,49.5
+12/24/2005,Tennessee Titans,10,Miami Dolphins,24,5.5,43
+12/24/2005,Jacksonville Jaguars,38,Houston Texans,20,-6,38
+12/24/2005,Detroit Lions,13,New Orleans Saints,12,3,37.5
+12/24/2005,Dallas Cowboys,24,Carolina Panthers,20,5.5,38.5
+12/24/2005,New York Giants,20,Washington Redskins,35,3,38
+12/24/2005,Atlanta Falcons,24,Tampa Bay Buccaneers,27,3,37.5
+12/24/2005,San Francisco 49ers,24,St Louis Rams,20,9,42
+12/24/2005,Philadelphia Eagles,21,Arizona Cardinals,27,1,39.5
+12/24/2005,Indianapolis Colts,13,Seattle Seahawks,28,7,47
+12/24/2005,Oakland Raiders,3,Denver Broncos,22,12.5,42.5
+12/25/2005,Chicago Bears,24,Green Bay Packers,17,-7,31
+12/25/2005,Minnesota Vikings,23,Baltimore Ravens,30,2.5,34
+12/26/2005,New England Patriots,31,New York Jets,21,-4,37.5
+12/31/2005,Denver Broncos,23,San Diego Chargers,7,7,44
+12/31/2005,New York Giants,30,Oakland Raiders,21,-7.5,44
+01/01/2006,Arizona Cardinals,13,Indianapolis Colts,17,6,43.5
+01/01/2006,Baltimore Ravens,16,Cleveland Browns,20,-3,37
+01/01/2006,Buffalo Bills,26,New York Jets,30,1.5,37.5
+01/01/2006,Carolina Panthers,44,Atlanta Falcons,11,-3.5,42
+01/01/2006,Chicago Bears,10,Minnesota Vikings,34,3,35
+01/01/2006,Cincinnati Bengals,3,Kansas City Chiefs,37,7.5,47
+01/01/2006,Detroit Lions,21,Pittsburgh Steelers,35,15.5,35.5
+01/01/2006,Miami Dolphins,28,New England Patriots,26,3,37
+01/01/2006,New Orleans Saints,13,Tampa Bay Buccaneers,27,13,37.5
+01/01/2006,Houston Texans,17,San Francisco 49ers,20,-1,37.5
+01/01/2006,Tennessee Titans,13,Jacksonville Jaguars,40,4,38
+01/01/2006,Seattle Seahawks,17,Green Bay Packers,23,3,40.5
+01/01/2006,Washington Redskins,31,Philadelphia Eagles,20,-7,37
+01/01/2006,St Louis Rams,20,Dallas Cowboys,10,12.5,43

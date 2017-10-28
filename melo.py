@@ -56,7 +56,7 @@ class Rating:
     Rating class calculates margin-dependent Elo ratings.
 
     """
-    def __init__(self, obs='points', mode='spread', database='elo.db',
+    def __init__(self, mode='spread', database='elo.db',
                  kfactor=None, hfa=None, regress=None, decay=None):
 
         # function to initialize a nested dictionary
@@ -68,7 +68,6 @@ class Rating:
             return defaults if manual is None else manual
 
         # model hyper-parameters
-        self.obs = obs
         self.mode = mode
         self.decay = decay
         self.kfactor = kfactor
@@ -78,9 +77,10 @@ class Rating:
         self.hfa = opt({'spread': 56, 'total': 0}[mode], hfa)
         self.kfactor = opt({'spread': 59, 'total': 48}[mode], kfactor)
         self.regress = opt({'spread': .64, 'total': .68}[mode], regress)
+        self.decay = opt({'spread': 51, 'total': 51}[mode], regress)
 
-        # point-spread interval attributes
-        self.bins = self.bin_edges(obs)
+        # point interval attributes
+        self.bins = self.bin_edges(mode)
         self.range = 0.5*(self.bins[:-1] + self.bins[1:])
 
         # list of team names
@@ -89,7 +89,7 @@ class Rating:
         # calculate Elo ratings
         self.nfldb = nfldb.connect()
         self.last_game = self.last_played()
-        self.spread_prob = self.spread_probability()
+        self.point_prob = self.point_probability()
         self.elodb = nested_dict()
         self.calc_elo()
 
@@ -117,16 +117,16 @@ class Rating:
     def starting_elo(self, margin):
         """
         Initialize the starting elo for each team. For the present
-        database, team histories start in 2009. One exception is the LA
-        rams.
+        database, team histories start in 2009. One exception is the
+        LA Rams.
 
         """
         TINY = 1e-3
         elo_init = 1500.
 
         phys_margin = {'spread': margin, 'total': abs(margin)}[self.mode]
-        spread_prob = self.spread_prob[phys_margin]
-        P = np.clip(spread_prob, TINY, 1 - TINY)
+        point_prob = self.point_prob[phys_margin]
+        P = np.clip(point_prob, TINY, 1 - TINY)
 
         elo_diff = (
                 400*np.log10(1/P - 1)
@@ -136,18 +136,17 @@ class Rating:
 
         return elo_init + .5*elo_diff
 
-    def spreads(self):
+    def game_points(self):
         """
-        All point spreads (points winner - points loser) since 2009.
+        All game points (spreads or totals) since 2009.
 
         """
         q = nfldb.Query(self.nfldb)
         q.game(season_type='Regular', finished=True)
-        spreads = [self.point_diff(g) for g in q.as_games()]
 
-        return spreads
+        return [self.points(g) for g in q.as_games()]
 
-    def spread_probability(self):
+    def point_probability(self):
         """
         Probabilities of observing each point spread.
 
@@ -155,12 +154,12 @@ class Rating:
         ub = np.append(self.bins[1:], 1)
         bins = {'spread': self.bins, 'total': self.bins[ub > 0]}[self.mode]
 
-        hist, edges = np.histogram(self.spreads(), bins=bins, normed=True)
-        spread = 0.5*(edges[:-1] + edges[1:])
+        hist, edges = np.histogram(self.game_points(), bins=bins, normed=True)
+        points = 0.5*(edges[:-1] + edges[1:])
         bin_width = edges[1] - edges[0]
         prob = bin_width * np.cumsum(hist[::-1], dtype=float)[::-1]
 
-        return dict(zip(spread, prob))
+        return dict(zip(points, prob))
 
     def elo(self, team, margin, year, week):
         """
@@ -191,67 +190,26 @@ class Rating:
 
         return self.starting_elo(margin)
 
-    def yards(self, game, team):
+    def points(self, game):
         """
-        Calculates the yards traversed by a team over the course of a
-        game.
-
-        """
-        def possession(drive):
-            return team == nfldb.standard_team(drive.pos_team)
-
-        def progress(drive):
-            try:
-                side, ydline = str(drive.end_field).split()
-                return {'OPP': 100 - int(ydline), 'OWN': int(ydline)}[side]
-            except ValueError:
-                return 50
-
-        home, away = (game.home_team, game.away_team)
-        total = {home: game.home_score, away: game.away_score}[team]
-
-        for drive in filter(lambda d: possession(d), game.drives):
-            if drive.result not in ('Field Goal', 'Touchdown'):
-                total += 7*progress(drive)/100.
-
-        return total
-
-    def point_diff(self, game):
-        """
-        Function which returns the point difference.
-        The point type is defined by the observable argument.
+        Function which returns either a point difference
+        or a point total depending on the mode argument.
 
         """
-        home, away = (game.home_team, game.away_team)
+        point_diff = game.home_score - game.away_score
+        point_total = game.home_score + game.away_score
 
-        spread = {
-                "points": game.home_score - game.away_score,
-                "yards": self.yards(game, home) - self.yards(game, away),
-                }[self.obs]
+        return {"spread": point_diff, "total": point_total}[self.mode]
 
-        total = {
-                "points": game.home_score + game.away_score,
-                "yards": self.yards(game, home) + self.yards(game, away),
-                }[self.obs]
-
-        return {"spread": spread, "total": total}[self.mode]
-
-    def bin_edges(self, obs):
+    def bin_edges(self, mode):
         """
         Returns an iterator over the range of reasonable point values.
 
         """
-        spread = {
-            "points": np.arange(-40.5, 41.5, 1),
-            "yards": np.arange(-50.5, 51.5, 1),
-            }[self.obs]
+        spread_range = np.arange(-40.5, 41.5, 1)
+        total_range = np.arange(-100.5, 101.5, 1)
 
-        total = {
-            "points": np.arange(-100.5, 101.5, 1),
-            "yards": np.arange(-100.5, 101.5, 1),
-            }[self.obs]
-
-        return {"spread": spread, "total": total}[self.mode]
+        return {"spread": spread_range, "total": total_range}[mode]
 
     def elo_change(self, rating_diff, points, hcap):
         """
@@ -279,7 +237,7 @@ class Rating:
     def calc_elo(self):
         """
         This function calculates ELO ratings for every team
-        for every value of the spread.
+        for every value of the point spread/total.
         The rating reflects the posterior knowledge after the
         given week.
 
@@ -302,9 +260,9 @@ class Rating:
             away = game.away_team
 
             # point differential
-            points = self.point_diff(game)
+            points = self.points(game)
 
-            # loop over all possible spread margins
+            # loop over all possible spread/total margins
             for hcap in self.range:
 
                 # query current elo ratings from most recent game
@@ -356,18 +314,18 @@ class Rating:
 
     def predict_spread(self, home, away, year, week, perc=0.5):
         """
-        Predict the spread for a matchup, given current knowledge of each
-        team's ELO ratings.
+        Predict the spread/total for a matchup, given current
+        knowledge of each team's Elo ratings.
         """
-        # cumulative spread distribution
-        spreads, cprob = self.cdf(home, away, year, week)
+        # cumulative point distribution
+        points, cprob = self.cdf(home, away, year, week)
 
-        # plot median prediction (compare to vegas spread)
+        # plot median prediction (compare to vegas spread/total)
         index = np.square([p - perc for p in cprob]).argmin()
         if index in range(1, len(cprob) - 2):
-            x0, y0 = (spreads[index - 1], cprob[index - 1])
-            x1, y1 = (spreads[index], cprob[index])
-            x2, y2 = (spreads[index + 1], cprob[index + 1])
+            x0, y0 = (points[index - 1], cprob[index - 1])
+            x1, y1 = (points[index], cprob[index])
+            x2, y2 = (points[index + 1], cprob[index + 1])
 
             # fit a quadratic polynomial
             coeff = np.polyfit([x0, x1, x2], [y0, y1, y2], 2)
@@ -377,11 +335,11 @@ class Rating:
 
             return 0.5 * round(res.x * 2)
 
-        return spreads[index]
+        return points[index]
 
     def predict_score(self, home, away, year, week):
         """
-        The model predicts the CDF of win margins, i.e. F = P(spread > x).
+        The model predicts the CDF of win margins, i.e. F = P(points > x).
         One can use integration by parts to calculate the expected score
         from the CDF,
 
@@ -389,7 +347,7 @@ class Rating:
              = x*F(x)| - \int F(x) dx
 
         """
-        # cumulative spread distribution
+        # cumulative point distribution
         x, F = self.cdf(home, away, year, week)
         dx = (x[1] - x[0])
         int_term = sum(F)*dx
@@ -431,7 +389,7 @@ class Rating:
             # allow for one season burn-in
             if year > 2009:
                 predicted = self.predict_score(home, away, year, week)
-                observed = self.point_diff(game)
+                observed = self.points(game)
                 residuals.append(observed - predicted)
 
         return residuals

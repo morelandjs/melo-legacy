@@ -1,0 +1,552 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<scores>
+<league>NFL</league><year>1982</year><season>Regular Season</season>
+<date day="1982-09-12">
+<game>
+<team tnum="1"><name>Atlanta Falcons</name><score>16</score><site>V</site><line>1.5</line></team>
+<team tnum="2"><name>New York Giants</name><score>14</score><site>H</site><line>-1.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>Chicago Bears</name><score>10</score><site>V</site><line>5.5</line></team>
+<team tnum="2"><name>Detroit Lions</name><score>17</score><site>H</site><line>-5.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>Cleveland Browns</name><score>21</score><site>V</site><line>-2.5</line></team>
+<team tnum="2"><name>Seattle Seahawks</name><score>7</score><site>H</site><line>2.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>Houston Oilers</name><score>6</score><site>V</site><line>7</line></team>
+<team tnum="2"><name>Cincinnati Bengals</name><score>27</score><site>H</site><line>-7</line></team>
+</game>
+<game>
+<team tnum="1"><name>Kansas City Chiefs</name><score>9</score><site>V</site><line>3.5</line></team>
+<team tnum="2"><name>Buffalo Bills</name><score>14</score><site>H</site><line>-3.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>Miami Dolphins</name><score>45</score><site>V</site><line>2</line></team>
+<team tnum="2"><name>New York Jets</name><score>28</score><site>H</site><line>-2</line></team>
+</game>
+<game>
+<team tnum="1"><name>New England Patriots</name><score>24</score><site>V</site><line>-2</line></team>
+<team tnum="2"><name>Baltimore Colts</name><score>13</score><site>H</site><line>2</line></team>
+</game>
+<game>
+<team tnum="1"><name>Los Angeles Raiders</name><score>23</score><site>V</site><line>6</line></team>
+<team tnum="2"><name>San Francisco 49ers</name><score>17</score><site>H</site><line>-6</line></team>
+</game>
+<game>
+<team tnum="1"><name>Los Angeles Rams</name><score>23</score><site>V</site><line>-1</line></team>
+<team tnum="2"><name>Green Bay Packers</name><score>35</score><site>H</site><line>1</line></team>
+</game>
+<game>
+<team tnum="1"><name>San Diego Chargers</name><score>23</score><site>V</site><line>1</line></team>
+<team tnum="2"><name>Denver Broncos</name><score>3</score><site>H</site><line>-1</line></team>
+</game>
+<game>
+<team tnum="1"><name>St Louis Cardinals</name><score>21</score><site>V</site><line>-1</line></team>
+<team tnum="2"><name>New Orleans Saints</name><score>7</score><site>H</site><line>1</line></team>
+</game>
+<game>
+<team tnum="1"><name>Tampa Bay Buccaneers</name><score>10</score><site>V</site><line>2</line></team>
+<team tnum="2"><name>Minnesota Vikings</name><score>17</score><site>H</site><line>-2</line></team>
+</game>
+<game>
+<team tnum="1"><name>Washington Redskins</name><score>37</score><site>V</site><line>6.5</line></team>
+<team tnum="2"><name>Philadelphia Eagles</name><score>34</score><site>H</site><line>-6.5</line></team>
+</game>
+</date>
+<date day="1982-09-13">
+<game>
+<team tnum="1"><name>Pittsburgh Steelers</name><score>36</score><site>V</site><line>5.5</line></team>
+<team tnum="2"><name>Dallas Cowboys</name><score>28</score><site>H</site><line>-5.5</line></team>
+</game>
+</date>
+<date day="1982-09-16">
+<game>
+<team tnum="1"><name>Minnesota Vikings</name><score>22</score><site>V</site><line>3</line></team>
+<team tnum="2"><name>Buffalo Bills</name><score>23</score><site>H</site><line>-3</line></team>
+</game>
+</date>
+<date day="1982-09-19">
+<game>
+<team tnum="1"><name>Baltimore Colts</name><score>20</score><site>V</site><line>12.5</line></team>
+<team tnum="2"><name>Miami Dolphins</name><score>24</score><site>H</site><line>-12.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>Cincinnati Bengals</name><score>20</score><site>V</site><line>-1</line></team>
+<team tnum="2"><name>Pittsburgh Steelers</name><score>26</score><site>H</site><line>1</line></team>
+</game>
+<game>
+<team tnum="1"><name>Dallas Cowboys</name><score>24</score><site>V</site><line>-4</line></team>
+<team tnum="2"><name>St Louis Cardinals</name><score>7</score><site>H</site><line>4</line></team>
+</game>
+<game>
+<team tnum="1"><name>Detroit Lions</name><score>19</score><site>V</site><line>1.5</line></team>
+<team tnum="2"><name>Los Angeles Rams</name><score>14</score><site>H</site><line>-1.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>New Orleans Saints</name><score>10</score><site>V</site><line>4.5</line></team>
+<team tnum="2"><name>Chicago Bears</name><score>0</score><site>H</site><line>-4.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>New York Jets</name><score>31</score><site>V</site><line>-1</line></team>
+<team tnum="2"><name>New England Patriots</name><score>7</score><site>H</site><line>1</line></team>
+</game>
+<game>
+<team tnum="1"><name>Philadelphia Eagles</name><score>24</score><site>V</site><line>2.5</line></team>
+<team tnum="2"><name>Cleveland Browns</name><score>21</score><site>H</site><line>-2.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>Los Angeles Raiders</name><score>38</score><site>V</site><line>3</line></team>
+<team tnum="2"><name>Atlanta Falcons</name><score>14</score><site>H</site><line>-3</line></team>
+</game>
+<game>
+<team tnum="1"><name>San Diego Chargers</name><score>12</score><site>V</site><line>-3</line></team>
+<team tnum="2"><name>Kansas City Chiefs</name><score>19</score><site>H</site><line>3</line></team>
+</game>
+<game>
+<team tnum="1"><name>Seattle Seahawks</name><score>21</score><site>V</site><line>3.5</line></team>
+<team tnum="2"><name>Houston Oilers</name><score>23</score><site>H</site><line>-3.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>San Francisco 49ers</name><score>21</score><site>V</site><line>1</line></team>
+<team tnum="2"><name>Denver Broncos</name><score>24</score><site>H</site><line>-1</line></team>
+</game>
+<game>
+<team tnum="1"><name>Washington Redskins</name><score>21</score><site>V</site><line>3.5</line></team>
+<team tnum="2"><name>Tampa Bay Buccaneers</name><score>13</score><site>H</site><line>-3.5</line></team>
+</game>
+</date>
+<date day="1982-09-20">
+<game>
+<team tnum="1"><name>Green Bay Packers</name><score>27</score><site>V</site><line>2.5</line></team>
+<team tnum="2"><name>New York Giants</name><score>19</score><site>H</site><line>-2.5</line></team>
+</game>
+</date>
+<date day="1982-11-21">
+<game>
+<team tnum="1"><name>Baltimore Colts</name><score>0</score><site>V</site><line>8</line></team>
+<team tnum="2"><name>New York Jets</name><score>37</score><site>H</site><line>-8</line></team>
+</game>
+<game>
+<team tnum="1"><name>Cincinnati Bengals</name><score>18</score><site>V</site><line>1</line></team>
+<team tnum="2"><name>Philadelphia Eagles</name><score>14</score><site>H</site><line>-1</line></team>
+</game>
+<game>
+<team tnum="1"><name>Detroit Lions</name><score>17</score><site>V</site><line>-3.5</line></team>
+<team tnum="2"><name>Chicago Bears</name><score>20</score><site>H</site><line>3.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>Kansas City Chiefs</name><score>17</score><site>V</site><line>-2.5</line></team>
+<team tnum="2"><name>New Orleans Saints</name><score>27</score><site>H</site><line>2.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>Miami Dolphins</name><score>9</score><site>V</site><line>1</line></team>
+<team tnum="2"><name>Buffalo Bills</name><score>7</score><site>H</site><line>-1</line></team>
+</game>
+<game>
+<team tnum="1"><name>Minnesota Vikings</name><score>7</score><site>V</site><line>2</line></team>
+<team tnum="2"><name>Green Bay Packers</name><score>26</score><site>H</site><line>-2</line></team>
+</game>
+<game>
+<team tnum="1"><name>New England Patriots</name><score>7</score><site>V</site><line>6.5</line></team>
+<team tnum="2"><name>Cleveland Browns</name><score>10</score><site>H</site><line>-6.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>Pittsburgh Steelers</name><score>24</score><site>V</site><line>-5.5</line></team>
+<team tnum="2"><name>Houston Oilers</name><score>10</score><site>H</site><line>5.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>Los Angeles Rams</name><score>17</score><site>V</site><line>3.5</line></team>
+<team tnum="2"><name>Atlanta Falcons</name><score>34</score><site>H</site><line>-3.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>Seattle Seahawks</name><score>17</score><site>V</site><line>7.5</line></team>
+<team tnum="2"><name>Denver Broncos</name><score>10</score><site>H</site><line>-7.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>San Francisco 49ers</name><score>31</score><site>V</site><line>-4</line></team>
+<team tnum="2"><name>St Louis Cardinals</name><score>20</score><site>H</site><line>4</line></team>
+</game>
+<game>
+<team tnum="1"><name>Tampa Bay Buccaneers</name><score>9</score><site>V</site><line>7</line></team>
+<team tnum="2"><name>Dallas Cowboys</name><score>14</score><site>H</site><line>-7</line></team>
+</game>
+<game>
+<team tnum="1"><name>Washington Redskins</name><score>27</score><site>V</site><line>0</line></team>
+<team tnum="2"><name>New York Giants</name><score>17</score><site>H</site><line>0</line></team>
+</game>
+</date>
+<date day="1982-11-22">
+<game>
+<team tnum="1"><name>San Diego Chargers</name><score>24</score><site>V</site><line>1</line></team>
+<team tnum="2"><name>Los Angeles Raiders</name><score>28</score><site>H</site><line>-1</line></team>
+</game>
+</date>
+<date day="1982-11-25">
+<game>
+<team tnum="1"><name>Cleveland Browns</name><score>14</score><site>V</site><line>6.5</line></team>
+<team tnum="2"><name>Dallas Cowboys</name><score>31</score><site>H</site><line>-6.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>New York Giants</name><score>13</score><site>V</site><line>4</line></team>
+<team tnum="2"><name>Detroit Lions</name><score>6</score><site>H</site><line>-4</line></team>
+</game>
+</date>
+<date day="1982-11-28">
+<game>
+<team tnum="1"><name>Baltimore Colts</name><score>0</score><site>V</site><line>13</line></team>
+<team tnum="2"><name>Buffalo Bills</name><score>20</score><site>H</site><line>-13</line></team>
+</game>
+<game>
+<team tnum="1"><name>Chicago Bears</name><score>7</score><site>V</site><line>5.5</line></team>
+<team tnum="2"><name>Minnesota Vikings</name><score>35</score><site>H</site><line>-5.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>Denver Broncos</name><score>20</score><site>V</site><line>6.5</line></team>
+<team tnum="2"><name>San Diego Chargers</name><score>30</score><site>H</site><line>-6.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>Green Bay Packers</name><score>13</score><site>V</site><line>3.5</line></team>
+<team tnum="2"><name>New York Jets</name><score>15</score><site>H</site><line>-3.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>Houston Oilers</name><score>21</score><site>V</site><line>2.5</line></team>
+<team tnum="2"><name>New England Patriots</name><score>29</score><site>H</site><line>-2.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>Kansas City Chiefs</name><score>14</score><site>V</site><line>2</line></team>
+<team tnum="2"><name>Los Angeles Rams</name><score>20</score><site>H</site><line>-2</line></team>
+</game>
+<game>
+<team tnum="1"><name>New Orleans Saints</name><score>23</score><site>V</site><line>7.5</line></team>
+<team tnum="2"><name>San Francisco 49ers</name><score>20</score><site>H</site><line>-7.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>Philadelphia Eagles</name><score>9</score><site>V</site><line>2.5</line></team>
+<team tnum="2"><name>Washington Redskins</name><score>13</score><site>H</site><line>-2.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>Pittsburgh Steelers</name><score>0</score><site>V</site><line>-6</line></team>
+<team tnum="2"><name>Seattle Seahawks</name><score>16</score><site>H</site><line>6</line></team>
+</game>
+<game>
+<team tnum="1"><name>Los Angeles Raiders</name><score>17</score><site>V</site><line>4.5</line></team>
+<team tnum="2"><name>Cincinnati Bengals</name><score>31</score><site>H</site><line>-4.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>St Louis Cardinals</name><score>23</score><site>V</site><line>7</line></team>
+<team tnum="2"><name>Atlanta Falcons</name><score>20</score><site>H</site><line>-7</line></team>
+</game>
+</date>
+<date day="1982-11-29">
+<game>
+<team tnum="1"><name>Miami Dolphins</name><score>17</score><site>V</site><line>-2</line></team>
+<team tnum="2"><name>Tampa Bay Buccaneers</name><score>23</score><site>H</site><line>2</line></team>
+</game>
+</date>
+<date day="1982-12-05">
+<game>
+<team tnum="1"><name>Atlanta Falcons</name><score>34</score><site>V</site><line>3.5</line></team>
+<team tnum="2"><name>Denver Broncos</name><score>27</score><site>H</site><line>-3.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>Buffalo Bills</name><score>21</score><site>V</site><line>2.5</line></team>
+<team tnum="2"><name>Green Bay Packers</name><score>33</score><site>H</site><line>-2.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>Cincinnati Bengals</name><score>20</score><site>V</site><line>-14.5</line></team>
+<team tnum="2"><name>Baltimore Colts</name><score>17</score><site>H</site><line>14.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>Dallas Cowboys</name><score>24</score><site>V</site><line>-2</line></team>
+<team tnum="2"><name>Washington Redskins</name><score>10</score><site>H</site><line>2</line></team>
+</game>
+<game>
+<team tnum="1"><name>Houston Oilers</name><score>14</score><site>V</site><line>7</line></team>
+<team tnum="2"><name>New York Giants</name><score>17</score><site>H</site><line>-7</line></team>
+</game>
+<game>
+<team tnum="1"><name>Kansas City Chiefs</name><score>14</score><site>V</site><line>6.5</line></team>
+<team tnum="2"><name>Pittsburgh Steelers</name><score>35</score><site>H</site><line>-6.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>Minnesota Vikings</name><score>14</score><site>V</site><line>6</line></team>
+<team tnum="2"><name>Miami Dolphins</name><score>22</score><site>H</site><line>-6</line></team>
+</game>
+<game>
+<team tnum="1"><name>New England Patriots</name><score>13</score><site>V</site><line>2</line></team>
+<team tnum="2"><name>Chicago Bears</name><score>26</score><site>H</site><line>-2</line></team>
+</game>
+<game>
+<team tnum="1"><name>San Diego Chargers</name><score>30</score><site>V</site><line>-3</line></team>
+<team tnum="2"><name>Cleveland Browns</name><score>13</score><site>H</site><line>3</line></team>
+</game>
+<game>
+<team tnum="1"><name>Seattle Seahawks</name><score>23</score><site>V</site><line>6.5</line></team>
+<team tnum="2"><name>Los Angeles Raiders</name><score>28</score><site>H</site><line>-6.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>San Francisco 49ers</name><score>30</score><site>V</site><line>-2.5</line></team>
+<team tnum="2"><name>Los Angeles Rams</name><score>24</score><site>H</site><line>2.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>St Louis Cardinals</name><score>23</score><site>V</site><line>5.5</line></team>
+<team tnum="2"><name>Philadelphia Eagles</name><score>20</score><site>H</site><line>-5.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>Tampa Bay Buccaneers</name><score>13</score><site>V</site><line>2.5</line></team>
+<team tnum="2"><name>New Orleans Saints</name><score>10</score><site>H</site><line>-2.5</line></team>
+</game>
+</date>
+<date day="1982-12-06">
+<game>
+<team tnum="1"><name>New York Jets</name><score>28</score><site>V</site><line>1</line></team>
+<team tnum="2"><name>Detroit Lions</name><score>13</score><site>H</site><line>-1</line></team>
+</game>
+</date>
+<date day="1982-12-11">
+<game>
+<team tnum="1"><name>Philadelphia Eagles</name><score>7</score><site>V</site><line>2</line></team>
+<team tnum="2"><name>New York Giants</name><score>23</score><site>H</site><line>-2</line></team>
+</game>
+<game>
+<team tnum="1"><name>San Diego Chargers</name><score>41</score><site>V</site><line>2</line></team>
+<team tnum="2"><name>San Francisco 49ers</name><score>37</score><site>H</site><line>-2</line></team>
+</game>
+</date>
+<date day="1982-12-12">
+<game>
+<team tnum="1"><name>Baltimore Colts</name><score>10</score><site>V</site><line>12</line></team>
+<team tnum="2"><name>Minnesota Vikings</name><score>13</score><site>H</site><line>-12</line></team>
+</game>
+<game>
+<team tnum="1"><name>Chicago Bears</name><score>14</score><site>V</site><line>3.5</line></team>
+<team tnum="2"><name>Seattle Seahawks</name><score>20</score><site>H</site><line>-3.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>Cleveland Browns</name><score>10</score><site>V</site><line>8</line></team>
+<team tnum="2"><name>Cincinnati Bengals</name><score>23</score><site>H</site><line>-8</line></team>
+</game>
+<game>
+<team tnum="1"><name>Denver Broncos</name><score>27</score><site>V</site><line>2.5</line></team>
+<team tnum="2"><name>Los Angeles Rams</name><score>24</score><site>H</site><line>-2.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>Detroit Lions</name><score>30</score><site>V</site><line>5.5</line></team>
+<team tnum="2"><name>Green Bay Packers</name><score>10</score><site>H</site><line>-5.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>Miami Dolphins</name><score>0</score><site>V</site><line>-6</line></team>
+<team tnum="2"><name>New England Patriots</name><score>3</score><site>H</site><line>6</line></team>
+</game>
+<game>
+<team tnum="1"><name>New Orleans Saints</name><score>0</score><site>V</site><line>3.5</line></team>
+<team tnum="2"><name>Atlanta Falcons</name><score>35</score><site>H</site><line>-3.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>Pittsburgh Steelers</name><score>0</score><site>V</site><line>0</line></team>
+<team tnum="2"><name>Buffalo Bills</name><score>13</score><site>H</site><line>0</line></team>
+</game>
+<game>
+<team tnum="1"><name>Los Angeles Raiders</name><score>21</score><site>V</site><line>-3</line></team>
+<team tnum="2"><name>Kansas City Chiefs</name><score>16</score><site>H</site><line>3</line></team>
+</game>
+<game>
+<team tnum="1"><name>Tampa Bay Buccaneers</name><score>17</score><site>V</site><line>3.5</line></team>
+<team tnum="2"><name>New York Jets</name><score>32</score><site>H</site><line>-3.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>Washington Redskins</name><score>12</score><site>V</site><line>-1</line></team>
+<team tnum="2"><name>St Louis Cardinals</name><score>7</score><site>H</site><line>1</line></team>
+</game>
+</date>
+<date day="1982-12-13">
+<game>
+<team tnum="1"><name>Dallas Cowboys</name><score>37</score><site>V</site><line>-8.5</line></team>
+<team tnum="2"><name>Houston Oilers</name><score>7</score><site>H</site><line>8.5</line></team>
+</game>
+</date>
+<date day="1982-12-18">
+<game>
+<team tnum="1"><name>New York Jets</name><score>19</score><site>V</site><line>0</line></team>
+<team tnum="2"><name>Miami Dolphins</name><score>20</score><site>H</site><line>0</line></team>
+</game>
+<game>
+<team tnum="1"><name>Los Angeles Rams</name><score>31</score><site>V</site><line>8</line></team>
+<team tnum="2"><name>Los Angeles Raiders</name><score>37</score><site>H</site><line>-8</line></team>
+</game>
+</date>
+<date day="1982-12-19">
+<game>
+<team tnum="1"><name>Atlanta Falcons</name><score>17</score><site>V</site><line>4</line></team>
+<team tnum="2"><name>San Francisco 49ers</name><score>7</score><site>H</site><line>-4</line></team>
+</game>
+<game>
+<team tnum="1"><name>Buffalo Bills</name><score>23</score><site>V</site><line>1</line></team>
+<team tnum="2"><name>Tampa Bay Buccaneers</name><score>24</score><site>H</site><line>-1</line></team>
+</game>
+<game>
+<team tnum="1"><name>Green Bay Packers</name><score>20</score><site>V</site><line>-7</line></team>
+<team tnum="2"><name>Baltimore Colts</name><score>20</score><site>H</site><line>7</line></team>
+</game>
+<game>
+<team tnum="1"><name>Houston Oilers</name><score>14</score><site>V</site><line>6</line></team>
+<team tnum="2"><name>Philadelphia Eagles</name><score>35</score><site>H</site><line>-6</line></team>
+</game>
+<game>
+<team tnum="1"><name>Kansas City Chiefs</name><score>37</score><site>V</site><line>6.5</line></team>
+<team tnum="2"><name>Denver Broncos</name><score>16</score><site>H</site><line>-6.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>Minnesota Vikings</name><score>34</score><site>V</site><line>4</line></team>
+<team tnum="2"><name>Detroit Lions</name><score>31</score><site>H</site><line>-4</line></team>
+</game>
+<game>
+<team tnum="1"><name>New England Patriots</name><score>16</score><site>V</site><line>4</line></team>
+<team tnum="2"><name>Seattle Seahawks</name><score>0</score><site>H</site><line>-4</line></team>
+</game>
+<game>
+<team tnum="1"><name>New Orleans Saints</name><score>7</score><site>V</site><line>10</line></team>
+<team tnum="2"><name>Dallas Cowboys</name><score>21</score><site>H</site><line>-10</line></team>
+</game>
+<game>
+<team tnum="1"><name>New York Giants</name><score>14</score><site>V</site><line>3.5</line></team>
+<team tnum="2"><name>Washington Redskins</name><score>15</score><site>H</site><line>-3.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>Pittsburgh Steelers</name><score>9</score><site>V</site><line>-3.5</line></team>
+<team tnum="2"><name>Cleveland Browns</name><score>10</score><site>H</site><line>3.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>St Louis Cardinals</name><score>10</score><site>V</site><line>-1</line></team>
+<team tnum="2"><name>Chicago Bears</name><score>7</score><site>H</site><line>1</line></team>
+</game>
+</date>
+<date day="1982-12-20">
+<game>
+<team tnum="1"><name>Cincinnati Bengals</name><score>34</score><site>V</site><line>3</line></team>
+<team tnum="2"><name>San Diego Chargers</name><score>50</score><site>H</site><line>-3</line></team>
+</game>
+</date>
+<date day="1982-12-26">
+<game>
+<team tnum="1"><name>Baltimore Colts</name><score>26</score><site>V</site><line>13.5</line></team>
+<team tnum="2"><name>San Diego Chargers</name><score>44</score><site>H</site><line>-13.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>Chicago Bears</name><score>34</score><site>V</site><line>3</line></team>
+<team tnum="2"><name>Los Angeles Rams</name><score>26</score><site>H</site><line>-3</line></team>
+</game>
+<game>
+<team tnum="1"><name>Cleveland Browns</name><score>20</score><site>V</site><line>-4</line></team>
+<team tnum="2"><name>Houston Oilers</name><score>14</score><site>H</site><line>4</line></team>
+</game>
+<game>
+<team tnum="1"><name>Denver Broncos</name><score>10</score><site>V</site><line>7.5</line></team>
+<team tnum="2"><name>Los Angeles Raiders</name><score>27</score><site>H</site><line>-7.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>Detroit Lions</name><score>21</score><site>V</site><line>3.5</line></team>
+<team tnum="2"><name>Tampa Bay Buccaneers</name><score>23</score><site>H</site><line>-3.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>Green Bay Packers</name><score>38</score><site>V</site><line>3.5</line></team>
+<team tnum="2"><name>Atlanta Falcons</name><score>7</score><site>H</site><line>-3.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>New England Patriots</name><score>14</score><site>V</site><line>7</line></team>
+<team tnum="2"><name>Pittsburgh Steelers</name><score>37</score><site>H</site><line>-7</line></team>
+</game>
+<game>
+<team tnum="1"><name>New York Giants</name><score>21</score><site>V</site><line>1</line></team>
+<team tnum="2"><name>St Louis Cardinals</name><score>24</score><site>H</site><line>-1</line></team>
+</game>
+<game>
+<team tnum="1"><name>New York Jets</name><score>42</score><site>V</site><line>-2.5</line></team>
+<team tnum="2"><name>Minnesota Vikings</name><score>14</score><site>H</site><line>2.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>Philadelphia Eagles</name><score>24</score><site>V</site><line>8</line></team>
+<team tnum="2"><name>Dallas Cowboys</name><score>20</score><site>H</site><line>-8</line></team>
+</game>
+<game>
+<team tnum="1"><name>Seattle Seahawks</name><score>10</score><site>V</site><line>10</line></team>
+<team tnum="2"><name>Cincinnati Bengals</name><score>24</score><site>H</site><line>-10</line></team>
+</game>
+<game>
+<team tnum="1"><name>San Francisco 49ers</name><score>26</score><site>V</site><line>-3</line></team>
+<team tnum="2"><name>Kansas City Chiefs</name><score>13</score><site>H</site><line>3</line></team>
+</game>
+<game>
+<team tnum="1"><name>Washington Redskins</name><score>27</score><site>V</site><line>-3</line></team>
+<team tnum="2"><name>New Orleans Saints</name><score>10</score><site>H</site><line>3</line></team>
+</game>
+</date>
+<date day="1982-12-27">
+<game>
+<team tnum="1"><name>Buffalo Bills</name><score>10</score><site>V</site><line>3</line></team>
+<team tnum="2"><name>Miami Dolphins</name><score>27</score><site>H</site><line>-3</line></team>
+</game>
+</date>
+<date day="1983-01-02">
+<game>
+<team tnum="1"><name>Atlanta Falcons</name><score>6</score><site>V</site><line>-5</line></team>
+<team tnum="2"><name>New Orleans Saints</name><score>35</score><site>H</site><line>5</line></team>
+</game>
+<game>
+<team tnum="1"><name>Buffalo Bills</name><score>19</score><site>V</site><line>-3.5</line></team>
+<team tnum="2"><name>New England Patriots</name><score>30</score><site>H</site><line>3.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>Chicago Bears</name><score>23</score><site>V</site><line>5</line></team>
+<team tnum="2"><name>Tampa Bay Buccaneers</name><score>26</score><site>H</site><line>-5</line></team>
+</game>
+<game>
+<team tnum="1"><name>Cincinnati Bengals</name><score>35</score><site>V</site><line>-10</line></team>
+<team tnum="2"><name>Houston Oilers</name><score>27</score><site>H</site><line>10</line></team>
+</game>
+<game>
+<team tnum="1"><name>Cleveland Browns</name><score>21</score><site>V</site><line>6</line></team>
+<team tnum="2"><name>Pittsburgh Steelers</name><score>37</score><site>H</site><line>-6</line></team>
+</game>
+<game>
+<team tnum="1"><name>Denver Broncos</name><score>11</score><site>V</site><line>3</line></team>
+<team tnum="2"><name>Seattle Seahawks</name><score>13</score><site>H</site><line>-3</line></team>
+</game>
+<game>
+<team tnum="1"><name>Green Bay Packers</name><score>24</score><site>V</site><line>0</line></team>
+<team tnum="2"><name>Detroit Lions</name><score>27</score><site>H</site><line>0</line></team>
+</game>
+<game>
+<team tnum="1"><name>Miami Dolphins</name><score>34</score><site>V</site><line>-8</line></team>
+<team tnum="2"><name>Baltimore Colts</name><score>7</score><site>H</site><line>8</line></team>
+</game>
+<game>
+<team tnum="1"><name>New York Giants</name><score>26</score><site>V</site><line>4</line></team>
+<team tnum="2"><name>Philadelphia Eagles</name><score>24</score><site>H</site><line>-4</line></team>
+</game>
+<game>
+<team tnum="1"><name>New York Jets</name><score>13</score><site>V</site><line>-5</line></team>
+<team tnum="2"><name>Kansas City Chiefs</name><score>37</score><site>H</site><line>5</line></team>
+</game>
+<game>
+<team tnum="1"><name>Los Angeles Raiders</name><score>41</score><site>V</site><line>3.5</line></team>
+<team tnum="2"><name>San Diego Chargers</name><score>34</score><site>H</site><line>-3.5</line></team>
+</game>
+<game>
+<team tnum="1"><name>Los Angeles Rams</name><score>21</score><site>V</site><line>10</line></team>
+<team tnum="2"><name>San Francisco 49ers</name><score>20</score><site>H</site><line>-10</line></team>
+</game>
+<game>
+<team tnum="1"><name>St Louis Cardinals</name><score>0</score><site>V</site><line>5</line></team>
+<team tnum="2"><name>Washington Redskins</name><score>28</score><site>H</site><line>-5</line></team>
+</game>
+</date>
+<date day="1983-01-03">
+<game>
+<team tnum="1"><name>Dallas Cowboys</name><score>27</score><site>V</site><line>-4</line></team>
+<team tnum="2"><name>Minnesota Vikings</name><score>31</score><site>H</site><line>4</line></team>
+</game>
+</date>
+</scores>

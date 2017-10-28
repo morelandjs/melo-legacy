@@ -1,0 +1,257 @@
+Date,Visitor,Visitor Score,Home Team,Home Score,Line,Total Line
+09/05/2012,Dallas Cowboys,24,New York Giants,17,4,46
+09/09/2012,Indianapolis Colts,21,Chicago Bears,41,10,42.5
+09/09/2012,Philadelphia Eagles,17,Cleveland Browns,16,-9.5,42
+09/09/2012,Buffalo Bills,28,New York Jets,48,3,39
+09/09/2012,Washington Redskins,40,New Orleans Saints,32,9,50.5
+09/09/2012,New England Patriots,34,Tennessee Titans,13,-6.5,48
+09/09/2012,Jacksonville Jaguars,23,Minnesota Vikings,26,3.5,38
+09/09/2012,Miami Dolphins,10,Houston Texans,30,13.5,41.5
+09/09/2012,St Louis Rams,23,Detroit Lions,27,9,46.5
+09/09/2012,Atlanta Falcons,40,Kansas City Chiefs,24,-2.5,43
+09/09/2012,San Francisco 49ers,30,Green Bay Packers,22,5.5,46.5
+09/09/2012,Carolina Panthers,10,Tampa Bay Buccaneers,16,-3,45.5
+09/09/2012,Seattle Seahawks,16,Arizona Cardinals,20,-3,41
+09/09/2012,Pittsburgh Steelers,19,Denver Broncos,31,2,45.5
+09/10/2012,Cincinnati Bengals,13,Baltimore Ravens,44,7,43
+09/10/2012,San Diego Chargers,22,Oakland Raiders,14,1,47.5
+09/13/2012,Chicago Bears,10,Green Bay Packers,23,5.5,51
+09/16/2012,Tampa Bay Buccaneers,34,New York Giants,41,8,43.5
+09/16/2012,Arizona Cardinals,20,New England Patriots,18,13.5,47
+09/16/2012,Minnesota Vikings,20,Indianapolis Colts,23,-3,45.5
+09/16/2012,New Orleans Saints,27,Carolina Panthers,35,-3,54
+09/16/2012,Kansas City Chiefs,17,Buffalo Bills,35,3,45
+09/16/2012,Baltimore Ravens,23,Philadelphia Eagles,24,3,47
+09/16/2012,Oakland Raiders,13,Miami Dolphins,35,-2,41
+09/16/2012,Cleveland Browns,27,Cincinnati Bengals,34,7,39.5
+09/16/2012,Houston Texans,27,Jacksonville Jaguars,7,-7,40
+09/16/2012,Dallas Cowboys,7,Seattle Seahawks,27,-3,43
+09/16/2012,Washington Redskins,28,St Louis Rams,31,-3.5,42.5
+09/16/2012,New York Jets,10,Pittsburgh Steelers,27,4.5,43
+09/16/2012,Tennessee Titans,10,San Diego Chargers,38,6,43.5
+09/16/2012,Detroit Lions,19,San Francisco 49ers,27,7,46
+09/17/2012,Denver Broncos,21,Atlanta Falcons,27,3,50.5
+09/20/2012,New York Giants,36,Carolina Panthers,7,3,49
+09/23/2012,St Louis Rams,6,Chicago Bears,23,7,42
+09/23/2012,Tampa Bay Buccaneers,10,Dallas Cowboys,16,7,45.5
+09/23/2012,San Francisco 49ers,13,Minnesota Vikings,24,-7,42.5
+09/23/2012,Detroit Lions,41,Tennessee Titans,44,-4,47
+09/23/2012,Cincinnati Bengals,38,Washington Redskins,31,3,49.5
+09/23/2012,New York Jets,23,Miami Dolphins,20,-3,40.5
+09/23/2012,Kansas City Chiefs,27,New Orleans Saints,24,8.5,51.5
+09/23/2012,Buffalo Bills,24,Cleveland Browns,14,-3,45
+09/23/2012,Jacksonville Jaguars,22,Indianapolis Colts,17,3,42
+09/23/2012,Philadelphia Eagles,6,Arizona Cardinals,27,-3,42
+09/23/2012,Atlanta Falcons,27,San Diego Chargers,3,3,47.5
+09/23/2012,Houston Texans,31,Denver Broncos,25,-1.5,43.5
+09/23/2012,Pittsburgh Steelers,31,Oakland Raiders,34,-4,45
+09/23/2012,New England Patriots,30,Baltimore Ravens,31,3,48
+09/24/2012,Green Bay Packers,12,Seattle Seahawks,14,-3.5,45.5
+09/27/2012,Cleveland Browns,16,Baltimore Ravens,23,11.5,43.5
+09/30/2012,New England Patriots,52,Buffalo Bills,28,-4.5,48.5
+09/30/2012,Minnesota Vikings,20,Detroit Lions,13,4,48.5
+09/30/2012,Carolina Panthers,28,Atlanta Falcons,30,7,48
+09/30/2012,San Francisco 49ers,34,New York Jets,0,-4,41
+09/30/2012,San Diego Chargers,37,Kansas City Chiefs,20,-2.5,43.5
+09/30/2012,Tennessee Titans,14,Houston Texans,38,13.5,45
+09/30/2012,Seattle Seahawks,13,St Louis Rams,19,-2.5,39
+09/30/2012,Miami Dolphins,21,Arizona Cardinals,24,4,39.5
+09/30/2012,Oakland Raiders,6,Denver Broncos,37,6.5,47
+09/30/2012,Cincinnati Bengals,27,Jacksonville Jaguars,10,1.5,45.5
+09/30/2012,New Orleans Saints,27,Green Bay Packers,28,7.5,54
+09/30/2012,Washington Redskins,24,Tampa Bay Buccaneers,22,2,45
+09/30/2012,New York Giants,17,Philadelphia Eagles,19,1.5,46.5
+10/01/2012,Chicago Bears,34,Dallas Cowboys,18,3,41.5
+10/04/2012,Arizona Cardinals,3,St Louis Rams,17,-1.5,38
+10/07/2012,Atlanta Falcons,24,Washington Redskins,17,-3,51
+10/07/2012,Philadelphia Eagles,14,Pittsburgh Steelers,16,4,44
+10/07/2012,Green Bay Packers,27,Indianapolis Colts,30,-6.5,49
+10/07/2012,Cleveland Browns,27,New York Giants,41,8,44
+10/07/2012,Tennessee Titans,7,Minnesota Vikings,30,6,44
+10/07/2012,Miami Dolphins,17,Cincinnati Bengals,13,3,45
+10/07/2012,Baltimore Ravens,9,Kansas City Chiefs,6,-6.5,47
+10/07/2012,Seattle Seahawks,16,Carolina Panthers,12,2,42
+10/07/2012,Chicago Bears,41,Jacksonville Jaguars,3,-6.5,40
+10/07/2012,Denver Broncos,21,New England Patriots,31,6,51.5
+10/07/2012,Buffalo Bills,3,San Francisco 49ers,45,10,45
+10/07/2012,San Diego Chargers,24,New Orleans Saints,31,3.5,52.5
+10/08/2012,Houston Texans,23,New York Jets,17,-10,41
+10/11/2012,Pittsburgh Steelers,23,Tennessee Titans,26,-6.5,43
+10/14/2012,Cincinnati Bengals,24,Cleveland Browns,34,-2,42
+10/14/2012,Indianapolis Colts,9,New York Jets,35,3,44
+10/14/2012,Kansas City Chiefs,10,Tampa Bay Buccaneers,38,5,39.5
+10/14/2012,Oakland Raiders,20,Atlanta Falcons,23,10,49
+10/14/2012,Dallas Cowboys,29,Baltimore Ravens,31,3,45
+10/14/2012,Detroit Lions,26,Philadelphia Eagles,23,3.5,47.5
+10/14/2012,St Louis Rams,14,Miami Dolphins,17,5,38
+10/14/2012,New England Patriots,23,Seattle Seahawks,24,-4,42.5
+10/14/2012,Buffalo Bills,19,Arizona Cardinals,16,5,44
+10/14/2012,Minnesota Vikings,26,Washington Redskins,38,-2,44
+10/14/2012,New York Giants,26,San Francisco 49ers,3,7,46.5
+10/14/2012,Green Bay Packers,42,Houston Texans,24,4,46.5
+10/15/2012,Denver Broncos,35,San Diego Chargers,24,0,47.5
+10/18/2012,Seattle Seahawks,6,San Francisco 49ers,13,7.5,37.5
+10/21/2012,Tennessee Titans,35,Buffalo Bills,34,4.5,46.5
+10/21/2012,Arizona Cardinals,14,Minnesota Vikings,21,6.5,39.5
+10/21/2012,Cleveland Browns,13,Indianapolis Colts,17,1,46.5
+10/21/2012,Baltimore Ravens,13,Houston Texans,43,6.5,47.5
+10/21/2012,Green Bay Packers,30,St Louis Rams,20,-5,45
+10/21/2012,Dallas Cowboys,19,Carolina Panthers,14,-2.5,45
+10/21/2012,Washington Redskins,23,New York Giants,27,6.5,51.5
+10/21/2012,New Orleans Saints,35,Tampa Bay Buccaneers,28,-1.5,49.5
+10/21/2012,New York Jets,26,New England Patriots,29,10.5,47
+10/21/2012,Jacksonville Jaguars,23,Oakland Raiders,26,6,44
+10/21/2012,Pittsburgh Steelers,24,Cincinnati Bengals,17,1,45.5
+10/22/2012,Detroit Lions,7,Chicago Bears,13,6.5,47
+10/25/2012,Tampa Bay Buccaneers,36,Minnesota Vikings,17,5.5,43
+10/28/2012,New England Patriots,45,St Louis Rams,7,-7,46
+10/28/2012,Indianapolis Colts,19,Tennessee Titans,13,3,47
+10/28/2012,Jacksonville Jaguars,15,Green Bay Packers,24,16,45.5
+10/28/2012,San Diego Chargers,6,Cleveland Browns,7,-3,41
+10/28/2012,Atlanta Falcons,30,Philadelphia Eagles,17,3,43
+10/28/2012,Seattle Seahawks,24,Detroit Lions,28,3,42.5
+10/28/2012,Miami Dolphins,30,New York Jets,9,1,39
+10/28/2012,Carolina Panthers,22,Chicago Bears,23,7.5,41.5
+10/28/2012,Washington Redskins,12,Pittsburgh Steelers,27,4.5,44
+10/28/2012,Oakland Raiders,26,Kansas City Chiefs,16,1,42.5
+10/28/2012,New York Giants,29,Dallas Cowboys,24,-2.5,48
+10/28/2012,New Orleans Saints,14,Denver Broncos,34,6.5,55
+10/29/2012,San Francisco 49ers,24,Arizona Cardinals,3,-7,38.5
+11/01/2012,Kansas City Chiefs,13,San Diego Chargers,31,7,41
+11/04/2012,Denver Broncos,31,Cincinnati Bengals,23,-5.5,47.5
+11/04/2012,Arizona Cardinals,17,Green Bay Packers,31,10.5,43.5
+11/04/2012,Miami Dolphins,20,Indianapolis Colts,23,-2,43.5
+11/04/2012,Baltimore Ravens,25,Cleveland Browns,15,-3.5,44
+11/04/2012,Buffalo Bills,9,Houston Texans,21,11.5,48
+11/04/2012,Carolina Panthers,21,Washington Redskins,13,3,48.5
+11/04/2012,Detroit Lions,31,Jacksonville Jaguars,14,-6,44
+11/04/2012,Chicago Bears,51,Tennessee Titans,20,-5,43.5
+11/04/2012,Minnesota Vikings,20,Seattle Seahawks,30,4,38.5
+11/04/2012,Tampa Bay Buccaneers,42,Oakland Raiders,32,1,47.5
+11/04/2012,Pittsburgh Steelers,24,New York Giants,20,3.5,47.5
+11/04/2012,Dallas Cowboys,13,Atlanta Falcons,19,4.5,47.5
+11/05/2012,Philadelphia Eagles,13,New Orleans Saints,28,3,52
+11/08/2012,Indianapolis Colts,27,Jacksonville Jaguars,10,-3.5,43.5
+11/11/2012,Buffalo Bills,31,New England Patriots,37,13.5,54
+11/11/2012,New York Giants,13,Cincinnati Bengals,31,-4.5,47.5
+11/11/2012,San Diego Chargers,24,Tampa Bay Buccaneers,34,3,47
+11/11/2012,Denver Broncos,36,Carolina Panthers,14,-4,47
+11/11/2012,Tennessee Titans,37,Miami Dolphins,3,7,44
+11/11/2012,Oakland Raiders,20,Baltimore Ravens,55,7.5,47.5
+11/11/2012,Atlanta Falcons,27,New Orleans Saints,31,-1.5,54
+11/11/2012,Detroit Lions,24,Minnesota Vikings,34,-3,45.5
+11/11/2012,New York Jets,7,Seattle Seahawks,28,5.5,38.5
+11/11/2012,Dallas Cowboys,38,Philadelphia Eagles,23,-2.5,44.5
+11/11/2012,St Louis Rams,24,San Francisco 49ers,24,13,38
+11/11/2012,Houston Texans,13,Chicago Bears,6,1,40
+11/12/2012,Kansas City Chiefs,13,Pittsburgh Steelers,16,13,40
+11/15/2012,Miami Dolphins,14,Buffalo Bills,19,2.5,46
+11/18/2012,Philadelphia Eagles,6,Washington Redskins,31,3.5,46
+11/18/2012,Green Bay Packers,24,Detroit Lions,20,-3,53.5
+11/18/2012,Arizona Cardinals,19,Atlanta Falcons,23,9.5,44
+11/18/2012,Tampa Bay Buccaneers,27,Carolina Panthers,21,-1.5,47
+11/18/2012,Cleveland Browns,20,Dallas Cowboys,23,7,43.5
+11/18/2012,New York Jets,27,St Louis Rams,13,3.5,38.5
+11/18/2012,Indianapolis Colts,24,New England Patriots,59,10,55
+11/18/2012,Jacksonville Jaguars,37,Houston Texans,43,15.5,40.5
+11/18/2012,Cincinnati Bengals,28,Kansas City Chiefs,6,-3,42.5
+11/18/2012,New Orleans Saints,38,Oakland Raiders,17,-6.5,56
+11/18/2012,San Diego Chargers,23,Denver Broncos,30,7.5,48
+11/18/2012,Baltimore Ravens,13,Pittsburgh Steelers,10,-3,40.5
+11/19/2012,Chicago Bears,7,San Francisco 49ers,32,5,35
+11/22/2012,Houston Texans,34,Detroit Lions,31,-4,49
+11/22/2012,Washington Redskins,38,Dallas Cowboys,31,3.5,47.5
+11/22/2012,New England Patriots,49,New York Jets,19,-7,48.5
+11/25/2012,Oakland Raiders,10,Cincinnati Bengals,34,8,51
+11/25/2012,Pittsburgh Steelers,14,Cleveland Browns,20,-2,33.5
+11/25/2012,Buffalo Bills,13,Indianapolis Colts,20,3,51.5
+11/25/2012,Denver Broncos,17,Kansas City Chiefs,9,-10.5,42.5
+11/25/2012,Tennessee Titans,19,Jacksonville Jaguars,24,-3.5,45
+11/25/2012,Minnesota Vikings,10,Chicago Bears,28,6.5,39
+11/25/2012,Atlanta Falcons,24,Tampa Bay Buccaneers,23,-1.5,51.5
+11/25/2012,Seattle Seahawks,21,Miami Dolphins,24,-3,38
+11/25/2012,Baltimore Ravens,16,San Diego Chargers,13,-1,47
+11/25/2012,San Francisco 49ers,31,New Orleans Saints,21,-1.5,50
+11/25/2012,St Louis Rams,31,Arizona Cardinals,17,1,36.5
+11/25/2012,Green Bay Packers,10,New York Giants,38,2.5,51.5
+11/26/2012,Carolina Panthers,30,Philadelphia Eagles,22,-3,42
+11/29/2012,New Orleans Saints,13,Atlanta Falcons,23,3.5,55
+12/02/2012,Seattle Seahawks,23,Chicago Bears,17,3.5,37
+12/02/2012,Minnesota Vikings,14,Green Bay Packers,23,7.5,47
+12/02/2012,San Francisco 49ers,13,St Louis Rams,16,-8,41
+12/02/2012,Arizona Cardinals,6,New York Jets,7,6,36.5
+12/02/2012,Carolina Panthers,21,Kansas City Chiefs,27,-6,41
+12/02/2012,Indianapolis Colts,35,Detroit Lions,33,7,51
+12/02/2012,Jacksonville Jaguars,18,Buffalo Bills,34,6,42
+12/02/2012,New England Patriots,23,Miami Dolphins,16,-9,51.5
+12/02/2012,Houston Texans,24,Tennessee Titans,10,-7,47
+12/02/2012,Tampa Bay Buccaneers,23,Denver Broncos,31,7.5,50
+12/02/2012,Pittsburgh Steelers,23,Baltimore Ravens,20,7.5,36.5
+12/02/2012,Cleveland Browns,20,Oakland Raiders,17,-2.5,39.5
+12/02/2012,Cincinnati Bengals,20,San Diego Chargers,13,-2.5,46
+12/02/2012,Philadelphia Eagles,33,Dallas Cowboys,38,10.5,44
+12/03/2012,New York Giants,16,Washington Redskins,17,-3,50
+12/06/2012,Denver Broncos,26,Oakland Raiders,13,-10.5,47
+12/09/2012,Baltimore Ravens,28,Washington Redskins,31,1.5,48
+12/09/2012,Kansas City Chiefs,7,Cleveland Browns,30,7,38
+12/09/2012,San Diego Chargers,34,Pittsburgh Steelers,24,7.5,38
+12/09/2012,Tennessee Titans,23,Indianapolis Colts,27,4,47
+12/09/2012,New York Jets,17,Jacksonville Jaguars,10,-3,39
+12/09/2012,Chicago Bears,14,Minnesota Vikings,21,-1.5,40.5
+12/09/2012,Atlanta Falcons,20,Carolina Panthers,30,-3.5,47
+12/09/2012,Philadelphia Eagles,23,Tampa Bay Buccaneers,21,7,48
+12/09/2012,St Louis Rams,15,Buffalo Bills,12,3,42.5
+12/09/2012,Dallas Cowboys,20,Cincinnati Bengals,19,3.5,46
+12/09/2012,Miami Dolphins,13,San Francisco 49ers,27,10.5,38.5
+12/09/2012,New Orleans Saints,27,New York Giants,52,4.5,51.5
+12/09/2012,Arizona Cardinals,0,Seattle Seahawks,58,10,36
+12/09/2012,Detroit Lions,20,Green Bay Packers,27,6.5,49
+12/10/2012,Houston Texans,14,New England Patriots,42,5.5,51
+12/13/2012,Cincinnati Bengals,34,Philadelphia Eagles,13,-5,45
+12/16/2012,Green Bay Packers,21,Chicago Bears,13,-3,43.5
+12/16/2012,New York Giants,0,Atlanta Falcons,34,0,50
+12/16/2012,Tampa Bay Buccaneers,0,New Orleans Saints,41,3.5,55
+12/16/2012,Minnesota Vikings,36,St Louis Rams,22,2.5,39.5
+12/16/2012,Washington Redskins,38,Cleveland Browns,21,4,40.5
+12/16/2012,Jacksonville Jaguars,3,Miami Dolphins,24,7.5,38
+12/16/2012,Denver Broncos,34,Baltimore Ravens,17,-3,48
+12/16/2012,Indianapolis Colts,17,Houston Texans,29,10.5,48
+12/16/2012,Carolina Panthers,31,San Diego Chargers,7,3,45.5
+12/16/2012,Seattle Seahawks,50,Buffalo Bills,17,-5,44
+12/16/2012,Detroit Lions,10,Arizona Cardinals,38,-6.5,43.5
+12/16/2012,Pittsburgh Steelers,24,Dallas Cowboys,27,-2.5,46
+12/16/2012,Kansas City Chiefs,0,Oakland Raiders,15,4.5,44
+12/16/2012,San Francisco 49ers,41,New England Patriots,34,5,47.5
+12/17/2012,New York Jets,10,Tennessee Titans,14,1,42
+12/22/2012,Atlanta Falcons,31,Detroit Lions,18,-4,50.5
+12/23/2012,Tennessee Titans,7,Green Bay Packers,55,11,44.5
+12/23/2012,Oakland Raiders,6,Carolina Panthers,17,9.5,47
+12/23/2012,Buffalo Bills,10,Miami Dolphins,24,5,43
+12/23/2012,Cincinnati Bengals,13,Pittsburgh Steelers,10,3.5,40
+12/23/2012,New England Patriots,23,Jacksonville Jaguars,16,-14.5,51
+12/23/2012,Indianapolis Colts,20,Kansas City Chiefs,13,-6,41.5
+12/23/2012,New Orleans Saints,34,Dallas Cowboys,31,3,54.5
+12/23/2012,Washington Redskins,27,Philadelphia Eagles,20,-6,46
+12/23/2012,St Louis Rams,28,Tampa Bay Buccaneers,13,3,44
+12/23/2012,New York Giants,14,Baltimore Ravens,33,-2.5,47
+12/23/2012,Minnesota Vikings,23,Houston Texans,6,7.5,43.5
+12/23/2012,Cleveland Browns,12,Denver Broncos,34,11,44
+12/23/2012,Chicago Bears,28,Arizona Cardinals,13,-7,36.5
+12/23/2012,San Francisco 49ers,13,Seattle Seahawks,42,2,40.5
+12/23/2012,San Diego Chargers,27,New York Jets,17,3,38
+12/30/2012,New York Jets,9,Buffalo Bills,28,3.5,41
+12/30/2012,Miami Dolphins,0,New England Patriots,28,10,46.5
+12/30/2012,Baltimore Ravens,17,Cincinnati Bengals,23,3,42.5
+12/30/2012,Cleveland Browns,10,Pittsburgh Steelers,24,9.5,36
+12/30/2012,Houston Texans,16,Indianapolis Colts,28,-6,47
+12/30/2012,Jacksonville Jaguars,20,Tennessee Titans,38,5.5,42
+12/30/2012,Philadelphia Eagles,7,New York Giants,42,6.5,44.5
+12/30/2012,Dallas Cowboys,18,Washington Redskins,28,3,49
+12/30/2012,Chicago Bears,26,Detroit Lions,24,-3,46
+12/30/2012,Green Bay Packers,34,Minnesota Vikings,37,-3,46
+12/30/2012,Tampa Bay Buccaneers,22,Atlanta Falcons,17,3,46
+12/30/2012,Carolina Panthers,44,New Orleans Saints,38,4,54
+12/30/2012,Kansas City Chiefs,3,Denver Broncos,38,17,41.5
+12/30/2012,Oakland Raiders,21,San Diego Chargers,24,8,41.5
+12/30/2012,Arizona Cardinals,13,San Francisco 49ers,27,16.5,39.5
+12/30/2012,St Louis Rams,13,Seattle Seahawks,20,12,42.5

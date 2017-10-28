@@ -1,4 +1,4 @@
-# MELO rating system
+# MELO Rating System
 Module which implements the margin-dependent Elo rating system (MELO) for
 predicting NFL spread and over/under point distributions.
 
