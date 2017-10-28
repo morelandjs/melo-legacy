@@ -2,11 +2,16 @@
 Module which implements the margin-dependent Elo rating system (MELO) for
 predicting NFL spread and over/under point distributions.
 
+## What's Here?
+This git repository contains a Python module to calculate margin-dependent Elo
+ratings for NFL games.
+
 ## Dependencies
  - Python 2.7 
- - [nfldb](https://github.com/BurntSushi/nfldb)
  - [numpy](www.numpy.org)
  - [scipy](www.scipy.org)
+ - [nfldb](https://github.com/BurntSushi/nfldb)
+ - [skopt](https://scikit-optimize.github.io/)
 
 ## Setup
 First, create a virtual enviroment (recommended),
