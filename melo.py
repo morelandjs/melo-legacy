@@ -75,8 +75,8 @@ class Rating:
         self.regress = regress
 
         # default hyper-parameter settings
-        self.hfa = opt({'spread': 56, 'total': 0}[mode], hfa)
-        self.kfactor = opt({'spread': 59, 'total': 48}[mode], kfactor)
+        self.kfactor = opt({'spread': 59., 'total': 48}[mode], kfactor)
+        self.hfa = opt({'spread': 56., 'total': 0}[mode], hfa)
         self.regress = opt({'spread': .64, 'total': .68}[mode], regress)
 
         # point-spread interval attributes
