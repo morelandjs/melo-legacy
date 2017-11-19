@@ -25,8 +25,8 @@ textwidth = 510/resolution
 textheight = 672/resolution
 textiny, texsmall, texnormal = 8.0, 9.25, 10.0
 offblack = 'black'
-blue = '#1b6394'
-orange = '#F1A107'
+blue = '#1f77bf' 
+orange = '#ff7f0e'
 
 plt.rcParams.update({
     'font.family': 'serif',
@@ -143,6 +143,30 @@ def spread_frequency():
 
     finish()
 
+@plot
+def model_vs_data():
+    """
+    Histogram model against data
+
+    """
+    figsize = (columnwidth, aspect*columnwidth)
+    fig = plt.figure(figsize=figsize)
+    plt.hist(rating.game_points(), bins=rating.bins)
+
+    q = nfldb.Query(rating.nfldb)
+    q.game(season_type='Regular', finished=True)
+
+    model_spreads = [
+            rating.predict_spread(
+                g.home_team, g.away_team,
+                g.season_year, g.week,
+                perc=np.random.rand()
+                ) for g in q.as_games()
+            ]
+
+    plt.hist(model_spreads, bins=rating.bins, histtype='step')
+    finish()
+
 
 @plot
 def home_field():
@@ -152,6 +176,8 @@ def home_field():
     """
     figsize = (columnwidth, aspect*columnwidth)
     plt.figure(figsize=figsize)
+
+    plt.axhline(1, color='.8', dashes=(4, 2))
 
     q = nfldb.Query(rating.nfldb)
     q.game(season_type='Regular', finished=True)
@@ -207,10 +233,10 @@ def home_field():
 
     plt.xlabel('spread [points]')
     plt.ylabel(r'$P(\mathrm{spread})/P(\pm\mathrm{spread})$')
-    plt.annotate(r'spread = home - away', xy=(.5, .1),
+    plt.annotate(r'spread = home $-$ away', xy=(.5, .1),
                  xycoords='axes fraction', ha='center')
 
-    plt.legend(loc=9)
+    plt.legend(loc=9, ncol=2)
 
     finish()
 
@@ -221,7 +247,7 @@ def win_rate(nsample=10**4):
     figsize = (columnwidth, aspect*columnwidth)
     plt.figure(figsize=figsize)
 
-    rating = melo.Rating(kfactor=2)
+    rating = melo.Rating(kfactor=2, smooth=False)
     spreads = skellam.rvs(16, 10, size=nsample)
 
     # loop over different handicap margins
@@ -249,7 +275,7 @@ def win_rate(nsample=10**4):
         # plot model
         plt.step(range(nsample), win_prob, color=plt.cm.Blues(.5))
         plt.plot((0, nsample), (win_rate, win_rate),
-                 color='#333333', dashes=(4, 1))
+                 color=offblack, dashes=(4, 1))
         plt.annotate('{} pts'.format(hcap), xycoords='data',
                      xy=(10500, win_rate), ha='left', va='center',
                      color=offblack, fontsize=textiny, clip_on=False)
@@ -356,68 +382,87 @@ def example_distribution():
 
 
 @plot
-def spreads(year=2017, week=2):
+def predict(year=2017, week=2):
     # create figure object
-    figsize = (textwidth, aspect*columnwidth)
-    plt.figure(figsize=figsize)
-    ax = plt.gca()
-    ax.grid(color='.9', zorder=0)
+    figsize = (textwidth, 2*aspect*columnwidth)
+    fig, axes = plt.subplots(nrows=2, figsize=figsize)
 
-    q = nfldb.Query(nfldb.connect())
-    q.game(season_type='Regular', season_year=year, week=week)
+    modes = 'spread', 'total'
+    ylabels = r'home $-$ away [points]', r'home $+$ away [points]'
+    yticks = np.linspace(-30, 30, 7), np.linspace(15, 75, 7) 
+    ylims = (-30, 30), (15, 75)
+    colors = plt.cm.Blues(.6), plt.cm.Greens(.6)
 
-    # loop over games in the week
-    for shift, game in enumerate(q.as_games(), start=1):
+    # top plot: spreads, bottom plot: totals
+    for ax, mode, ylabel, ytick, ylim, color in zip(
+            axes, modes, ylabels, yticks, ylims, colors):
 
-        home, away = (game.home_team, game.away_team)
+        # run elo ratings simulation
+        rating = melo.Rating(mode=mode, database='elo.db')
 
-        median = rating.predict_spread(home, away, year, week)
-        integer_median = int(round(median))
+        q = nfldb.Query(nfldb.connect())
+        q.game(season_type='Regular', season_year=year, week=week)
 
-        box1, box2 = [
-                rating.predict_spread(home, away, year, week, perc=p)
-                for p in (.25, .75)
-                ]
+        # loop over games in the week
+        for shift, game in enumerate(q.as_games(), start=1):
 
-        box_lo, box_hi = (min(box1, box2), max(box1, box2))
+            home, away = (game.home_team, game.away_team)
 
-        line1, line2 = [
-                rating.predict_spread(home, away, year, week, perc=p)
-                for p in (.05, .95)
-                ]
+            median = rating.predict_spread(home, away, year, week)
+            integer_median = int(round(median))
 
-        line_lo, line_hi = (min(line1, line2), max(line1, line2))
+            box1, box2 = [
+                    rating.predict_spread(home, away, year, week, perc=p)
+                    for p in (.25, .75)
+                    ]
 
-        box = patches.Rectangle(
-                (shift-.15, box_lo), 0.3, box_hi - box_lo,
-                color=blue, alpha=.8, lw=0, zorder=2
-                )
+            box_lo, box_hi = (min(box1, box2), max(box1, box2))
 
-        ax.add_patch(box)
-        plt.plot((shift, shift), (line_lo, box_lo),
-                 color=blue, alpha=.8, lw=1.2)
-        plt.plot((shift, shift), (box_hi, line_hi),
-                 color=blue, alpha=.8, lw=1.2)
-        plt.plot((shift-.15, shift+.15), (median, median),
-                 color=orange, lw=1.2)
+            line1, line2 = [
+                    rating.predict_spread(home, away, year, week, perc=p)
+                    for p in (.05, .95)
+                    ]
 
-        plt.annotate(home, xy=(shift, 37), xycoords='data',
-                     ha='center', va='center', clip_on=False)
-        plt.annotate(away, xy=(shift, -37), xycoords='data',
-                     ha='center', va='center', clip_on=False)
-        plt.annotate(integer_median, xy=(shift+.4, median),
-                     xycoords='data', ha='center', va='center',
-                     fontsize=9, clip_on=False)
+            line_lo, line_hi = (min(line1, line2), max(line1, line2))
 
-    ax.spines['bottom'].set_visible(False)
+            box = patches.Rectangle(
+                    (shift-.15, box_lo), 0.3, box_hi - box_lo,
+                    color=color, alpha=.8, lw=0, zorder=2
+                    )
 
-    plt.xlim(0, 17)
-    plt.ylim(-37, 37)
+            ax.add_patch(box)
+            ax.plot((shift, shift), (line_lo, box_lo), color=color,
+                    alpha=.8, lw=1.2)
+            ax.plot((shift, shift), (box_hi, line_hi), color=color,
+                    alpha=.8, lw=1.2)
+            ax.plot((shift-.13, shift+.13), (median, median),
+                    color=offblack, lw=1.3)
 
-    plt.xticks([])
-    plt.ylabel('home ${-}$ away [points]')
+            ax.annotate(integer_median, xy=(shift+.4, median),
+                        xycoords='data', ha='center', va='center',
+                        fontsize=9, clip_on=False)
 
-    finish(pad=1)
+            ymin, ymax = (min(ylim) - 5, max(ylim) + 5)
+            ax.annotate(home, xy=(shift, ymax), xycoords='data',
+                        ha='center', va='center', annotation_clip=False)
+            ax.annotate(away, xy=(shift, ymin), xycoords='data',
+                        ha='center', va='center', annotation_clip=False)
+
+        for lbl, y in ('H:', ymax), ('A:', ymin):
+            ax.annotate(lbl, xy=(0, y), va='center', xycoords='data',
+                    annotation_clip=False)
+
+        ax.grid(color='.9', zorder=0)
+        ax.spines['bottom'].set_visible(False)
+
+        ax.set_xlim(0, 17)
+        ax.set_ylim(*ylim)
+
+        ax.set_xticks([])
+        ax.set_yticks(ytick)
+        ax.set_ylabel(ylabel, fontsize=9)
+
+    finish(h_pad=5, rect=(0, .05, 1, .95))
 
 
 @plot
@@ -496,16 +541,19 @@ def mean_abs_error():
                 error(game) for game in history
             ]).mean()
             year = float(re.findall(r'nfl(.*?)lines', fname.stem).pop())
-            plt.scatter(year, mean_abs_error, color=blue)
+            data = plt.scatter(year, mean_abs_error, color=blue)
 
     for year in range(2010, 2018):
         residuals = rating.model_accuracy(year=year)
-        plt.scatter(year, np.abs(residuals).mean(), color=orange)
+        model = plt.scatter(year, np.abs(residuals).mean(), color=orange)
 
     plt.xlabel('Season year')
     plt.ylabel(r'$\langle |\mathrm{pred} - \mathrm{obs}| \rangle$ [points]')
+    plt.ylim(8, 12)
 
-    plt.ylim(8, 14)
+    handles, labels = plt.gca().get_legend_handles_labels()
+    plt.legend([data, model], ['Vegas', 'Model'])
+
     finish()
 
 def main():

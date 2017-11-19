@@ -5,9 +5,13 @@ from functools import total_ordering
 
 import numpy as np
 from scipy.optimize import minimize
-from skopt import gp_minimize
+from scipy.ndimage.filters import gaussian_filter1d
+from skopt import forest_minimize
 
 import nfldb
+
+
+import matplotlib.pyplot as plt
 
 
 @total_ordering
@@ -57,7 +61,7 @@ class Rating:
 
     """
     def __init__(self, mode='spread', database='elo.db',
-                 kfactor=None, hfa=None, regress=None, decay=None):
+            kfactor=None, hfa=None, regress=None, decay=None, smooth=None):
 
         # function to initialize a nested dictionary
         def nested_dict():
@@ -72,12 +76,20 @@ class Rating:
         self.decay = decay
         self.kfactor = kfactor
         self.regress = regress
+        self.smooth = smooth
 
         # default hyper-parameter settings
-        self.hfa = opt({'spread': 56, 'total': 0}[mode], hfa)
-        self.kfactor = opt({'spread': 59, 'total': 48}[mode], kfactor)
-        self.regress = opt({'spread': .64, 'total': .68}[mode], regress)
+        #self.kfactor = opt({'spread': 70., 'total': 38}[mode], kfactor)
+        #self.hfa = opt({'spread': 56., 'total': 0}[mode], hfa)
+        #self.regress = opt({'spread': .6, 'total': .7}[mode], regress)
+        #self.decay = opt({'spread': 51, 'total': 51}[mode], regress)
+        #self.smooth = opt(3., smooth)
+
+        self.kfactor = opt({'spread': 59., 'total': 38}[mode], kfactor)
+        self.hfa = opt({'spread': 56., 'total': 0}[mode], hfa)
+        self.regress = opt({'spread': .64, 'total': .7}[mode], regress)
         self.decay = opt({'spread': 51, 'total': 51}[mode], regress)
+        self.smooth = opt(0., smooth)
 
         # point interval attributes
         self.bins = self.bin_edges(mode)
@@ -136,6 +148,30 @@ class Rating:
 
         return elo_init + .5*elo_diff
 
+    def yards(self, game, team):
+        """
+        Calculates the yards traversed by a team which do not result in
+        points
+
+        """
+        def possession(drive):
+            return team == nfldb.standard_team(drive.pos_team)
+
+        def progress(drive):
+            try:
+                side, ydline = str(drive.end_field).split()
+                return {'OPP': 100 - int(ydline), 'OWN': int(ydline)}[side]
+            except ValueError:
+                return 50
+
+        total = 0
+
+        for drive in filter(lambda d: possession(d), game.drives):
+            if drive.result not in ('Field Goal', 'Touchdown'):
+                total += 7*progress(drive)/100.
+
+        return total
+
     def game_points(self):
         """
         All game points (spreads or totals) since 2009.
@@ -153,8 +189,9 @@ class Rating:
         """
         ub = np.append(self.bins[1:], 1)
         bins = {'spread': self.bins, 'total': self.bins[ub > 0]}[self.mode]
+        hist, edges = np.histogram(self.game_points(),
+                                   bins=bins, normed=True)
 
-        hist, edges = np.histogram(self.game_points(), bins=bins, normed=True)
         points = 0.5*(edges[:-1] + edges[1:])
         bin_width = edges[1] - edges[0]
         prob = bin_width * np.cumsum(hist[::-1], dtype=float)[::-1]
@@ -167,11 +204,16 @@ class Rating:
         elo(year, week) for (year, week) < (query year, query week)
 
         """
+        # used to predict performance against an average team
+        if team == 'AVG':
+            return self.starting_elo(margin)
+
         date = Date(year, week)
         date_last = self.last_game[team].next
 
         # extrapolate Elo with information decay for future dates
         if date > date_last:
+            print("here")
             last_year, last_week = (date_last.year, date_last.week)
             elo = self.elodb[team][margin][last_year][last_week]
 
@@ -201,6 +243,19 @@ class Rating:
 
         return {"spread": point_diff, "total": point_total}[self.mode]
 
+    def model_points(self, game):
+        """
+        Function which returns either a point difference
+        or a point total depending on the mode argument.
+
+        """
+        home, away = (game.home_team, game.away_team)
+
+        point_diff = game.home_score - game.away_score
+        point_total = game.home_score + game.away_score
+
+        return {"spread": point_diff, "total": point_total}[self.mode]
+
     def bin_edges(self, mode):
         """
         Returns an iterator over the range of reasonable point values.
@@ -223,7 +278,11 @@ class Rating:
 
         pts = {'spread': points, 'total': sign*points}[self.mode]
 
-        return win if pts > hcap else lose
+        if not self.smooth:
+            return win if pts > hcap else lose
+
+        prob = 1./(1. + np.exp(-(pts - hcap)/self.smooth))
+        return prob*win + (1 - prob)*lose
 
     def regress_to_mean(self, rtg, factor, hcap):
         """
@@ -289,6 +348,11 @@ class Rating:
 
                     self.elodb[team][hcap][next_year][next_week] = rtg
 
+
+        # loop over all possible spread/total margins
+        #for hcap in self.range:
+        #    self.elodb['HOU'][hcap][2017][11] -= 50
+
     def cdf(self, home, away, year, week):
         """
         Cumulative (integrated) probability that,
@@ -305,7 +369,9 @@ class Rating:
         for hcap in hcap_range:
             home_rtg = self.elo(home, hcap, year, week)
             away_rtg = self.elo(away, -hcap, year, week)
-            elo_diff = home_rtg - away_rtg + self.hfa
+
+            hfa = 0 if 'AVG' in (home, away) else self.hfa
+            elo_diff = home_rtg - away_rtg + hfa
 
             win_prob = self.win_prob(elo_diff)
             cprob.append(win_prob)
@@ -394,25 +460,26 @@ class Rating:
 
         return residuals
 
-    def optimize(self):
+    def optimize(self, mode):
         """
         Function to optimize model hyper-parameters
 
         """
-        def objective(parameters):
+        def obj(parameters):
             """
             Evaluates the mean absolute error for a set of input
             parameters: kfactor, decay, regress.
 
             """
+            print(parameters)
             kfactor, regress = parameters
-            rating = Rating(kfactor=kfactor, regress=regress)
+            rating = Rating(mode=mode, kfactor=kfactor, regress=regress)
             residuals = rating.model_accuracy()
             mean_abs_error = np.abs(residuals).mean()
             return mean_abs_error
 
-        bounds = [(10, 100), (0.1, 1)]
-        res_gp = gp_minimize(objective, bounds, n_calls=100, random_state=0)
+        bounds = [(30., 60.), (0.7, 1)]
+        res_gp = forest_minimize(obj, bounds, n_calls=100, verbose=True)
 
         print("Best score: {:.4f}".format(res_gp.fun))
         print("Best parameters: {}".format(res_gp.x))
@@ -423,10 +490,13 @@ def main():
     Main function prints the model accuracy diagnostics and exits
 
     """
+    #Rating().optimize('total')
     rating = Rating(mode='spread')
     residuals = rating.model_accuracy()
     mean_error = np.mean(residuals)
     rms_error = np.std(residuals)
+
+    residuals = rating.model_accuracy()
     mean_abs_error = np.abs(residuals).mean()
 
     print("mean:", mean_error)

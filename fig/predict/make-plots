@@ -3,6 +3,7 @@
 import argparse
 
 import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
 import matplotlib.patches as patches
 import numpy as np
 
@@ -68,7 +69,7 @@ def plot(f):
     def wrapper(*args, **kwargs):
         print(f.__name__)
         f(*args, **kwargs)
-        plt.savefig('{}.png'.format(f.__name__), dpi=200)
+        plt.savefig('{}.png'.format(f.__name__), dpi=150)
         plt.close()
 
     plot_functions[f.__name__] = wrapper
@@ -93,6 +94,59 @@ def finish(despine=True, remove_ticks=False, pad=0.1,
             ax.yaxis.set_ticks_position('left')
 
     fig.tight_layout(pad=pad, h_pad=h_pad, w_pad=w_pad, rect=rect)
+
+@plot
+def ratings(year, week):
+    """
+    Offensive and deffensive power ratings for each team
+
+    """
+    plt.figure(figsize=(3.8, 4))
+
+    q = nfldb.Query(nfldb.connect())
+    q.game(season_type='Regular', season_year=year, week=week)
+
+    spread_rtg, total_rtg = [
+            melo.Rating(mode=mode, database='elo.db')
+            for mode in ('spread', 'total')
+            ]
+
+    spreads, totals = [[
+        rtg.predict_score(team, 'AVG', year, week) for team in rtg.teams
+        ] for rtg in (spread_rtg, total_rtg)
+        ]
+    
+    smin, smax = min(spreads), max(spreads)
+    colors = [plt.cm.coolwarm((s - smin)/(smax - smin)) for s in spreads]
+
+    for team, spread, total, color in zip(
+            spread_rtg.teams, spreads, totals, colors):
+
+        offense = 0.5*(total + spread)
+        defense = 0.5*(total - spread)
+
+        bump = .05
+        plt.scatter(defense, offense, c=color, s=15,
+                    edgecolor=offblack, linewidth=.4)
+        plt.annotate(team, xy=(defense - bump, offense + bump),
+                     xycoords='data', ha='left')
+
+    ax = plt.gca()
+    #ax.set_aspect('equal')
+
+    for axis in ax.xaxis, ax.yaxis:
+        loc = ticker.MultipleLocator(base=1)
+        axis.set_major_locator(loc)
+
+    ax.grid(True, which='both')
+    ax.invert_xaxis()
+
+    plt.xlim(29, 17)
+    plt.ylim(17, 29)
+    plt.xlabel('Points Allowed')
+    plt.ylabel('Points Scored')
+    plt.title('Season {}, Week {}'.format(year, week))
+    finish(pad=.5)
 
 
 def points(mode, year=2017, week=1):
@@ -211,6 +265,9 @@ def main():
 
     args = parser.parse_args()
     args_dict = vars(args)
+
+    # plot offensive and defensive ratings
+    ratings(**args_dict)
 
     # plot the point spread and point total
     for plot in spreads, totals:
