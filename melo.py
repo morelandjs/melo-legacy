@@ -79,17 +79,11 @@ class Rating:
         self.smooth = smooth
 
         # default hyper-parameter settings
-        #self.kfactor = opt({'spread': 70., 'total': 38}[mode], kfactor)
-        #self.hfa = opt({'spread': 56., 'total': 0}[mode], hfa)
-        #self.regress = opt({'spread': .6, 'total': .7}[mode], regress)
-        #self.decay = opt({'spread': 51, 'total': 51}[mode], regress)
-        #self.smooth = opt(3., smooth)
-
-        self.kfactor = opt({'spread': 59., 'total': 38}[mode], kfactor)
+        self.kfactor = opt({'spread': 70., 'total': 38}[mode], kfactor)
         self.hfa = opt({'spread': 56., 'total': 0}[mode], hfa)
-        self.regress = opt({'spread': .64, 'total': .7}[mode], regress)
+        self.regress = opt({'spread': .6, 'total': .7}[mode], regress)
         self.decay = opt({'spread': 51, 'total': 51}[mode], regress)
-        self.smooth = opt(0., smooth)
+        self.smooth = opt(3., smooth)
 
         # point interval attributes
         self.bins = self.bin_edges(mode)
@@ -213,7 +207,6 @@ class Rating:
 
         # extrapolate Elo with information decay for future dates
         if date > date_last:
-            print("here")
             last_year, last_week = (date_last.year, date_last.week)
             elo = self.elodb[team][margin][last_year][last_week]
 

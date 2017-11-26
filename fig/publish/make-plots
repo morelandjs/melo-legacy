@@ -10,8 +10,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import numpy as np
 from matplotlib import ticker
-from scipy.stats import skellam, probplot
-from scipy.ndimage.filters import gaussian_filter1d
+from scipy.stats import skellam
 
 import melo
 import nfldb
@@ -24,10 +23,16 @@ columnwidth = 246/resolution
 textwidth = 510/resolution
 textheight = 672/resolution
 textiny, texsmall, texnormal = 8.0, 9.25, 10.0
-offblack = 'black'
-blue = '#1f77bf' 
-orange = '#ff7f0e'
 
+# html colors
+black = '#000000'
+gray = '#e0e0e0'
+blue = '#4a98c9'
+green = '#4bb062'
+orange = '#ff7f0e'
+purple = '#d8412f'
+
+# plot properties
 plt.rcParams.update({
     'font.family': 'serif',
     'font.serif': ['CMU Serif'],
@@ -60,10 +65,10 @@ plt.rcParams.update({
     'ytick.minor.size': 1.3,
     'xtick.major.pad': 1.8,
     'ytick.major.pad': 1.8,
-    'text.color': offblack,
-    'axes.labelcolor': offblack,
-    'xtick.color': offblack,
-    'ytick.color': offblack,
+    'text.color': black,
+    'axes.labelcolor': black,
+    'xtick.color': black,
+    'ytick.color': black,
     'legend.numpoints': 1,
     'legend.scatterpoints': 1,
     'legend.frameon': False,
@@ -132,7 +137,7 @@ def spread_frequency():
 
     """
     figsize = (columnwidth, aspect*columnwidth)
-    fig = plt.figure(figsize=figsize)
+    plt.figure(figsize=figsize)
     plt.hist(rating.game_points(), bins=rating.bins)
 
     plt.xlabel('Spread [pts]')
@@ -143,6 +148,7 @@ def spread_frequency():
 
     finish()
 
+
 @plot
 def model_vs_data():
     """
@@ -150,7 +156,7 @@ def model_vs_data():
 
     """
     figsize = (columnwidth, aspect*columnwidth)
-    fig = plt.figure(figsize=figsize)
+    plt.figure(figsize=figsize)
     plt.hist(rating.game_points(), bins=rating.bins)
 
     q = nfldb.Query(rating.nfldb)
@@ -177,7 +183,7 @@ def home_field():
     figsize = (columnwidth, aspect*columnwidth)
     plt.figure(figsize=figsize)
 
-    plt.axhline(1, color='.8', dashes=(4, 2))
+    plt.axhline(1, color=gray, dashes=(4, 2))
 
     q = nfldb.Query(rating.nfldb)
     q.game(season_type='Regular', finished=True)
@@ -243,6 +249,10 @@ def home_field():
 
 @plot
 def win_rate(nsample=10**4):
+    """
+    Win rate calculated for a Poisson toy model
+
+    """
     # figure dimensions
     figsize = (columnwidth, aspect*columnwidth)
     plt.figure(figsize=figsize)
@@ -273,12 +283,12 @@ def win_rate(nsample=10**4):
             win_prob.append(pwin)
 
         # plot model
-        plt.step(range(nsample), win_prob, color=plt.cm.Blues(.5))
+        plt.step(range(nsample), win_prob, color=blue)
         plt.plot((0, nsample), (win_rate, win_rate),
-                 color=offblack, dashes=(4, 1))
+                 color=black, dashes=(4, 1))
         plt.annotate('{} pts'.format(hcap), xycoords='data',
                      xy=(10500, win_rate), ha='left', va='center',
-                     color=offblack, fontsize=textiny, clip_on=False)
+                     color=black, fontsize=textiny, clip_on=False)
 
     # figure labels
     plt.xlabel("Updates [games]")
@@ -323,6 +333,10 @@ def elo_history(team, handicap):
 
 @plot
 def team_history():
+    """
+    Margin-dependent Elo rating for all teams since 2009
+
+    """
     fig, axes = plt.subplots(
             nrows=8, ncols=4,
             sharex=True, sharey=True,
@@ -358,11 +372,15 @@ def team_history():
 
 @plot
 def example_distribution():
+    """
+    Simple example CDF point spread distribution
+
+    """
     # create figure object
     figsize = (columnwidth, aspect*columnwidth)
     plt.figure(figsize=figsize)
     ax = plt.gca()
-    ax.grid(color='.9', zorder=0)
+    ax.grid(color=gray, zorder=0)
 
     spreads, cdf = rating.cdf('CLE', 'PIT', 2017, 1)
     plt.step(spreads, cdf)
@@ -383,15 +401,18 @@ def example_distribution():
 
 @plot
 def predict(year=2017, week=2):
+    """
+    Example game point spread and point total predictions
+
+    """
     # create figure object
     figsize = (textwidth, 2*aspect*columnwidth)
     fig, axes = plt.subplots(nrows=2, figsize=figsize)
 
     modes = 'spread', 'total'
     ylabels = r'home $-$ away [points]', r'home $+$ away [points]'
-    yticks = np.linspace(-30, 30, 7), np.linspace(15, 75, 7) 
+    yticks = np.linspace(-30, 30, 7), np.linspace(15, 75, 7)
     ylims = (-30, 30), (15, 75)
-    colors = plt.cm.Blues(.6), plt.cm.Greens(.6)
 
     # top plot: spreads, bottom plot: totals
     for ax, mode, ylabel, ytick, ylim, color in zip(
@@ -436,7 +457,7 @@ def predict(year=2017, week=2):
             ax.plot((shift, shift), (box_hi, line_hi), color=color,
                     alpha=.8, lw=1.2)
             ax.plot((shift-.13, shift+.13), (median, median),
-                    color=offblack, lw=1.3)
+                    color=black, lw=1.3)
 
             ax.annotate(integer_median, xy=(shift+.4, median),
                         xycoords='data', ha='center', va='center',
@@ -450,9 +471,9 @@ def predict(year=2017, week=2):
 
         for lbl, y in ('H:', ymax), ('A:', ymin):
             ax.annotate(lbl, xy=(0, y), va='center', xycoords='data',
-                    annotation_clip=False)
+                        annotation_clip=False)
 
-        ax.grid(color='.9', zorder=0)
+        ax.grid(color=gray, zorder=0)
         ax.spines['bottom'].set_visible(False)
 
         ax.set_xlim(0, 17)
@@ -466,11 +487,14 @@ def predict(year=2017, week=2):
 
 
 @plot
-def validate():
-    figsize = (textwidth, .5*textwidth)
-    fig, (ax1, ax2) = plt.subplots(
-            ncols=2, figsize=figsize, sharey=True
-            )
+def quantiles():
+    """
+    Quantile-quantile plot of model predictions compared to game outcomes.
+
+    """
+    width = .4*2*columnwidth
+    figsize = (width, width)
+    plt.figure(figsize=figsize)
 
     q = nfldb.Query(rating.nfldb)
     q.game(season_type='Regular', finished=True)
@@ -494,23 +518,26 @@ def validate():
                 break
 
         cdf = dict(zip(*rating.cdf(home, away, year, week)))
-
         model.append(cdf[spread])
         control.append(cdf[random_spread])
 
-    _, (_, _, R_model) = probplot(model, dist='uniform', plot=ax1)
-    _, (_, _, R_control) = probplot(control, dist='uniform', plot=ax2)
+    model, control = [np.sort(d) for d in (model, control)]
+    uniform = np.linspace(0, 1, len(model))
 
-    ax1.annotate('R={}'.format(R_model), xy=(.9, .1),
-            xycoords='axes fraction', ha='right')
+    plt.scatter(control, uniform, color=blue, s=2.5, label='Control')
+    plt.scatter(model, uniform, color=orange, s=2.5, label='Model')
 
-    ax2.annotate('R={}'.format(R_control), xy=(.9, .1),
-            xycoords='axes fraction', ha='right')
+    coeff = np.polyfit(model, uniform, 1)
+    line = np.polyval(coeff, uniform)
+    plt.plot(uniform, line, color=black, label='Linear Fit')
 
-    ax1.set_title('Model predictions')
-    ax2.set_title('Random model samples')
+    plt.title('')
+    plt.xlabel('Theoretical Quantiles')
+    plt.ylabel('Empirical Quantiles')
+    plt.legend(handlelength=1, markerscale=1.8)
 
-    finish(h_pad=1)
+    finish()
+
 
 @plot
 def mean_abs_error():
@@ -519,14 +546,15 @@ def mean_abs_error():
     Vegas spread predictions
 
     """
-    figsize = (columnwidth, aspect*columnwidth)
-    fig = plt.figure(figsize=figsize)
+    width = .6*2*columnwidth
+    figsize = (width, (2./3.)*width)
+    plt.figure(figsize=figsize)
 
     files = Path('data').glob('*.csv')
     rating = melo.Rating()
 
     baseline = np.abs(rating.game_points()).mean()
-    plt.axhline(baseline, color=offblack, dashes=(4, 2))
+    plt.axhline(baseline, color=black, dashes=(4, 2))
 
     def error(game):
         home = game['Home Score']
@@ -548,13 +576,69 @@ def mean_abs_error():
         model = plt.scatter(year, np.abs(residuals).mean(), color=orange)
 
     plt.xlabel('Season year')
-    plt.ylabel(r'$\langle |\mathrm{pred} - \mathrm{obs}| \rangle$ [points]')
+    plt.ylabel(r'$\langle|\mathrm{pred} - \mathrm{obs}|\rangle$ [points]')
     plt.ylim(8, 12)
 
     handles, labels = plt.gca().get_legend_handles_labels()
     plt.legend([data, model], ['Vegas', 'Model'])
 
     finish()
+
+
+@plot
+def ratings(year=2017, week=12):
+    """
+    Offensive and deffensive power ratings for each team
+
+    """
+    figsize = (columnwidth, columnwidth)
+    plt.figure(figsize=figsize)
+
+    q = nfldb.Query(nfldb.connect())
+    q.game(season_type='Regular', season_year=year, week=week)
+
+    spread_rtg, total_rtg = [
+            melo.Rating(mode=mode, database='elo.db')
+            for mode in ('spread', 'total')
+            ]
+
+    spreads, totals = [[
+        rtg.predict_score(team, 'AVG', year, week) for team in rtg.teams
+        ] for rtg in (spread_rtg, total_rtg)
+        ]
+
+    smin, smax = min(spreads), max(spreads)
+    colors = [plt.cm.coolwarm((s - smin)/(smax - smin)) for s in spreads]
+
+    for team, spread, total, color in zip(
+            spread_rtg.teams, spreads, totals, colors):
+
+        offense = 0.5*(total + spread)
+        defense = 0.5*(total - spread)
+
+        bump = .05
+        plt.scatter(defense, offense, c=color, s=15,
+                    edgecolor=black, linewidth=.4, zorder=99)
+        plt.annotate(team, xy=(defense - bump, offense + bump),
+                     xycoords='data', ha='left')
+
+    ax = plt.gca()
+
+    for axis in ax.xaxis, ax.yaxis:
+        loc = ticker.MultipleLocator(base=1)
+        axis.set_major_locator(loc)
+
+    ax.grid(True, which='both')
+    ax.grid(color=gray, zorder=0)
+    ax.invert_xaxis()
+
+    plt.xlim(29, 17)
+    plt.ylim(17, 29)
+    plt.xlabel('Points Allowed')
+    plt.ylabel('Points Scored')
+    plt.title('Season {}, Week {}'.format(year, week))
+    finish(pad=.5)
+
 
 def main():
     parser = argparse.ArgumentParser()
