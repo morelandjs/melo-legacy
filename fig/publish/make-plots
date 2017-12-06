@@ -29,6 +29,7 @@ black = '#000000'
 gray = '#e0e0e0'
 blue = '#4a98c9'
 green = '#4bb062'
+dgreen = '#138D75'
 orange = '#ff7f0e'
 purple = '#d8412f'
 
@@ -138,7 +139,7 @@ def spread_frequency():
     """
     figsize = (columnwidth, aspect*columnwidth)
     plt.figure(figsize=figsize)
-    plt.hist(rating.game_points(), bins=rating.bins)
+    plt.hist(rating.game_points, bins=rating.hcaps)
 
     plt.xlabel('Spread [pts]')
     plt.ylabel('Counts [games]')
@@ -157,7 +158,7 @@ def model_vs_data():
     """
     figsize = (columnwidth, aspect*columnwidth)
     plt.figure(figsize=figsize)
-    plt.hist(rating.game_points(), bins=rating.bins)
+    plt.hist(rating.game_points, bins=rating.hcaps)
 
     q = nfldb.Query(rating.nfldb)
     q.game(season_type='Regular', finished=True)
@@ -170,11 +171,11 @@ def model_vs_data():
                 ) for g in q.as_games()
             ]
 
-    plt.hist(model_spreads, bins=rating.bins, histtype='step')
+    plt.hist(model_spreads, bins=rating.hcaps, histtype='step')
     finish()
 
 
-@plot
+#@plot
 def home_field():
     """
     Frequency of NFL spreads (margin of victory) since 2009
@@ -183,7 +184,7 @@ def home_field():
     figsize = (columnwidth, aspect*columnwidth)
     plt.figure(figsize=figsize)
 
-    plt.axhline(1, color=gray, dashes=(4, 2))
+    plt.axhline(1, color=black, dashes=(4, 2), lw=.5)
 
     q = nfldb.Query(rating.nfldb)
     q.game(season_type='Regular', finished=True)
@@ -213,13 +214,13 @@ def home_field():
         negated_spreads = [-s for s in spreads]
         signal, edges = np.histogram(
                 spreads,
-                bins=rating.bins,
+                bins=rating.hcaps,
                 density=True
                 )
 
         background, edges = np.histogram(
                 spreads + negated_spreads,
-                bins=rating.bins,
+                bins=rating.hcaps,
                 density=True
                 )
 
@@ -230,7 +231,7 @@ def home_field():
         return middles, ratio
 
     # plot game spreads
-    middles, ratio = hfa_ratio(rating.game_points())
+    middles, ratio = hfa_ratio(rating.game_points)
     plt.plot(middles, ratio, label='NFL')
 
     # plot model spreads
@@ -257,7 +258,7 @@ def win_rate(nsample=10**4):
     figsize = (columnwidth, aspect*columnwidth)
     plt.figure(figsize=figsize)
 
-    rating = melo.Rating(kfactor=2, smooth=False)
+    rating = melo.Rating(kfactor=2)
     spreads = skellam.rvs(16, 10, size=nsample)
 
     # loop over different handicap margins
@@ -269,8 +270,8 @@ def win_rate(nsample=10**4):
         # initialize elo ratings
         arg = max(1/win_rate - 1, 1e-6)
         elo_diff = -200*np.log10(arg)
-        home_elo = 1500. + elo_diff
-        away_elo = 1500. - elo_diff
+        home_elo = 1500. #+ elo_diff
+        away_elo = 1500. #- elo_diff
         win_prob = []
 
         # simulate a ficticious season
@@ -349,7 +350,7 @@ def team_history():
     teams = set(g.home_team for g in q.as_games())
 
     # point values
-    spreads = [r for r in rating.range[::5] if r >= 0]
+    spreads = [r for r in rating.hcaps[::5] if r >= 0]
 
     for ax, team in zip(axes.flat, sorted(teams)):
         for hcap in spreads:
@@ -413,6 +414,7 @@ def predict(year=2017, week=2):
     ylabels = r'home $-$ away [points]', r'home $+$ away [points]'
     yticks = np.linspace(-30, 30, 7), np.linspace(15, 75, 7)
     ylims = (-30, 30), (15, 75)
+    colors = blue, green
 
     # top plot: spreads, bottom plot: totals
     for ax, mode, ylabel, ytick, ylim, color in zip(
@@ -487,54 +489,58 @@ def predict(year=2017, week=2):
 
 
 @plot
-def quantiles():
+def percentiles():
     """
-    Quantile-quantile plot of model predictions compared to game outcomes.
+    Comparison of predicted and observed percentiles.
 
     """
-    width = .4*2*columnwidth
-    figsize = (width, width)
+    figsize = (columnwidth, aspect*columnwidth)
     plt.figure(figsize=figsize)
 
     q = nfldb.Query(rating.nfldb)
     q.game(season_type='Regular', finished=True)
 
-    spreads = rating.game_points()
-
     model = []
-    control = []
+    broken = []
 
     for game in q.as_games():
         year, week = (game.season_year, game.week)
         home, away = (game.home_team, game.away_team)
 
         spread = rating.points(game)
-        if abs(spread) > 40:
-            continue
+        random_spread = np.random.choice(rating.game_points)
 
-        while True:
-            random_spread = np.random.choice(spreads)
-            if abs(random_spread) < 40:
-                break
+        model_perc, broken_perc = [
+                np.interp(s, *rating.cdf(home, away, year, week))
+                for s in (spread, random_spread)
+                ]
 
-        cdf = dict(zip(*rating.cdf(home, away, year, week)))
-        model.append(cdf[spread])
-        control.append(cdf[random_spread])
+        model.append(model_perc)
+        broken.append(broken_perc)
 
-    model, control = [np.sort(d) for d in (model, control)]
-    uniform = np.linspace(0, 1, len(model))
+    N = len(model)
+    uniform = np.linspace(0, 1, N)
 
-    plt.scatter(control, uniform, color=blue, s=2.5, label='Control')
-    plt.scatter(model, uniform, color=orange, s=2.5, label='Model')
+    brk, mdl, ref = ('Broken Model', 'Model', '95% CI')
+    plt.plot(uniform, np.sort(broken) - uniform, color=dgreen, label=brk)
+    plt.plot(uniform, np.sort(model) - uniform, color=purple, label=mdl)
+    plt.axhline(0, color=black, dashes=(4, 2))
+    
+    M = 10**4
+    rand = np.random.uniform(size=(M, N))
+    true = np.sort(rand, axis=1) - uniform[np.newaxis, :]
 
-    coeff = np.polyfit(model, uniform, 1)
-    line = np.polyval(coeff, uniform)
-    plt.plot(uniform, line, color=black, label='Linear Fit')
+    indices = [int(cut*M) for cut in (.025, .975)]
+    true_min, true_max = [np.sort(true, axis=0)[i] for i in indices]
+    plt.fill_between(uniform, true_min, true_max, color=gray,
+            lw=0, label=ref)
 
     plt.title('')
-    plt.xlabel('Theoretical Quantiles')
-    plt.ylabel('Empirical Quantiles')
-    plt.legend(handlelength=1, markerscale=1.8)
+    plt.xlabel('Percentile')
+    plt.ylabel('Percentile Error')
+    plt.ylim(-0.06, 0.06)
+    plt.legend(handlelength=1, markerscale=1.8,
+            bbox_to_anchor=(0.025, 1.1), loc=2)
 
     finish()
 
@@ -546,14 +552,13 @@ def mean_abs_error():
     Vegas spread predictions
 
     """
-    width = .6*2*columnwidth
-    figsize = (width, (2./3.)*width)
+    figsize = (columnwidth, aspect*columnwidth)
     plt.figure(figsize=figsize)
 
     files = Path('data').glob('*.csv')
     rating = melo.Rating()
 
-    baseline = np.abs(rating.game_points()).mean()
+    baseline = np.abs(rating.game_points).mean()
     plt.axhline(baseline, color=black, dashes=(4, 2))
 
     def error(game):
