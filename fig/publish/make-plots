@@ -175,7 +175,7 @@ def model_vs_data():
     finish()
 
 
-#@plot
+@plot
 def home_field():
     """
     Frequency of NFL spreads (margin of victory) since 2009
@@ -249,6 +249,103 @@ def home_field():
 
 
 @plot
+def toy_model(size=5*10**6):
+    """
+    Construct a toy-model to demonstrate that the Elo ratings converge to
+    the true win probability in the relevant limit.
+
+    """
+    # figure dimensions
+    figsize = (columnwidth, aspect*columnwidth) 
+    fig, ax = plt.subplots(figsize=figsize)
+
+    # initialize rating class object
+    rating = melo.Rating(mode='spread', kfactor=.01, hfa=0, smooth=0)
+
+    # Poisson random variable lambda values
+    teams = [9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 22]
+    #teams = [5, 10, 21, 23, 25, 27, 40, 22]
+    opp = 22
+
+    # Elo ratings dictionary
+    rtg = {}
+
+    # useful constant
+    TINY = 1e-6
+    
+    # loop over weeks
+    for week in range(size):
+
+        # loop over matches (pairs of teams)
+        for (home, away) in np.random.choice(
+                teams, size=(6, 2), replace=False):
+
+            # sample game scores
+            home_pts, away_pts = [
+                    np.random.poisson(lam=lam)
+                    for lam in (home, away)
+                    ]
+
+            # read Elo ratings
+            try:
+                home_elo = rtg[home][-1]
+                away_elo = rtg[away][-1]
+            except KeyError:
+                home_elo = 1500.
+                away_elo = 1500.
+
+            # update Elo ratings
+            points = home_pts - away_pts
+            elo_diff = home_elo - away_elo
+            bounty = rating.elo_change(elo_diff, points, 0)
+
+            home_elo += bounty
+            away_elo -= bounty
+
+            try:
+                rtg[home].append(home_elo)
+                rtg[away].append(away_elo)
+            except KeyError:
+                rtg[home] = [home_elo]
+                rtg[away] = [away_elo]
+
+    # plot each team's expected win rate against reference team
+    for team in teams[:-1]:
+
+        # Elo projected win probability
+        team_rtg, opp_rtg = [np.array(rtg[a]) for a in (team, opp)]
+        pwin = rating.win_prob(team_rtg - opp_rtg)
+        plt.plot(np.arange(size), pwin, zorder=0)
+
+        # True win probability
+        nsamples = 10**7
+        team_pts, opp_pts = [
+                np.random.poisson(lam=lam, size=nsamples)
+                for lam in (team, opp)
+                ]
+        eps = np.random.uniform(-TINY, TINY, size=nsamples)
+        ptrue = np.mean(team_pts - opp_pts + eps > 0)
+        plt.plot((0, size), (ptrue, ptrue), color=black, dashes=(4, 2))
+
+        # Team labels
+        label = "{}".format(team)
+        ax.annotate(label, xy=(1.04*size, ptrue), xycoords='data',
+                ha='center', va='center', clip_on=False)
+
+    # figure properties
+    plt.xlim(0, 1.06*size)
+    plt.xlabel('Updates [games]')
+    plt.ylabel('Win probability')
+
+    # use scientific notation for x-labels
+    xaxis = ax.get_xaxis()
+    xaxis.get_major_formatter().set_powerlimits((0, 0))
+    
+    plt.yscale('log')
+    finish()
+
+
+@plot
 def win_rate(nsample=10**4):
     """
     Win rate calculated for a Poisson toy model
@@ -258,20 +355,20 @@ def win_rate(nsample=10**4):
     figsize = (columnwidth, aspect*columnwidth)
     plt.figure(figsize=figsize)
 
-    rating = melo.Rating(kfactor=2)
+    rating = melo.Rating(kfactor=2, smooth=0)
     spreads = skellam.rvs(16, 10, size=nsample)
 
     # loop over different handicap margins
     for hcap in np.arange(0, 15, 3):
 
         # home team true win rate
-        win_rate = np.heaviside(spreads - hcap, 0).mean()
+        win_rate = np.mean(spreads - hcap > 0)
 
         # initialize elo ratings
         arg = max(1/win_rate - 1, 1e-6)
         elo_diff = -200*np.log10(arg)
-        home_elo = 1500. #+ elo_diff
-        away_elo = 1500. #- elo_diff
+        home_elo = 1500.
+        away_elo = 1500.
         win_prob = []
 
         # simulate a ficticious season

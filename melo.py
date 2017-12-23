@@ -5,10 +5,10 @@ from functools import total_ordering
 
 import numpy as np
 from scipy.optimize import minimize
+from scipy.special import erf
 from skopt import forest_minimize
 
 import nfldb
-
 
 @total_ordering
 class Date:
@@ -77,9 +77,9 @@ class Rating:
         # default hyper-parameter settings
         self.kfactor = opt({'spread': 70., 'total': 38}[mode], kfactor)
         self.hfa = opt({'spread': 56., 'total': 0}[mode], hfa)
-        self.regress = opt({'spread': .59, 'total': .7}[mode], regress)
+        self.regress = opt({'spread': .6, 'total': .7}[mode], regress)
         self.decay = opt({'spread': 51, 'total': 51}[mode], regress)
-        self.smooth= opt(2., smooth)
+        self.smooth= opt(3., smooth)
 
         # handicap values
         self.hcaps = self.handicaps(mode)
@@ -161,6 +161,13 @@ class Rating:
 
         return dict(zip(self.hcaps, prob))
 
+    def normal_cdf(self, x, loc=0, scale=1):
+        """
+        Normal cumulative distribution function
+
+        """
+        return 0.5*(1. + erf((x - loc)/(np.sqrt(2.)*scale)))
+
     def elo(self, team, margin, year, week):
         """
         Queries the most recent ELO rating for a team, i.e.
@@ -223,9 +230,16 @@ class Rating:
         sign = np.sign(hcap)
         pts = {'spread': points, 'total': sign*points}[self.mode]
 
-        TINY = 1e-8
+        TINY = 1e-3
+
         prior = self.win_prob(rating_diff)
-        post = 1./(1. + np.exp(-(pts - hcap)/max(self.smooth, TINY)))
+        exp_arg = (pts - hcap)/max(self.smooth, TINY)
+
+        if self.smooth:
+            post = self.normal_cdf(pts, loc=hcap, scale=self.smooth)
+            #post = 1./(1. + np.exp(-np.clip(exp_arg, -10., 10.)))
+        else:
+            post = (1 if pts > hcap else 0)
 
         return self.kfactor * (post - prior)
 
@@ -317,7 +331,7 @@ class Rating:
             win_prob = self.win_prob(elo_diff)
             cprob.append(win_prob)
 
-        return hcap_range, cprob
+        return hcap_range, sorted(cprob, reverse=True)
 
     def predict_spread(self, home, away, year, week, perc=0.5):
         """
@@ -370,7 +384,7 @@ class Rating:
         Win probability as function of ELO difference
 
         """
-        return 1./(10**(-rtg_diff/400.) + 1.)
+        return self.normal_cdf(rtg_diff, scale=300)
 
     def model_accuracy(self, year=None):
         """
@@ -414,14 +428,14 @@ class Rating:
             parameters: kfactor, decay, regress.
 
             """
-            kfactor, regress, smooth = parameters
+            kfactor, regress, smooth, hfa = parameters
             rating = Rating(mode=mode, kfactor=kfactor,
-                    regress=regress, smooth=smooth)
+                    regress=regress, smooth=smooth, hfa=hfa)
             residuals = rating.model_accuracy()
             mean_abs_error = np.abs(residuals).mean()
             return mean_abs_error
 
-        bounds = [(70., 90.), (0.5, 0.65), (0.0, 7.0)]
+        bounds = [(40., 100.), (0.4, 0.8), (0.0, 7.0), (30., 80.)]
         res_gp = forest_minimize(obj, bounds, n_calls=100, verbose=True)
 
         print("Best score: {:.4f}".format(res_gp.fun))
