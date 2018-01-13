@@ -263,9 +263,8 @@ def toy_model(size=5*10**6):
     rating = melo.Rating(mode='spread', kfactor=.01, hfa=0, smooth=0)
 
     # Poisson random variable lambda values
-    teams = [9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 22]
-    #teams = [5, 10, 21, 23, 25, 27, 40, 22]
-    opp = 22
+    teams = [11, 13, 15, 17, 19, 21, 23, 25, 27]
+    opp = 19.01
 
     # Elo ratings dictionary
     rtg = {}
@@ -278,7 +277,7 @@ def toy_model(size=5*10**6):
 
         # loop over matches (pairs of teams)
         for (home, away) in np.random.choice(
-                teams, size=(6, 2), replace=False):
+                teams + [opp], size=(5, 2), replace=False):
 
             # sample game scores
             home_pts, away_pts = [
@@ -310,12 +309,13 @@ def toy_model(size=5*10**6):
                 rtg[away] = [away_elo]
 
     # plot each team's expected win rate against reference team
-    for team in teams[:-1]:
+    for team in teams:
 
         # Elo projected win probability
         team_rtg, opp_rtg = [np.array(rtg[a]) for a in (team, opp)]
         pwin = rating.win_prob(team_rtg - opp_rtg)
-        plt.plot(np.arange(size), pwin, zorder=0)
+        plt.plot(np.arange(size), pwin, zorder=0, label='Elo model',
+                color=blue)
 
         # True win probability
         nsamples = 10**7
@@ -323,25 +323,42 @@ def toy_model(size=5*10**6):
                 np.random.poisson(lam=lam, size=nsamples)
                 for lam in (team, opp)
                 ]
+
         eps = np.random.uniform(-TINY, TINY, size=nsamples)
         ptrue = np.mean(team_pts - opp_pts + eps > 0)
-        plt.plot((0, size), (ptrue, ptrue), color=black, dashes=(4, 2))
+        plt.plot((0, size), (ptrue, ptrue), color=black, dashes=(4, 2),
+                label='Exact')
 
         # Team labels
         label = "{}".format(team)
-        ax.annotate(label, xy=(1.04*size, ptrue), xycoords='data',
-                ha='center', va='center', clip_on=False)
+
+        ax.annotate(
+                label, xy=(1.02*size, ptrue), xycoords='data', ha='left',
+                va='center', annotation_clip=False, fontsize=textiny
+                )
+
+    plt.annotate(
+            r'$\lambda_2\!:$', xy=(1.02*size, 1), xycoords='data',
+            ha='left', va='top', annotation_clip=False, fontsize=textiny
+            )
 
     # figure properties
     plt.xlim(0, 1.06*size)
-    plt.xlabel('Updates [games]')
-    plt.ylabel('Win probability')
+    plt.ylim(0, 1)
 
     # use scientific notation for x-labels
     xaxis = ax.get_xaxis()
     xaxis.get_major_formatter().set_powerlimits((0, 0))
+
+    # labels
+    plt.xlabel('Updates [games]')
+    plt.ylabel(r'$P_\mathrm{win}(\lambda_1, \lambda_2)$')
+    plt.title('Toy model')
+
+    handles, labels = ax.get_legend_handles_labels()
+    plt.legend(handles[:2], labels[:2], ncol=2, bbox_to_anchor=(.5, .96),
+            loc=10, fontsize=textiny)
     
-    plt.yscale('log')
     finish()
 
 
