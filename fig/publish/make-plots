@@ -333,13 +333,13 @@ def toy_model(size=5*10**6):
         label = "{}".format(team)
 
         ax.annotate(
-                label, xy=(1.02*size, ptrue), xycoords='data', ha='left',
-                va='center', annotation_clip=False, fontsize=textiny
+                label, xy=(1.07*size, ptrue), xycoords='data', ha='right',
+                va='center', annotation_clip=False, fontsize=texsmall
                 )
 
     plt.annotate(
-            r'$\lambda_2\!:$', xy=(1.02*size, 1), xycoords='data',
-            ha='left', va='top', annotation_clip=False, fontsize=textiny
+            r'$\lambda_\mathrm{team}:\!$', xy=(1.07*size, 0.98), xycoords='data',
+            ha='right', va='center', annotation_clip=False, fontsize=texsmall
             )
 
     # figure properties
@@ -352,12 +352,11 @@ def toy_model(size=5*10**6):
 
     # labels
     plt.xlabel('Updates [games]')
-    plt.ylabel(r'$P_\mathrm{win}(\lambda_1, \lambda_2)$')
-    plt.title('Toy model')
+    plt.ylabel(r'$P_\mathrm{win}(\lambda_\mathrm{team}, \lambda_\mathrm{opp})$')
 
     handles, labels = ax.get_legend_handles_labels()
-    plt.legend(handles[:2], labels[:2], ncol=2, bbox_to_anchor=(.5, .96),
-            loc=10, fontsize=textiny)
+    plt.legend(handles[:2], labels[:2], ncol=2, bbox_to_anchor=(.5, .98),
+            loc=10, fontsize=texsmall)
     
     finish()
 
@@ -497,8 +496,12 @@ def example_distribution():
     ax = plt.gca()
     ax.grid(color=gray, zorder=0)
 
-    spreads, cdf = rating.cdf('CLE', 'PIT', 2017, 1)
-    plt.step(spreads, cdf)
+    spreads, cdf = [
+            np.array(d)
+            for d in rating.cdf('CLE', 'PIT', 2017, 1)
+            ]
+    cut = (-40 <= spreads) & (spreads <= 40)
+    plt.step(spreads[cut], cdf[cut], clip_on=False)
 
     median = rating.predict_spread('CLE', 'PIT', 2017, 1)
     plt.scatter(median, 0.5, color=orange, zorder=3)
