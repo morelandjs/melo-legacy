@@ -2,11 +2,12 @@
 
 from collections import defaultdict
 from functools import total_ordering
+from math import sqrt
 
 import numpy as np
 from scipy.optimize import minimize
-from scipy.special import erf
-from skopt import forest_minimize
+from scipy.special import erf, erfinv
+from skopt import gp_minimize
 
 import nfldb
 
@@ -74,12 +75,16 @@ class Rating:
         self.regress = regress
         self.smooth = smooth
 
+        # Elo constants
+        self.elo_init = 1500
+        self.sigma = 300
+
         # default hyper-parameter settings
-        self.kfactor = opt({'spread': 70., 'total': 38}[mode], kfactor)
-        self.hfa = opt({'spread': 56., 'total': 0}[mode], hfa)
-        self.regress = opt({'spread': .6, 'total': .7}[mode], regress)
+        self.kfactor = opt({'spread': 75., 'total': 38}[mode], kfactor)
+        self.hfa = opt({'spread': 50., 'total': 0}[mode], hfa)
+        self.regress = opt({'spread': .58, 'total': .7}[mode], regress)
         self.decay = opt({'spread': 51, 'total': 51}[mode], regress)
-        self.smooth= opt(3., smooth)
+        self.smooth= opt(8.5, smooth)
 
         # handicap values
         self.hcaps = self.handicaps(mode)
@@ -124,19 +129,14 @@ class Rating:
 
         """
         TINY = 1e-3
-        elo_init = 1500.
 
         phys_margin = {'spread': margin, 'total': abs(margin)}[self.mode]
         point_prob = self.point_prob[phys_margin]
         P = np.clip(point_prob, TINY, 1 - TINY)
+        Delta_R = sqrt(2)*self.sigma*erfinv(2*P - 1)
 
-        elo_diff = (
-                400*np.log10(1/P - 1)
-                if margin < 0 and self.mode == 'total' else
-                -400*np.log10(1/P - 1)
-                )
-
-        return elo_init + .5*elo_diff
+        positive_rtg = (margin < 0 and self.mode == 'total')
+        return self.elo_init + .5*(-Delta_R if positive_rtg else Delta_R)
 
     @property
     def game_points(self):
@@ -160,13 +160,6 @@ class Rating:
                 for hcap in self.hcaps]
 
         return dict(zip(self.hcaps, prob))
-
-    def normal_cdf(self, x, loc=0, scale=1):
-        """
-        Normal cumulative distribution function
-
-        """
-        return 0.5*(1. + erf((x - loc)/(np.sqrt(2.)*scale)))
 
     def elo(self, team, margin, year, week):
         """
@@ -222,6 +215,13 @@ class Rating:
 
         return {"spread": spread_range, "total": total_range}[mode]
 
+    def norm_cdf(self, x, loc=0, scale=1):
+        """
+        Normal cumulative probability distribution
+
+        """
+        return 0.5*(1 + erf((x - loc)/(sqrt(2)*scale)))
+
     def elo_change(self, rating_diff, points, hcap):
         """
         Change in home team ELO rating after a single game
@@ -236,8 +236,7 @@ class Rating:
         exp_arg = (pts - hcap)/max(self.smooth, TINY)
 
         if self.smooth:
-            post = self.normal_cdf(pts, loc=hcap, scale=self.smooth)
-            #post = 1./(1. + np.exp(-np.clip(exp_arg, -10., 10.)))
+            post = self.norm_cdf(pts, loc=hcap, scale=self.smooth)
         else:
             post = (1 if pts > hcap else 0)
 
@@ -384,7 +383,7 @@ class Rating:
         Win probability as function of ELO difference
 
         """
-        return self.normal_cdf(rtg_diff, scale=300)
+        return self.norm_cdf(rtg_diff, scale=self.sigma)
 
     def model_accuracy(self, year=None):
         """
@@ -428,15 +427,15 @@ class Rating:
             parameters: kfactor, decay, regress.
 
             """
-            kfactor, regress, smooth, hfa = parameters
+            kfactor, regress, smooth = parameters
             rating = Rating(mode=mode, kfactor=kfactor,
-                    regress=regress, smooth=smooth, hfa=hfa)
+                    regress=regress, smooth=smooth)
             residuals = rating.model_accuracy()
             mean_abs_error = np.abs(residuals).mean()
             return mean_abs_error
 
-        bounds = [(40., 100.), (0.4, 0.8), (0.0, 7.0), (30., 80.)]
-        res_gp = forest_minimize(obj, bounds, n_calls=100, verbose=True)
+        bounds = [(65., 85.), (0.48, 0.68), (4.0, 10.0)]
+        res_gp = gp_minimize(obj, bounds, n_calls=100, verbose=True)
 
         print("Best score: {:.4f}".format(res_gp.fun))
         print("Best parameters: {}".format(res_gp.x))
@@ -447,7 +446,7 @@ def main():
     Main function prints the model accuracy diagnostics and exits
 
     """
-    #Rating().optimize('spread')
+    # Rating().optimize('spread')
     rating = Rating(mode='spread')
     residuals = rating.model_accuracy()
     mean_error = np.mean(residuals)

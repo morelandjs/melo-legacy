@@ -352,7 +352,7 @@ def toy_model(size=5*10**6):
 
     # labels
     plt.xlabel('Updates [games]')
-    plt.ylabel(r'$P_\mathrm{win}(\lambda_\mathrm{team}, \lambda_\mathrm{opp})$')
+    plt.ylabel(r'$P_\mathrm{exp}(\lambda_\mathrm{team}, \lambda_\mathrm{opp})$')
 
     handles, labels = ax.get_legend_handles_labels()
     plt.legend(handles[:2], labels[:2], ncol=2, bbox_to_anchor=(.5, .98),
@@ -638,7 +638,7 @@ def percentiles():
     N = len(model)
     uniform = np.linspace(0, 1, N)
 
-    brk, mdl, ref = ('Broken Model', 'Model', '95% CI')
+    brk, mdl, ref = ('Broken Model', 'Our Model', '95% CI')
     plt.plot(uniform, np.sort(broken) - uniform, color=dgreen, label=brk)
     plt.plot(uniform, np.sort(model) - uniform, color=purple, label=mdl)
     plt.axhline(0, color=black, dashes=(4, 2))
