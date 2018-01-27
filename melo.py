@@ -1,5 +1,6 @@
 #!/usr/bin/env python2
 
+import argparse
 from collections import defaultdict
 from functools import total_ordering
 from math import sqrt
@@ -10,6 +11,7 @@ from scipy.special import erf, erfinv
 from skopt import gp_minimize
 
 import nfldb
+
 
 @total_ordering
 class Date:
@@ -80,11 +82,11 @@ class Rating:
         self.sigma = 300
 
         # default hyper-parameter settings
-        self.kfactor = opt({'spread': 75., 'total': 38}[mode], kfactor)
-        self.hfa = opt({'spread': 50., 'total': 0}[mode], hfa)
-        self.regress = opt({'spread': .58, 'total': .7}[mode], regress)
+        self.kfactor = opt({'spread': 75., 'total': 37}[mode], kfactor)
+        self.hfa = opt({'spread': 54., 'total': 0}[mode], hfa)
+        self.regress = opt({'spread': .6, 'total': .7}[mode], regress)
         self.decay = opt({'spread': 51, 'total': 51}[mode], regress)
-        self.smooth= opt(8.5, smooth)
+        self.smooth= opt(5., smooth)
 
         # handicap values
         self.hcaps = self.handicaps(mode)
@@ -416,7 +418,8 @@ class Rating:
 
         return residuals
 
-    def optimize(self, mode):
+    @property
+    def optimize(self):
         """
         Function to optimize model hyper-parameters
 
@@ -427,14 +430,19 @@ class Rating:
             parameters: kfactor, decay, regress.
 
             """
-            kfactor, regress, smooth = parameters
-            rating = Rating(mode=mode, kfactor=kfactor,
-                    regress=regress, smooth=smooth)
+            kfactor, regress = parameters
+
+            rating = Rating(
+                    mode=self.mode,
+                    kfactor=kfactor,
+                    regress=regress
+                    )
+
             residuals = rating.model_accuracy()
             mean_abs_error = np.abs(residuals).mean()
             return mean_abs_error
 
-        bounds = [(65., 85.), (0.48, 0.68), (4.0, 10.0)]
+        bounds = [(25., 85.), (0.4, 0.8)]
         res_gp = gp_minimize(obj, bounds, n_calls=100, verbose=True)
 
         print("Best score: {:.4f}".format(res_gp.fun))
@@ -443,21 +451,37 @@ class Rating:
 
 def main():
     """
-    Main function prints the model accuracy diagnostics and exits
-
+    Define command line arguments. 
     """
-    # Rating().optimize('spread')
-    rating = Rating(mode='spread')
-    residuals = rating.model_accuracy()
-    mean_error = np.mean(residuals)
-    rms_error = np.std(residuals)
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+            "mode",
+            action="store",
+            type=str,
+            help="'spread', 'total'"
+            )
+    parser.add_argument(
+            "--optimize",
+            action="store_true",
+            default=False,
+            help="optimize model hyperparameters"
+            )
 
-    residuals = rating.model_accuracy()
-    mean_abs_error = np.abs(residuals).mean()
+    args = parser.parse_args()
+    args_dict = vars(args)
 
-    print("mean:", mean_error)
-    print("std dev:", rms_error)
-    print("mean abs error:", mean_abs_error)
+    mode = args_dict['mode']
+    optimize = args_dict['optimize']
+
+    if optimize:
+        Rating(mode=mode).optimize
+
+    rating = Rating(mode=mode)
+    residuals = rating.model_accuracy()
+
+    print("mean:", np.mean(residuals))
+    print("std dev:", np.std(residuals))
+    print("mean abs error:", np.abs(residuals).mean())
 
 
 if __name__ == "__main__":

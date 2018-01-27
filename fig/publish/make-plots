@@ -518,7 +518,7 @@ def example_distribution():
 
 
 @plot
-def predict(year=2017, week=2):
+def predict(year=2017, week=12):
     """
     Example game point spread and point total predictions
 
