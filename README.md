@@ -37,3 +37,17 @@ python -m pytest
 ```
 
 ## Usage
+
+First ensure that the nfldb database is up to date
+```
+nfldb-update
+```
+Then regenerate all figures used for the publication by running
+```
+./fig/publish/make-plots
+```
+Alternatively, you can generate the spread and total predictions for any season
+and week of the NFL season by running
+```
+./fig/predict make-plots [season year] [week]
+```
