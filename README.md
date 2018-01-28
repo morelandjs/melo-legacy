@@ -2,7 +2,7 @@
 Module which implements the margin-dependent Elo rating system (MELO) for
 predicting NFL spread and over/under point distributions.
 
-![alt text](https://github.com/morelandjs/melo/predict.png)
+![title](https://github.com/morelandjs/melo/predict.png)
 
 ## What's Here?
 This git repository contains a Python module to calculate margin-dependent Elo
