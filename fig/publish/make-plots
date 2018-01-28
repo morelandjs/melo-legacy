@@ -87,7 +87,7 @@ def plot(f):
     def wrapper(*args, **kwargs):
         print(f.__name__)
         f(*args, **kwargs)
-        plt.savefig('{}.pdf'.format(f.__name__))
+        plt.savefig('{}.png'.format(f.__name__))
         plt.close()
 
     plot_functions[f.__name__] = wrapper
