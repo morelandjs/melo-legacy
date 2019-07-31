@@ -1,3 +1,6 @@
+# Unmaintained package notice
+This project is no longer unmaintained. Please see the current incarnation of the project [melo](https://github.com/morelandjs/melo).
+
 # MELO Rating System
 Module which implements the margin-dependent Elo rating system (MELO) for
 predicting NFL spread and over/under point distributions.
